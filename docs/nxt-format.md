@@ -6,6 +6,17 @@ Everything here is derived from the 13 `.nxt` files in this repo's (git-ignored)
 `FLLawDL2025/Library/` folder plus the live statute text at leg.state.fl.us —
 re-run `scripts/nxt_survey.py` to regenerate the raw data behind this doc.
 
+**Pipeline decision (settled, plan Phase 5):** FLiberator decodes `.nxt`
+**directly to HTML + a JSON metadata sidecar**. The originally-planned
+Folio Flat File (`.fff`) intermediate and the [`folioxml`](https://github.com/imazen/folioxml)
+converter are not used. This is a direct consequence of the Phase 2
+finding below: `.nxt`'s content layer is a thin opcode wrapper around what
+is otherwise ordinary, literal HTML text — decoding it is a "decompress
+the tokens back to text" problem, not a format-conversion problem, so
+routing through an intermediate format would have added a hop with no
+benefit. See README.md and CLAUDE.md for the user-facing statement of this
+decision.
+
 ## Corpus
 
 | file | size | notes |
@@ -68,17 +79,23 @@ from leg.state.fl.us as ground truth) inside `fs2025.nxt` at byte offsets
 ...<span class="Text Intro Justify">\x08Crude turpentine gum (oleoresin)...
 ```
 
-Working opcode hypotheses (sample size still small — Phase 2 in the plan is
-to confirm these programmatically across thousands of instances, not by eye):
+Initial opcode hypotheses, formed from this small eyeballed sample before
+Phase 2 confirmed things programmatically across thousands of instances
+(kept here for the record; see "Phase 2" below for what actually held up):
 
-- **`\x13 <len> <len bytes>`** — opens a markup token. Length checks out
-  exactly against real tag text in every sample seen so far (e.g. `\x13\x25`
-  + 37 bytes = the 37-character `<a href="...">` string).
-- **`\x08`** — precedes a literal text run (plain content, not markup).
-  Terminator not yet confirmed — likely "until the next control opcode."
+- **`\x13 <len> <len bytes>`** — opens a markup token. **Held up** — this is
+  exactly rule 1 of the Phase 2 decoder below (refined to a 2-byte subtype +
+  length framing).
+- **`\x08`** — guessed as "precedes a literal text run." **Wrong** — Phase 2
+  found real text appears completely unprefixed just as often; `\x08` isn't
+  a dedicated text opcode at all, just a byte that happens to often sit near
+  one.
 - **`\x15 <bytes>`** — short field, possibly paragraph/style marker or
   special-character escape (one instance carried a literal UTF-8 EM SPACE
-  character, `\xe2\x80\x83`, immediately after it).
+  character, `\xe2\x80\x83`, immediately after it). **Still unconfirmed** —
+  never fully decoded; current decoder just skips it byte-by-byte via the
+  generic unknown-opcode fallback (harmless for text extraction, since the
+  em-space's HTML-entity twin `&#x2003;` is emitted anyway via rule 1).
 
 Also confirmed: `xrt2025.nxt` (and likely `defx2025.nxt`) use the same
 tokenized-markup scheme for a completely different kind of content — an
@@ -138,12 +155,13 @@ Constitution, then a second one that's mostly binary index data — the
 `0x1BC` header field being `3` for this file evidently isn't "3 LPDD
 documents"; likely a different count, e.g. top-level records or fields).
 
-This is a meaningful result for the project's direction: it confirms `.nxt`
-can be decoded **directly to HTML (+ a JSON metadata sidecar)**, without ever
-producing `.fff` or running it through `folioxml` — see the "pipeline shape"
-decision point in `plans/re-plan.md` Phase 5. Text-content extraction is
-solid across two different document eras; what's left rough is decorative
-markup and a handful of still-uncatalogued short opcodes.
+This was the result that settled the project's pipeline shape (see the
+pipeline decision note at the top of this document, and `plans/re-plan.md`
+Phase 5): `.nxt` decodes **directly to HTML (+ a JSON metadata sidecar)**,
+without ever producing `.fff` or running it through `folioxml`.
+Text-content extraction is solid across two different document eras;
+what's left rough is decorative markup and a handful of still-uncatalogued
+short opcodes.
 
 ### New structure found: per-document manifest block
 
@@ -369,10 +387,13 @@ original merge gap was scoped before this fix.
 ## Not yet investigated
 
 - The full byte-value vocabulary of remaining short control opcodes (Phase 2
-  continued) — current fallback (skip unknown bytes one at a time, but pass
-  through anything printable) is good enough for reliable text extraction,
-  but doesn't explain everything structurally. This is also what's behind
-  the ~4% title-extraction gap in the Phase 3 index above.
+  continued), including `\x15` (above) and the real paging/record model
+  behind the `LPDD` mid-token interruptions (Phase 2b) — current fallback
+  (skip unknown bytes one at a time, but pass through anything printable)
+  is good enough for reliable text extraction, but doesn't explain
+  everything structurally. This is also what's behind the small residual
+  gap in the Phase 3/2b index (~68 duplicate + ~48 garbled titles out of
+  26,317 — down from the original ~4%, see "Phase 2b" above).
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
   unextracted; likely contain the real Folio/NXT rendering engine
   (`nfoenu6.dll`, referenced by name inside `fs2025.nxt` itself, isn't present

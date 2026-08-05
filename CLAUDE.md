@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-The `fliberator` package is scaffolded (src layout, managed with `uv`) but has no pipeline logic implemented yet — `src/fliberator/__init__.py` only exports `__version__`. The conversion pipeline described below (download → unzip → NXT→FFF → FFF→XML) still needs to be built.
+The `fliberator` package is still scaffolded (src layout, managed with `uv`) — `src/fliberator/__init__.py` only exports `__version__`. The actual NXT-decoding logic exists as throwaway analysis scripts in `scripts/`, not yet promoted into the package: `nxt_survey.py` (header/corpus survey), `nxt_decode_poc.py` (tokenized-markup decoder), `nxt_build_index.py` (citation → byte-offset index). See `docs/nxt-format.md` for the reverse-engineered format spec and `plans/re-plan.md` for phase-by-phase status (what's done vs. still open — promoting these scripts into the real package is one of the open phases).
 
 ## Commands
 
@@ -22,23 +22,22 @@ The package targets Python 3.12+ and builds with `hatchling`. Source lives under
 
 ## What FLiberator does
 
-FLiberator converts Florida's officially-distributed statutes bulk data out of a proprietary format into open, usable formats. It does exactly one thing: liberate the downloadable Florida statutes.
+FLiberator converts Florida's officially-distributed statutes bulk data out of a proprietary format into open, usable formats: HTML plus a JSON metadata sidecar. It does exactly one thing: liberate the downloadable Florida statutes.
 
-## Planned pipeline
+## Pipeline
 
-The intended data flow, in order:
+The intended data flow, in order — **settled** (see `plans/re-plan.md` Phase 5; this pipeline shape replaces an earlier NXT→FFF→XML plan, abandoned once the NXT content layer itself turned out to be directly decodable):
 
-1. **Download** the "Advanced Legislative Search & Browse" application zip from Florida's official download page into a git-ignored working folder. Example: `https://www.leg.state.fl.us/Statutes/FLLawDL2025.zip` (2025 statutes).
-2. **Unzip** the archive.
-3. **Convert NXT → FFF**: the statutes are distributed as Rocket® NXT (`.nxt`) files — the key source file is `Library/fs2025.nxt`. This is a proprietary format. Conversion to Folio Flat File (`.fff`) format is the hardest, currently-unsolved step (marked TBD in the README) — expect to research Rocket NXT/Folio internals here.
-4. **Convert FFF → XML**: once `.fff` files exist, the Apache 2.0-licensed [`folioxml`](https://github.com/imazen/folioxml) package converts them to XML. This step is believed to be solved by existing tooling; the hard part of this project is step 3.
+1. **Download** the "Advanced Legislative Search & Browse" application zip from Florida's official download page into a git-ignored working folder. Example: `https://www.leg.state.fl.us/Statutes/FLLawDL2025.zip` (2025 statutes). Not yet automated (`plans/re-plan.md` Phase 6).
+2. **Unzip** the archive. Not yet automated.
+3. **Decode NXT → HTML + JSON directly.** The statutes are distributed as Rocket® NXT (`.nxt`) files — the key source file is `Library/fs2025.nxt`. This is a proprietary "Infobase" container, but its content layer turned out to be a thin opcode wrapper around otherwise-literal HTML text (a length-prefixed literal-text token plus a handful of control opcodes — see `docs/nxt-format.md`). Decoding it is a "decompress the tokens back to text" problem, not a format-conversion problem, which is why no intermediate format is needed: a proof-of-concept decoder (`scripts/nxt_decode_poc.py`) and citation index builder (`scripts/nxt_build_index.py`) already exist as analysis scripts; promoting them into the installable package is `plans/re-plan.md` Phase 7.
 
 ## Key external references
 
 - Florida statutes download page: `https://www.leg.state.fl.us/Statutes/index.cfm?Mode=Statutes%20Download&Submenu=7&Tab=statutes`
 - Rocket NXT / Folio NXT software: `https://www.rocketsoftware.com/en-us/products/folio-nxt/nxt`
-- `folioxml` (FFF → XML converter, Apache 2.0): `https://github.com/imazen/folioxml`
 
 ## Working conventions
 
-- Downloaded/unzipped artifacts (the statutes zip, extracted `.nxt`/`.fff` files) belong in a git-ignored working folder, not committed to the repo.
+- Downloaded/unzipped artifacts (the statutes zip, extracted `.nxt` files) belong in a git-ignored working folder, not committed to the repo.
+- Format research lives in `docs/nxt-format.md` (living notes — append as understanding grows, don't just overwrite history) and `plans/re-plan.md` (phase-by-phase status). Check both before re-deriving something about the format that's likely already been figured out.
