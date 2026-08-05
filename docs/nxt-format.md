@@ -50,7 +50,7 @@ over the full corpus, not just a couple of samples). Fields:
 | `0x1B0` (uint32 LE) | **`2`** | constant across all 13 files — likely a format major version |
 | `0x1B4` (uint32 LE) | varies, range 39–67, **not** correlated with file size (e.g. `sct2025.nxt` @ 528KB and `rtt2025.nxt` @ 4.8MB both = 49) | hypothesis: count of defined fields/index columns for this infobase (Folio infobases have a configurable field schema — Title, Text, Citation, Date, etc.) |
 | `0x1B8` (uint32 LE) | **`1`** | constant across all 13 files |
-| `0x1BC` (uint32 LE) | varies, strongly tracks content volume: `uscon`=3, `sct2025`=13, `TT2025`=218, `rtt2025`=22, `Law_Download_Help_PDF`=2, `xrt2025`=625, `defx2025`=12723, `stin2025`=3810, **`fs2025`=26348** | **best candidate for a document/record count.** 26,348 is plausible for the total section/subsection/note count of the full Florida Statutes. `Law_Download_Help_PDF.nxt`=2 fits "one wrapped PDF ≈ 2 records" (e.g. title + content). |
+| `0x1BC` (uint32 LE) | varies, strongly tracks content volume: `uscon`=3, `sct2025`=13, `TT2025`=218, `rtt2025`=22, `Law_Download_Help_PDF`=2, `xrt2025`=625, `defx2025`=12723, `stin2025`=3810, **`fs2025`=26348** | Originally read as "document count" on the strength of `fs2025`'s value nearly matching an early index-building result. **Revised in Phase 3**: the actual, carefully-verified document count for `fs2025.nxt` is 26,197 (§ Phase 3 below), not 26,348 — the earlier near-match was coincidental. More likely this counts storage pages/records, a related but distinct quantity. Still clearly tracks content volume either way. |
 | `0x1C0`+ | zero (at least through `0x200`) | |
 
 Regenerate this table with `uv run python scripts/nxt_survey.py` (dumps all of
@@ -210,49 +210,93 @@ rendering), not a decoder artifact.
 
 ## Phase 3: citation → byte-offset index
 
-`scripts/nxt_build_index.py` builds the index the plan called for — but not
-via the pre-`LPDD` manifest block's sibling-ID list, which turned out to be
-unreliable for this: its counter looked like it might be a global sequence
-across all ~26,000 documents, but checking it against a real sample showed
-most documents have **no** `FS...` ID within reach of it at all (it's a
-local "recent neighbors" breadcrumb, not a per-document field). Instead, the
-index is built by leveraging the already-validated Phase 2 decoder directly:
-a single `re.finditer` pass locates every `LPDD` position in the file in one
-linear scan (avoiding the O(n²) blowup repeated `.find()` calls would cause
-on a 240MB file), then each document's `<title>` tag is decoded from a small
-bounded window right after its `LPDD` marker — since `<title>` reliably
-carries the citation (`F.S. 1.01`, `CHAPTER 1`, `Preface, Florida Statutes
-2025`, etc.), this sidesteps needing to fully understand the manifest block.
+### v1 (superseded): decode a window after each `LPDD`
 
-Run against the full `fs2025.nxt` (all 240MB, not a sample): **3.2 seconds**,
-**26,306 documents found** — matching the `0x1BC` header field's predicted
-document count of `26,348` from Phase 1 to within 0.2%, which is a strong
-independent confirmation of that Phase 1 hypothesis. Saved to
-`data/fs2025_citation_index.json` (2MB; `{title, offset, length}` per
-document).
+First working version decoded a bounded window right after each `LPDD`
+marker and read its `<title>` tag. Ran against the full `fs2025.nxt`: 3.2
+seconds, 26,306 "documents" found — which matched the `0x1BC` header field's
+predicted count (`26,348`, Phase 1) to within 0.2% and looked like a strong
+confirmation. **It wasn't** (see below) — the closeness of that match was
+coincidental. ~4% of entries had no extractable title.
 
-Quality checks run against the built index:
-- **Zero duplicate citations among real sections.** All 165 duplicate titles
-  found are `CHAPTER N` part-boundary headers (large chapters split into
-  multiple parts each get their own `LPDD` document, but share the chapter's
-  title) — every `F.S. X.YY` section citation is unique, which is what
-  actually matters for building a lookup table.
-- **1,068 of 26,306 documents (~4%) have no extractable title.** Size
-  distribution: 229 are under 100 bytes (genuine tiny stub/placeholder
-  records, plausibly renumbered-section redirects), but 310 are 1000+
-  bytes — real, substantial section content that hit a decode edge case in
-  the `<head>`, tracing back to the same still-unresolved `\x13\x37`
-  length-desync issue flagged in Phase 2's "not yet investigated" list below
-  (not a new bug — the same class of gap, now quantified: it costs ~1.2% of
-  documents a labeled citation, though the index still covers them by byte
-  offset). Chasing this further would mean going back into opcode
-  archaeology rather than index-building, so it's left as a known,
-  quantified gap rather than pursued here.
+### The bug this hid, and how it was found
 
-This settles the plan's Phase 3 open question ("is there a true
-random-access index, or is a linear scan good enough") in favor of the
-linear-scan approach: at 3.2 seconds for the full file, there was never a
-performance reason to keep looking for a binary offset table.
+Picked one of the ~4% "untitled" entries to show as an example (a 12,286-byte
+span). It decoded as real, readable statute text — but jumbled: what looked
+like the tail of one section's grounds-for-discipline list, followed
+abruptly by a fragment about repeat license revocations, followed by a
+*complete second document* (§ 626.631, with its own working `<title>`)
+embedded mid-stream. Initial read: byte-level corruption in the source file.
+**Wrong** — flagged by cross-checking against the actual live statute text
+and the chapter's table of contents: the "jumbled" text was in fact the
+complete, correctly-ordered text of **§ 626.6215** verbatim, and § 626.6215
+→ § 626.631 really are sequential neighbors in the chapter, no jump at all.
+
+The real mechanism, confirmed by checking title-entry length distribution
+across the whole index: lengths cluster tightly around **exact multiples of
+4096 bytes** (4096, 8192, 12288, 16384...). `LPDD` doesn't mark "one
+document" — it marks something closer to a storage page. Most sections fit
+in one page (why the v1 heuristic worked ~96% of the time), but § 626.6215
+is long enough to spill across page boundaries as a **continuation with no
+title of its own** — not corruption, just not a new document. And in the
+other direction, § 626.631 turned out to start **mid-page**, immediately
+after § 626.6215's content ends, with no fresh `LPDD` before it at all —
+so a page can also hold more than one complete document back-to-back. Given
+both failure modes, indexing by `LPDD` boundaries was the wrong foundation
+regardless of how the per-page title extraction was implemented.
+
+### v2 (current): scan the whole file for literal `<title>` bytes
+
+Key fact that unlocks a much simpler design: `<title>`/`</title>` text is
+stored as literal, undamaged bytes even in cases (like § 626.631) where the
+DOCTYPE/meta preamble around it is garbled — confirmed by finding
+`F.S. 626.631` sitting in the raw file completely intact despite the broken
+head around it. So `scripts/nxt_build_index.py` v2 drops `LPDD` and the
+Phase 2 decoder entirely for index-building: a single regex pass finds every
+literal `<title>...</title>` / `<TITLE>...</TITLE>` occurrence in the whole
+file (every one immediately preceded by a 3-byte `\x13\x37<len>` opcode,
+confirmed with zero exceptions across a 2,000-sample check), and each
+match's position becomes a document boundary. A document's length is simply
+"distance to the next document's start" — which is what makes multi-page
+sections come out with their correct full length automatically, with no
+need to understand paging at all.
+
+Run against the full `fs2025.nxt`: **0.3 seconds** (faster than v1, since
+there's no per-document decode call anymore), **26,197 documents**. Verified
+directly: § 626.6215 now gets its own entry with the correct full length
+(9,104 bytes, up from v1's truncated 4,098) and decodes cleanly end-to-end
+matching the live statute text; § 626.631 — previously missing from the
+index entirely — now gets its own correct entry too.
+
+Quality checks on v2:
+- **Zero duplicate citations among real sections** (same as v1) — all
+  duplicate titles are `CHAPTER N` part-boundary headers.
+- **~3.8% of entries (991 of 26,197) still show signs of holding more than
+  one document** (checked via counting `class="Section"` occurrences per
+  entry's raw span — a real document body marker that should appear exactly
+  once). Same root cause as the original ~4% gap: in a small number of
+  cases the `<title>` tag itself, not just its surrounding preamble, hits
+  the still-unresolved `\x13\x37` length-desync issue and doesn't survive as
+  literal text, so that document is silently swallowed into the *previous*
+  entry's span instead of getting its own. This is meaningfully better than
+  v1 (documents are lost, not mislabeled — no more phantom "untitled"
+  entries, and the swallowed content is still present, just under the wrong
+  citation) but not eliminated. Chasing the remaining ~4% further means
+  going back into Phase 2 opcode archaeology, not index-building — left as a
+  documented, quantified gap.
+- **One expected, benign edge case:** the last document's stated length
+  balloons to ~73MB because there's no further title to bound it — the tail
+  of the file past the last real document is non-HTML binary index data
+  (compiled search structures), not more documents. Not fixed; just don't
+  trust the very last index entry's `length`.
+
+This still settles the plan's Phase 3 open question ("is there a true
+random-access index, or is a linear scan good enough") in favor of linear
+scan — 0.3 seconds for the full file leaves no performance reason to keep
+looking for a binary offset table. It also means the Phase 1 cross-check
+("26,306 found vs. `0x1BC`'s predicted 26,348") should be discounted: with
+v2's more accurate 26,197, `0x1BC` likely counts storage pages, not logical
+documents — the earlier near-match was coincidental, not a confirmation.
 
 ## Not yet investigated
 
