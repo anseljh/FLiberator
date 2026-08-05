@@ -208,14 +208,59 @@ and is consistently present — a real feature of the format (probably: raw
 character for full-text search indexing, entity for guaranteed-correct
 rendering), not a decoder artifact.
 
+## Phase 3: citation → byte-offset index
+
+`scripts/nxt_build_index.py` builds the index the plan called for — but not
+via the pre-`LPDD` manifest block's sibling-ID list, which turned out to be
+unreliable for this: its counter looked like it might be a global sequence
+across all ~26,000 documents, but checking it against a real sample showed
+most documents have **no** `FS...` ID within reach of it at all (it's a
+local "recent neighbors" breadcrumb, not a per-document field). Instead, the
+index is built by leveraging the already-validated Phase 2 decoder directly:
+a single `re.finditer` pass locates every `LPDD` position in the file in one
+linear scan (avoiding the O(n²) blowup repeated `.find()` calls would cause
+on a 240MB file), then each document's `<title>` tag is decoded from a small
+bounded window right after its `LPDD` marker — since `<title>` reliably
+carries the citation (`F.S. 1.01`, `CHAPTER 1`, `Preface, Florida Statutes
+2025`, etc.), this sidesteps needing to fully understand the manifest block.
+
+Run against the full `fs2025.nxt` (all 240MB, not a sample): **3.2 seconds**,
+**26,306 documents found** — matching the `0x1BC` header field's predicted
+document count of `26,348` from Phase 1 to within 0.2%, which is a strong
+independent confirmation of that Phase 1 hypothesis. Saved to
+`data/fs2025_citation_index.json` (2MB; `{title, offset, length}` per
+document).
+
+Quality checks run against the built index:
+- **Zero duplicate citations among real sections.** All 165 duplicate titles
+  found are `CHAPTER N` part-boundary headers (large chapters split into
+  multiple parts each get their own `LPDD` document, but share the chapter's
+  title) — every `F.S. X.YY` section citation is unique, which is what
+  actually matters for building a lookup table.
+- **1,068 of 26,306 documents (~4%) have no extractable title.** Size
+  distribution: 229 are under 100 bytes (genuine tiny stub/placeholder
+  records, plausibly renumbered-section redirects), but 310 are 1000+
+  bytes — real, substantial section content that hit a decode edge case in
+  the `<head>`, tracing back to the same still-unresolved `\x13\x37`
+  length-desync issue flagged in Phase 2's "not yet investigated" list below
+  (not a new bug — the same class of gap, now quantified: it costs ~1.2% of
+  documents a labeled citation, though the index still covers them by byte
+  offset). Chasing this further would mean going back into opcode
+  archaeology rather than index-building, so it's left as a known,
+  quantified gap rather than pursued here.
+
+This settles the plan's Phase 3 open question ("is there a true
+random-access index, or is a linear scan good enough") in favor of the
+linear-scan approach: at 3.2 seconds for the full file, there was never a
+performance reason to keep looking for a binary offset table.
+
 ## Not yet investigated
 
 - The full byte-value vocabulary of remaining short control opcodes (Phase 2
   continued) — current fallback (skip unknown bytes one at a time, but pass
   through anything printable) is good enough for reliable text extraction,
-  but doesn't explain everything structurally.
-- Whether there's a true random-access offset index anywhere in the file, vs.
-  relying on a single linear scan (Phase 3).
+  but doesn't explain everything structurally. This is also what's behind
+  the ~4% title-extraction gap in the Phase 3 index above.
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
   unextracted; likely contain the real Folio/NXT rendering engine
   (`nfoenu6.dll`, referenced by name inside `fs2025.nxt` itself, isn't present
