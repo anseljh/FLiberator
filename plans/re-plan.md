@@ -72,18 +72,27 @@ Phase 4 (harness) and Phase 5 (write-up/decision) as originally scoped are
 still open, folded into the numbering below alongside newly-identified work.
 None of these have been started; order is a suggestion, not a commitment.
 
-### Phase 2b — Decode the boilerplate back-reference opcode
-- Targeted fix for the Phase 3 v2 "~3.8% merge" gap. Investigation (see
-  `docs/nxt-format.md`, "The 3.8% merge gap: likely cause found") found that
-  the merges aren't random corruption: right after `</html>`, a short
-  (5-13 byte) binary marker stands in for what should be ~230 bytes of
-  literal DOCTYPE/head/link boilerplate, and the decoder's dumb fallback
-  desyncs a few bytes into the following title token as a result.
-- Next step: bucket the ~991 known boundary sequences by shape/length,
-  confirm the byte immediately after each one always lands inside a
-  `\x13\x37<len>` token, and add one new opcode rule for it. Small and
-  well-scoped — high confidence of closing most of the gap without further
-  open-ended archaeology.
+### Phase 2b — Close the Phase 3 v2 merge gap ✅ done
+- **Done** — see `docs/nxt-format.md` "Phase 2b: the 3.8% merge gap, fixed"
+  and `scripts/nxt_build_index.py` v3. The original "one back-reference
+  opcode" hypothesis didn't hold up: wider sampling showed the boundaries
+  are real `LPDD` page markers that can interrupt a literal text run
+  mid-token (confirmed: a 239-byte DOCTYPE token cut off after ~29 bytes by
+  a second marker, resuming into an unrelated document's body), which is a
+  paging/storage-layout behavior, not a missing opcode rule — properly
+  modeling it is a much bigger undertaking than Phase 2's opcode table and
+  isn't material to extracting section content (bodies are intact either
+  way). Fixed at the index-building level instead, where the goal actually
+  lives: `<div class="Section">` / `<span class="SectionNumber">` survive
+  intact in 100% of checked cases even when `<title>` doesn't, so v3 scans
+  for orphaned Section divs directly and synthesizes their titles from the
+  section number. Result: 26,317 documents, 982 recovered, **0 entries left
+  with more than one Section div** (was 991). Recovering those documents
+  also surfaced ~930 duplicate-titled entries (an empty title-only stub
+  paired with the real recovered one) — 862 matched a clean, understood
+  pattern and are dropped automatically; ~68 duplicate + ~48 garbled titles
+  remain (same root cause, smaller scale) and are documented as a known,
+  quantified gap rather than chased into full paging archaeology.
 
 ### Phase 4 — Validation harness (as originally scoped above)
 - Not yet built. Depends on Phase 2b to avoid the harness flagging known,

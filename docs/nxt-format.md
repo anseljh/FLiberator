@@ -298,56 +298,73 @@ looking for a binary offset table. It also means the Phase 1 cross-check
 v2's more accurate 26,197, `0x1BC` likely counts storage pages, not logical
 documents — the earlier near-match was coincidental, not a confirmation.
 
-### The 3.8% merge gap: likely cause found (not yet fixed)
+### Phase 2b: the 3.8% merge gap, fixed (index-level, not decoder-level)
 
-Follow-up investigation (not yet implemented as a decoder fix) narrowed the
-merge gap from "same unresolved decode edge case" to a specific, testable
-hypothesis. Method: pulled all 991 flagged entries (`class="Section"`
-appearing more than once in an entry's span), decoded a sample with the
-Phase 2 `decode()`, and diffed the raw bytes at the internal boundary.
+The initial hypothesis (single unrecognized "boilerplate back-reference"
+opcode) didn't survive a wider sample. Bucketing all 991 flagged entries'
+boundary bytes by shape surfaced two different phenomena:
 
-Concrete example — entry titled `F.S. 6.02` (offset 136270, length 3042):
-decoding the whole span produces **two complete, correctly-formed
-documents** back to back — 6.02's full section text (catchline, body,
-history, matches its own title), immediately followed by 6.01's full
-section text with no title tag of its own. Both bodies are intact; nothing
-here is corrupted at the content level, only the second document's
-`<title>` is unaccounted for.
+1. **Real `LPDD` page markers, spliced mid-token.** Some boundaries contain
+   the literal ASCII `LPDD` plus a recognizable fixed-ish binary structure
+   (page number, `0xffffffff` neighbor-pointer fields, etc.) — this is the
+   same 4KB-page marker from the Phase 3 v1 story, just appearing *inside*
+   a document instead of between them. Worse: it can interrupt a literal
+   text run mid-flight, not just between tokens. Concrete example (`F.S.
+   7.08`'s entry): a `\x13\x37<len=239>` token for the standard
+   `<!DOCTYPE...>` preamble gets cut off after only ~29 of its 239 declared
+   bytes by a second, different 6-byte marker, and what resumes afterward
+   is unrelated body text from a completely different document (a
+   metes-and-bounds boundary description). This means length-prefixed
+   tokens aren't reliably contiguous in the file — a real fix requires a
+   paging/record model the decoder doesn't have, not one opcode rule.
+2. **Short 5-13 byte markers with no `LPDD` text**, standing in for the
+   ~230-byte DOCTYPE/head/title preamble entirely (the original "back
+   reference" guess). Also not a simple opcode: the replaced title text
+   differs per document, so it can't be a straight byte-for-byte
+   back-reference — more likely the preamble/title for these documents was
+   never re-emitted at all and lives only in the earlier `CatchlineIndex`
+   TOC block, not in the document body.
 
-The raw bytes right after the first document's `</html>` are the tell —
-the same shape recurs across all 991 cases:
+Both are real paging/storage-layout behavior, not a decoder opcode gap —
+correctly modeling either means understanding how NXT lays out pages and
+records, which is a much bigger undertaking than Phase 2's opcode table.
+Given it's not material to extracting section content (the bodies
+themselves are intact either way — confirmed against every case checked),
+**Phase 2b did not attempt to solve paging.** Instead it fixed the
+*symptom* at the index-building level, where the actual goal lives.
 
-```
-</html>  <handful of binary bytes, 5-13 long>  <ASCII text resumes mid-word>
-```
+**The fix (`scripts/nxt_build_index.py` v3):** `<div class="Section">` and
+the `<span class="SectionNumber">` text immediately inside it turned out to
+survive perfectly in every one of the 971 broken cases checked (100%
+recovery), even when `<title>` doesn't. So v3 keeps the v2 title scan as
+the primary pass, then separately scans the whole file for every
+`<div class="Section">` occurrence; any such div that isn't the first one
+inside a title-entry's span is a document v2 silently swallowed. Each
+becomes its own entry with a synthesized title (`F.S. <number>`, read
+straight from `SectionNumber`) and `"source": "section-number"` so it's
+distinguishable from a real decoded `<title>`.
 
-e.g. (raw bytes, not decoded output):
+Result on `fs2025.nxt`: **26,317 documents, 982 recovered via
+SectionNumber, 0 entries left containing more than one
+`<div class="Section">`** (down from 991) — runs in 0.7s.
 
-```
-</html>\xb7\x02\x00\x00\x03\x00tle>F.S...          (should read "<title>F.S...")
-</html>\x05\x00\xe2\x07\x02\x00\x00\x00\x00\x00\x00\x00\xfffl...
-</html>&\x00\x00\x00\x01\x00rida or...
-```
-
-A normal document's preamble (`<!DOCTYPE...><html>...<head><meta.../>`) is
-~230 literal bytes; here only 5-13 binary bytes stand in for all of it,
-clustering into a handful of recurring shapes (several sharing the exact
-tail `...\x02\x00\x00\x00\x00\x00\x00\x00\xff`). That's far more consistent
-with **an unrecognized opcode that back-references the boilerplate head**
-than with random corruption — every one of these ~26,000 documents shares
-byte-identical DOCTYPE/head/link boilerplate, so a back-reference/dictionary
-opcode for it would be a natural, high-value compression choice for the
-format to make. The current decoder doesn't recognize this opcode, falls
-through to its dumb one-byte-at-a-time skip, and desyncs by a few bytes
-right as the following `\x13\x37<len>` title token starts — sometimes
-skipping past the whole title (the 6.02/6.01 case), sometimes chopping its
-first few bytes (the `tle>F.S` case, missing `<ti`).
-
-**Not yet fixed.** Next step, if pursued: bucket the ~991 boundary byte
-sequences by shape/length and test whether the byte immediately following
-each one always lands inside a `\x13\x37<len>` title token — if so this is
-one new opcode rule (likely fixed-length or self-length-prefixed), not
-further open-ended archaeology. See `plans/re-plan.md` Phase 2b.
+**Side effect, also cleaned up:** recovering a swallowed document doesn't
+remove the *original*, now-orphaned `<title>` match — it's a real title
+tag, just one whose body was itself cut short by the same page-boundary
+interruption before reaching its own `<div class="Section">` (i.e., a
+content-free stub). This produced ~930 duplicate-titled entries (one empty
+stub + one real). 862 of them matched this exact pattern cleanly (one
+entry with a Section div, one without, excluding legitimate `CHAPTER N`
+part-boundary repeats) and are dropped by a follow-up pass
+(`drop_stub_duplicates`), tracked as `dropped_stub_duplicates` in the
+index. **~68 duplicate titles and ~48 garbled titles remain** — the
+garbled ones are cases where the page-boundary interruption hit inside the
+`<title>...</title>` span itself, fooling the non-greedy regex into
+matching across it to a later, unrelated closing tag. Both are
+small-in-number (68 and 48 out of 26,317) and same root cause as above
+(paging, not a decoder bug) — left as a documented, quantified gap rather
+than chased into full paging archaeology, consistent with how the
+original merge gap was scoped before this fix.
 
 ## Not yet investigated
 
