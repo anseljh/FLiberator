@@ -94,6 +94,68 @@ Per-section anchor IDs are embedded literally in the text, e.g.
 This is the leading candidate for a citation → byte-offset index (Phase 3 of
 the plan).
 
+## Phase 2 update: proof-of-concept decoder works
+
+`scripts/nxt_decode_poc.py` implements a first decoder and successfully
+extracts the **complete, verbatim body text of § 1.01** from `fs2025.nxt`
+— all 19 numbered definitions plus the 9 lettered wartime-service periods in
+subsection (14) — matching the live leg.state.fl.us page word-for-word. It
+also recovered a bonus the plain web page doesn't show: a `<HISTORY>` block
+of session-law citation anchors (`LAW90-092`, `LAW92-080`, ... `LAW2024-147`).
+See `scripts/sample_output_1.01.txt` for the raw decoded output.
+
+This is a meaningful result for the project's direction: it means `.nxt` can
+plausibly be decoded **directly to HTML (+ a JSON metadata sidecar)** without
+ever producing `.fff` or running it through `folioxml` — see the "pipeline
+shape" decision point in `plans/re-plan.md` Phase 5. Text-content extraction
+looks solid; what's still rough is decorative markup.
+
+### Framing correction
+
+The earlier "`\x13 <len> <text>`" hypothesis was slightly wrong — the lead-in
+is a **fixed 2-byte sequence `\x13 \x37`**, not `\x13` alone (confirmed
+against `<div class="Catchline">`, 23 bytes, length byte `\x17` = 23 exactly).
+Corrected rule: **`\x13 \x37 <len:1> <text>`**.
+
+`\x08` was confirmed as "literal text run" — but only when what follows is
+actually printable/UTF-8. When `\x08` precedes non-printable bytes (e.g. the
+recurring 6-byte block `10 00 03 82 3a 01` seen before both `<TITLE>` in the
+Preface and `<title>` in § 1.01's `<head>`), it's something else entirely —
+likely an attribute/style-flag opcode that happens to reuse the byte value
+0x08. The POC decoder resolves this by only treating `\x08`'s payload as text
+if it starts with a printable byte; otherwise it falls through to the generic
+"unknown opcode, skip one byte" fallback.
+
+### New structure found: per-document manifest block
+
+Immediately before each document's `LPDD`-prefixed HTML body, there's a
+manifest/nav block listing sibling document IDs with a descending counter
+(`FS20250001.02` counter=7, `FS20250001.015` counter=6, `FS20250001.01`
+counter=5, ...), plus for the current document: its own ID, a filename
+(`0001.015.html`-style), encoding (`utf-8`), content-type (`text/html`), and
+a **generation timestamp** (`2025-08-31 17:02:13 UTC` — i.e. this is when
+Rocket's tooling built this particular `.nxt`, not a statute date). Not yet
+fully parsed field-by-field, but the sibling-ID list is a second candidate
+(besides the TOC anchors from Phase 1) for building the citation → offset
+index in Phase 3.
+
+### Known gaps in the POC decoder
+
+- Boilerplate `<head>`/`<meta>` tags and a couple of `<link>` attributes come
+  out mangled — they route through opcodes the decoder doesn't know, so the
+  "skip one unknown byte at a time" fallback eats into them unevenly.
+- `<CATCHLINE></CATCHLINE>` decodes **empty** in the body — the catchline
+  text ("Definitions.") isn't duplicated inline here; it lives in the
+  TOC/index block found in Phase 1 and is presumably substituted at render
+  time. Confirms the JSON-sidecar plan should pull title/catchline from the
+  index structures, not expect to find it in every document body.
+- One isolated attribute corruption mid-document (`class="Text Intro  #<binary>Vietnam War:`
+  instead of `class="Text Intro Justify"` before item (f)) — an unknown
+  opcode landed inside a tag's attribute list. Notably this did **not**
+  cascade or desync the rest of the decode — everything after it decoded
+  correctly, which is a good sign the format is reasonably self-synchronizing
+  even when an opcode is mishandled.
+
 ## Not yet investigated
 
 - The exact terminator rule for `\x08` text runs, and the full byte-value
