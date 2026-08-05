@@ -20,9 +20,9 @@ import fliberator
 
 ## Steps
 
-1. FLiberator downloads, into a git-ignored working folder, the "Advanced Legislative Search & Browse" application zip file from its [download page](https://www.leg.state.fl.us/Statutes/index.cfm?Mode=Statutes%20Download&Submenu=7&Tab=statutes). The current link for the 2025 statutes is <https://www.leg.state.fl.us/Statutes/FLLawDL2025.zip>.
-2. FLiberator unzips the file.
-3. FLiberator decodes the Rocket NXT (`.nxt`) files directly into HTML, plus a JSON sidecar mapping each statute citation to its location in the source file. See [`docs/nxt-format.md`](docs/nxt-format.md) for how the format was reverse-engineered and how decoding works.
+1. FLiberator downloads, into the git-ignored `download/` folder, the "Advanced Legislative Search & Browse" application zip file from its [download page](https://www.leg.state.fl.us/Statutes/index.cfm?Mode=Statutes%20Download&Submenu=7&Tab=statutes). Run with `uv run python scripts/download.py` — it scrapes the download page for the current year's zip link (currently `FLLawDL2025.zip`) rather than hardcoding a year.
+2. FLiberator unzips the file, also into `download/` (same script).
+3. FLiberator decodes the Rocket NXT (`.nxt`) files directly into HTML, plus a JSON sidecar mapping each statute citation to its location in the source file. See [`docs/nxt-format.md`](docs/nxt-format.md) for how the format was reverse-engineered and how decoding works. Output will land in the git-ignored `output/` folder once its shape is decided (see `plans/re-plan.md`).
 
 ## Background
 

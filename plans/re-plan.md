@@ -2,15 +2,18 @@
 
 ## Status
 
-Phases 1, 2, 2b, 3, 4, and 5 are **done**. Phase 5's pipeline decision is
-settled: FLiberator decodes `.nxt` **directly to HTML + JSON**, with no
+Phases 1, 2, 2b, 3, 4, 5, and 6 are **done**. Phase 5's pipeline decision
+is settled: FLiberator decodes `.nxt` **directly to HTML + JSON**, with no
 `.fff` intermediate and no dependency on `folioxml` — see README.md and
 CLAUDE.md. Phase 4 (validation harness, `scripts/nxt_validate.py`) found
 that content loss/corruption from the Phase 2b paging-interruption
 mechanism is more widespread than previously quantified — see
 docs/nxt-format.md "Phase 4" — which motivated the new Phase 2c below.
-Phases 2c and 6-9 (gap detection, download automation, package promotion,
-rest-of-corpus, output format) are scoped but not started.
+Phase 6 (`scripts/download.py`) established the `download/`/`output/`
+working-folder convention alongside the frozen `FLLawDL2025/` reference
+copy — see CLAUDE.md "Working conventions". Phases 2c and 7-9 (gap
+detection, package promotion, rest-of-corpus, output format) are scoped
+but not started.
 
 ## Context
 
@@ -137,11 +140,32 @@ added a conversion hop with no benefit. README.md and CLAUDE.md now state
 this plainly instead of the original FFF/folioxml pipeline description;
 `docs/nxt-format.md` carries the technical detail backing the decision.
 
-### Phase 6 — Automate download + unzip ⬜ open
-Currently `FLLawDL2025/` is manually populated. Build the actual step 1-2
-of the pipeline: fetch the zip from the leg.state.fl.us download page into
-the git-ignored working folder, unzip it, with basic handling for a new
-year's URL/filename changing.
+### Phase 6 — Automate download + unzip ✅ done
+`scripts/download.py` scrapes the leg.state.fl.us download page for its
+current `FLLawDL<year>.zip` link (rather than hardcoding a year, so it
+keeps working after the 2025 edition is superseded), downloads it into the
+git-ignored `download/` folder, and extracts it there. Established the
+three-way data-folder split now documented in CLAUDE.md:
+- `FLLawDL2025/` stays exactly as it was — the frozen, read-only reference
+  copy this whole project (Phases 1-4) was developed and validated
+  against. Never written to.
+- `download/` is the live target: `download/FLLawDL2025.zip` and
+  `download/FLLawDL2025/Library/*.nxt`, laid out identically to the
+  reference copy (the zip wraps everything in a top-level folder matching
+  its own name, so extracting straight into `download/` reproduces that
+  layout with no extra nesting).
+- `output/` is reserved for decoded HTML/JSON output once Phase 9 decides
+  its shape (created empty for now).
+
+Ran end-to-end: downloaded the real 248,586,704-byte zip, extracted 1,352
+files, and verified all 13 `Library/*.nxt` files are **byte-for-byte
+identical** (SHA-256) to the frozen `FLLawDL2025/` reference copy — both
+confirms the downloader works correctly and that Florida hasn't changed
+the 2025 edition's data since the reference copy was made. Analysis
+scripts (`nxt_decode_poc.py`, `nxt_build_index.py`, `nxt_validate.py`)
+still default to reading `FLLawDL2025/` for now, since that's what they
+were developed and checked against; pointing the real pipeline at
+`download/` instead is part of Phase 7.
 
 ### Phase 7 — Promote scripts/ into the installable package ⬜ open
 `src/fliberator/` is still just a scaffold (`__version__` only). Move the
