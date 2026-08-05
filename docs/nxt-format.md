@@ -384,6 +384,89 @@ small-in-number (68 and 48 out of 26,317) and same root cause as above
 than chased into full paging archaeology, consistent with how the
 original merge gap was scoped before this fix.
 
+## Phase 4: validation harness
+
+`scripts/nxt_validate.py` decodes a citation via the Phase 2/3 index and
+decoder, fetches the live leg.state.fl.us page for the same citation over
+plain HTTP (`urllib` -- no dependency on any interactive tool, so this is
+a real, re-runnable regression check), and diffs the two. Both sides get
+reduced the same way: both leg.state.fl.us and our own decoded output
+embed the section as a self-contained `<div class="Section">...</div>`
+mini-document using identical class names, so extraction just grabs that
+fragment, strips tags, unescapes entities, and collapses whitespace --
+this is a much tighter comparison than a generic whole-page text diff.
+
+Two confirmed **non-bugs** get folded away before scoring (see
+`comparable()`):
+- **Doubled em-dash.** The raw `.nxt` stream encodes some punctuation
+  twice -- a literal Unicode character immediately followed by its own
+  HTML-entity twin. Already documented for em-space; this run confirms it
+  also applies to em-dash (`—` decodes as `——`). Real, deliberate format
+  behavior (per the existing hypothesis: one copy for full-text search
+  indexing, one for guaranteed rendering), not a decoding error.
+- **Straight vs. curly apostrophes/quotes.** leg.state.fl.us applies a
+  "smart quotes" typographic upgrade at render time. Checked directly: the
+  raw `.nxt` bytes for one such case (`Children's` in § 215.22) contain a
+  plain ASCII `'` (0x27), not a curly one. The decoder is being faithful
+  to the source; the live page is prettifying it. Not a gap.
+
+### Results (5 sections, chosen to cover distinct edge cases)
+
+| citation | edge case | ratio | verdict |
+|---|---|---|---|
+| F.S. 1.01 | simple baseline | 0.9930 | close |
+| F.S. 145.10 | has a `<table>` | 0.6535 | mismatch |
+| F.S. 215.22 | heavy History (59 citations) | 0.9387 | mismatch |
+| F.S. 775.082 | cross-references (32 internal anchors) | 0.9804 | mismatch |
+| F.S. 6.081 | non-ASCII (degree/minute/second coordinates) | 0.8264 | mismatch |
+
+**Every one of the 5 sections showed some divergence**, more than the
+existing Phase 2b gap estimate (~68 duplicate + ~48 garbled *titles* out of
+26,317, i.e. index-boundary problems) would have suggested. Investigating
+each mismatch traced all of them to the *same already-documented*
+page/record-boundary interruption mechanism from Phase 2b -- just now
+confirmed to also strike **inside document bodies that are otherwise
+correctly, uniquely indexed**, which the existing "count Section divs per
+entry" quality check has no way to catch:
+
+- **F.S. 1.01** (the most scrutinized section in this whole project) is
+  missing its trailing `<div class="Note">` block and closing tags. Not an
+  index-boundary bug -- checked the raw bytes right at and past the
+  entry's boundary and confirmed § 1.02's clean `<!DOCTYPE...><title>`
+  begins exactly there, with no leftover 1.01 content sitting just past
+  the cutoff. The Note text simply isn't present as literal bytes anywhere
+  in the file; a page interruption swallowed it before the boundary was
+  ever reached.
+- **F.S. 145.10** is the clearest and most significant finding: real
+  content loss, not cosmetic. Decoding stops mid-sentence
+  (`"...maintain a certified Florida property"`) right at the entry's
+  length boundary, well before the section's live text ends. The live
+  chapter 145 table of contents confirms **§ 145.11 is a real, separate
+  section** sitting between 145.10 and 145.121 in the file -- but its
+  `<title>` *and* its `<div class="Section">`/`SectionNumber` (the Phase 2b
+  recovery path) both failed to survive, so neither recovery mechanism
+  caught it. This is a new residual-gap category: a "double failure" that
+  the existing quality checks (which rely on exactly those two signals)
+  are structurally blind to, distinct from the already-quantified Phase 2b
+  numbers.
+- **F.S. 215.22 / F.S. 775.082** show only isolated 2-4 character
+  corruption mid-prose (`person` → `pOgierson`, `exemptions` →
+  `exemptioh1ns`, `c.` → `c.vHik`) -- concrete, in-the-wild confirmation of
+  the Phase 2b mid-token interruption mechanism, small in magnitude here.
+- **F.S. 6.081** shows a large content-bleed: a block of unrelated prose
+  (an older historical boundary description, itself plausibly quoted
+  elsewhere in the same section) appears out of place mid-sentence. Same
+  family as the "F.S. 7.08" example documented in Phase 2b.
+
+**Not fixed.** This harness's job was to measure and characterize, not to
+solve paging -- consistent with how Phase 2b already scoped that work as
+out of reach for a targeted opcode fix. The materially new information is
+that the impact is broader than the Phase 2b index-quality numbers alone
+suggested: real (if usually small) content loss/corruption can occur
+inside documents that pass every existing index-quality check. Left as a
+documented, better-characterized gap; see `plans/re-plan.md` for the
+follow-up phase this motivates.
+
 ## Not yet investigated
 
 - The full byte-value vocabulary of remaining short control opcodes (Phase 2

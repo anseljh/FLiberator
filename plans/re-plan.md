@@ -2,12 +2,15 @@
 
 ## Status
 
-Phases 1, 2, 2b, 3, and 5 are **done**. Phase 5's pipeline decision is
+Phases 1, 2, 2b, 3, 4, and 5 are **done**. Phase 5's pipeline decision is
 settled: FLiberator decodes `.nxt` **directly to HTML + JSON**, with no
 `.fff` intermediate and no dependency on `folioxml` — see README.md and
-CLAUDE.md. Phase 4 (validation harness) is the recommended next step;
-Phases 6-9 (download automation, package promotion, rest-of-corpus, output
-format) are scoped below but not started.
+CLAUDE.md. Phase 4 (validation harness, `scripts/nxt_validate.py`) found
+that content loss/corruption from the Phase 2b paging-interruption
+mechanism is more widespread than previously quantified — see
+docs/nxt-format.md "Phase 4" — which motivated the new Phase 2c below.
+Phases 2c and 6-9 (gap detection, download automation, package promotion,
+rest-of-corpus, output format) are scoped but not started.
 
 ## Context
 
@@ -93,14 +96,36 @@ zero duplicate real-section citations, ~3.8% merge gap — closed by Phase
 2b above). Settles the "is a random-access index needed" question: no,
 linear scan is fast enough. Index saved to `data/fs2025_citation_index.json`.
 
-### Phase 4 — Validation harness ⬜ open, recommended next
-Build a small script that: picks N statute section IDs, extracts the
-corresponding text via the Phase 2/3 decoder + index, fetches the
-equivalent page live via `WebFetch`, and diffs the two (strip HTML tags
-for a first-pass text-only comparison — exact HTML fidelity is a stretch
-goal). Pick sections covering edge cases: simple (1.01, spot-checked
-already), a table, historical/amendment notes, cross-references, non-ASCII
-characters. Becomes the regression check for any future decoder changes.
+### Phase 4 — Validation harness ✅ done
+`scripts/nxt_validate.py` decodes a citation via the Phase 2/3 index,
+fetches the live leg.state.fl.us page over plain HTTP (no tool dependency
+-- a real, re-runnable regression check), and diffs the two using the
+same class-name-based extraction on both sides. Ran against 5 sections
+covering distinct edge cases (simple baseline, a `<table>`, heavy History
+citations, cross-references, non-ASCII coordinates) -- see
+`docs/nxt-format.md` "Phase 4" for full results and analysis. Headline
+finding: all 5 sections showed some divergence, tracing back to the same
+Phase 2b page-boundary-interruption mechanism now confirmed to also strike
+*inside* documents that pass every existing index-quality check --
+broader impact than the Phase 2b numbers alone suggested. One new,
+distinct residual-gap category surfaced: **§ 145.11** is a real section
+whose `<title>` *and* `SectionNumber` (the Phase 2b recovery path) both
+failed to survive, a "double failure" the existing quality checks can't
+detect. Not fixed -- this phase's job was to measure and characterize;
+see Phase 2c below for the follow-up this motivates.
+
+### Phase 2c — Investigate "double failure" section loss ⬜ open, new
+Phase 4 found at least one section (§ 145.11) missing from the index
+entirely because *both* Phase 3 (title scan) and Phase 2b (SectionNumber
+recovery) failed to find it -- a category the existing quality checks
+(which rely on exactly those two signals) can't detect, so its true
+prevalence across the full 26,317-document index is unknown. Next step:
+find a third, independent signal to detect "gap" cases -- e.g. compare
+decoded section-body length/word-count against a live-fetched baseline for
+a large citation sample, or check for suspicious byte-distance jumps
+between consecutive numerically-adjacent citations (e.g. 145.10 directly
+followed by 145.121 with no 145.11 or 145.11x in between is itself a
+detectable signal, independent of decoding content at all). Not started.
 
 ### Phase 5 — Pipeline decision & write-up ✅ done
 **Decision confirmed:** FLiberator decodes `.nxt` directly to HTML + a
