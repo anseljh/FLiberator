@@ -65,6 +65,67 @@ This isn't a cold start — direct inspection of `FLLawDL2025/Library/*.nxt` and
 - Write `docs/nxt-format.md` documenting the header layout, opcode table, and document/anchor scheme discovered, with byte-offset examples (like the ones above) so it's independently verifiable.
 - Explicit decision point to flag back to the user once Phases 1–4 are done: the original README pipeline assumes NXT → FFF (via unknown tooling) → XML (via `folioxml`). Given that `.nxt` already contains tokenized HTML with usable structure, it may be simpler to decode NXT → HTML/XML **directly**, skipping the FFF intermediate and `folioxml` entirely. Don't decide this now — surface it as a fork once there's enough data to judge which path is less work.
 
+## Proposed remaining phases (post Phase 1-3, not yet started)
+
+Phases 1-3 above are done (Phase 3 in two iterations — see `docs/nxt-format.md`).
+Phase 4 (harness) and Phase 5 (write-up/decision) as originally scoped are
+still open, folded into the numbering below alongside newly-identified work.
+None of these have been started; order is a suggestion, not a commitment.
+
+### Phase 2b — Decode the boilerplate back-reference opcode
+- Targeted fix for the Phase 3 v2 "~3.8% merge" gap. Investigation (see
+  `docs/nxt-format.md`, "The 3.8% merge gap: likely cause found") found that
+  the merges aren't random corruption: right after `</html>`, a short
+  (5-13 byte) binary marker stands in for what should be ~230 bytes of
+  literal DOCTYPE/head/link boilerplate, and the decoder's dumb fallback
+  desyncs a few bytes into the following title token as a result.
+- Next step: bucket the ~991 known boundary sequences by shape/length,
+  confirm the byte immediately after each one always lands inside a
+  `\x13\x37<len>` token, and add one new opcode rule for it. Small and
+  well-scoped — high confidence of closing most of the gap without further
+  open-ended archaeology.
+
+### Phase 4 — Validation harness (as originally scoped above)
+- Not yet built. Depends on Phase 2b to avoid the harness flagging known,
+  already-understood merge cases as new failures.
+
+### Phase 5 — Pipeline decision write-up (as originally scoped above)
+- The direct NXT → HTML+JSON path (skipping `.fff`/`folioxml` entirely) is
+  the de facto direction of all work so far but hasn't been formally
+  recorded. Update README.md and CLAUDE.md to state this decision plainly
+  and retire the FFF/folioxml language from the "planned pipeline"
+  description.
+
+### Phase 6 — Automate download + unzip
+- Currently `FLLawDL2025/` is manually populated. Build the actual step
+  1-2 of the original pipeline: fetch the zip from the leg.state.fl.us
+  download page into the git-ignored working folder, unzip it, with basic
+  handling for a new year's URL/filename changing.
+
+### Phase 7 — Promote scripts/ into the installable package
+- `src/fliberator/` is still just a scaffold (`__version__` only). Move the
+  decoder (`nxt_decode_poc.py`), index builder (`nxt_build_index.py`), and
+  eventually the downloader into real modules under `src/fliberator/`, add
+  a CLI entry point, and add unit tests (decoder opcode rules, index
+  builder against a small fixture) to replace ad hoc script runs.
+- Do this after Phase 2b so the decoder logic being promoted isn't
+  immediately stale.
+
+### Phase 8 — Extend to the rest of the corpus
+- All work so far targets `fs2025.nxt` only. The other 12 `.nxt` files
+  (`flcnst2025.nxt` = FL Constitution, `uscon.nxt` = US Constitution, plus
+  various index/table files whose purpose is still guessed rather than
+  confirmed — see the Corpus table above) need the same decode+index
+  treatment, or an explicit decision that some of them (e.g. the index
+  files) aren't in scope for FLiberator's output.
+
+### Phase 9 — Decide and implement the actual output shape
+- The "liberated" deliverable format has never been decided — one HTML
+  file per section? A single structured JSON/SQLite dataset keyed by
+  citation? Depends on Phase 4 (validated content) and Phase 7 (a real
+  package to emit it from). This is the phase that turns "we can decode
+  this" into "here is the liberated Florida Statutes."
+
 ## Tooling notes
 
 - Pure Python (stdlib `struct`/regex) is sufficient for Phases 1–3; no new runtime dependencies needed yet. If the opcode grammar turns out to be more of a real mini-language (nested/recursive), consider `construct` or a Kaitai Struct `.ksy` definition — Kaitai in particular is nice here because a `.ksy` file *is* the documentation and generates a visual structure browser, which is valuable for a format nobody else has documented.

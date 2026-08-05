@@ -298,6 +298,57 @@ looking for a binary offset table. It also means the Phase 1 cross-check
 v2's more accurate 26,197, `0x1BC` likely counts storage pages, not logical
 documents — the earlier near-match was coincidental, not a confirmation.
 
+### The 3.8% merge gap: likely cause found (not yet fixed)
+
+Follow-up investigation (not yet implemented as a decoder fix) narrowed the
+merge gap from "same unresolved decode edge case" to a specific, testable
+hypothesis. Method: pulled all 991 flagged entries (`class="Section"`
+appearing more than once in an entry's span), decoded a sample with the
+Phase 2 `decode()`, and diffed the raw bytes at the internal boundary.
+
+Concrete example — entry titled `F.S. 6.02` (offset 136270, length 3042):
+decoding the whole span produces **two complete, correctly-formed
+documents** back to back — 6.02's full section text (catchline, body,
+history, matches its own title), immediately followed by 6.01's full
+section text with no title tag of its own. Both bodies are intact; nothing
+here is corrupted at the content level, only the second document's
+`<title>` is unaccounted for.
+
+The raw bytes right after the first document's `</html>` are the tell —
+the same shape recurs across all 991 cases:
+
+```
+</html>  <handful of binary bytes, 5-13 long>  <ASCII text resumes mid-word>
+```
+
+e.g. (raw bytes, not decoded output):
+
+```
+</html>\xb7\x02\x00\x00\x03\x00tle>F.S...          (should read "<title>F.S...")
+</html>\x05\x00\xe2\x07\x02\x00\x00\x00\x00\x00\x00\x00\xfffl...
+</html>&\x00\x00\x00\x01\x00rida or...
+```
+
+A normal document's preamble (`<!DOCTYPE...><html>...<head><meta.../>`) is
+~230 literal bytes; here only 5-13 binary bytes stand in for all of it,
+clustering into a handful of recurring shapes (several sharing the exact
+tail `...\x02\x00\x00\x00\x00\x00\x00\x00\xff`). That's far more consistent
+with **an unrecognized opcode that back-references the boilerplate head**
+than with random corruption — every one of these ~26,000 documents shares
+byte-identical DOCTYPE/head/link boilerplate, so a back-reference/dictionary
+opcode for it would be a natural, high-value compression choice for the
+format to make. The current decoder doesn't recognize this opcode, falls
+through to its dumb one-byte-at-a-time skip, and desyncs by a few bytes
+right as the following `\x13\x37<len>` title token starts — sometimes
+skipping past the whole title (the 6.02/6.01 case), sometimes chopping its
+first few bytes (the `tle>F.S` case, missing `<ti`).
+
+**Not yet fixed.** Next step, if pursued: bucket the ~991 boundary byte
+sequences by shape/length and test whether the byte immediately following
+each one always lands inside a `\x13\x37<len>` title token — if so this is
+one new opcode rule (likely fixed-length or self-length-prefixed), not
+further open-ended archaeology. See `plans/re-plan.md` Phase 2b.
+
 ## Not yet investigated
 
 - The full byte-value vocabulary of remaining short control opcodes (Phase 2
