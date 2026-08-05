@@ -94,37 +94,56 @@ Per-section anchor IDs are embedded literally in the text, e.g.
 This is the leading candidate for a citation → byte-offset index (Phase 3 of
 the plan).
 
-## Phase 2 update: proof-of-concept decoder works
+## Phase 2: decoder for the tokenized-markup layer
 
-`scripts/nxt_decode_poc.py` implements a first decoder and successfully
-extracts the **complete, verbatim body text of § 1.01** from `fs2025.nxt`
-— all 19 numbered definitions plus the 9 lettered wartime-service periods in
-subsection (14) — matching the live leg.state.fl.us page word-for-word. It
-also recovered a bonus the plain web page doesn't show: a `<HISTORY>` block
-of session-law citation anchors (`LAW90-092`, `LAW92-080`, ... `LAW2024-147`).
-See `scripts/sample_output_1.01.txt` for the raw decoded output.
+`scripts/nxt_decode_poc.py` decodes the content layer using two rules:
 
-This is a meaningful result for the project's direction: it means `.nxt` can
-plausibly be decoded **directly to HTML (+ a JSON metadata sidecar)** without
-ever producing `.fff` or running it through `folioxml` — see the "pipeline
-shape" decision point in `plans/re-plan.md` Phase 5. Text-content extraction
-looks solid; what's still rough is decorative markup.
+1. **`\x13 <subtype:1> <len> <text>`** — length-prefixed literal text.
+   `<subtype>` varies (`0x37` for markup tags, `0x39` for HTML numeric
+   entities like `&#x2003;`) but the framing is identical either way, so the
+   decoder treats it as opaque. `<len>` is 1 byte normally; if its high bit
+   is set, it's a 2-byte big-endian length instead:
+   `((b1 & 0x7F) << 8) | b2` (confirmed against a 239-byte
+   `<!DOCTYPE...><meta.../>` run — this was the earlier decoder's biggest
+   source of mangled boilerplate, since most `<head>` tags exceed 255 bytes).
+2. **Printable/UTF-8 runs are sniffed at every byte position**, not just
+   after a specific opcode. Earlier hypotheses treated `0x08` as "the text
+   opcode," but that's wrong: plenty of real text (e.g. `Definitions.`
+   inside `<CATCHLINE>Definitions.</CATCHLINE>`, and `Justify` inside a
+   `class="Text Intro Justify"` attribute) appears **completely unprefixed**,
+   with no `0x08` in front of it at all. The old decoder was silently
+   dropping this text because its fallback path didn't check printability.
+   `0x08` isn't a dedicated text opcode — it's just one more byte that
+   happens to often sit right before a text run.
+3. Anything else `< 0x20` and not part of rule 1 is an unrecognized opcode,
+   skipped one byte at a time (deliberately dumb, so decoding degrades
+   instead of halting on an incomplete opcode table).
 
-### Framing correction
+With these three rules, the decoder extracts the **complete, verbatim body
+text of § 1.01** from `fs2025.nxt` — all 19 numbered definitions and the 9
+lettered wartime-service periods in subsection (14) — matching the live
+leg.state.fl.us page word-for-word, plus a bonus the plain web page doesn't
+show: a `<HISTORY>` block of session-law citation anchors (`LAW90-092`,
+`LAW92-080`, ... `LAW2024-147`). See `scripts/sample_output_1.01.txt`.
 
-The earlier "`\x13 <len> <text>`" hypothesis was slightly wrong — the lead-in
-is a **fixed 2-byte sequence `\x13 \x37`**, not `\x13` alone (confirmed
-against `<div class="Catchline">`, 23 bytes, length byte `\x17` = 23 exactly).
-Corrected rule: **`\x13 \x37 <len:1> <text>`**.
+It also generalizes to a **completely different document era**: run against
+`uscon.nxt` (copyright range ends 2018 vs. 2024 — an older Folio build, using
+plain `<P CLASS="ARTICLE">`/`<A NAME="...">` markup instead of `fs2025.nxt`'s
+XHTML `<div>`/`<span>` style), the same two rules — no format-specific
+logic — correctly extract the Constitution's preamble and Article I verbatim
+("We the People of the United States, in Order to form a more perfect
+Union..."). See `scripts/sample_output_uscon.txt`. `uscon.nxt` only has 2
+`LPDD` markers total (one real content document covering the whole
+Constitution, then a second one that's mostly binary index data — the
+`0x1BC` header field being `3` for this file evidently isn't "3 LPDD
+documents"; likely a different count, e.g. top-level records or fields).
 
-`\x08` was confirmed as "literal text run" — but only when what follows is
-actually printable/UTF-8. When `\x08` precedes non-printable bytes (e.g. the
-recurring 6-byte block `10 00 03 82 3a 01` seen before both `<TITLE>` in the
-Preface and `<title>` in § 1.01's `<head>`), it's something else entirely —
-likely an attribute/style-flag opcode that happens to reuse the byte value
-0x08. The POC decoder resolves this by only treating `\x08`'s payload as text
-if it starts with a printable byte; otherwise it falls through to the generic
-"unknown opcode, skip one byte" fallback.
+This is a meaningful result for the project's direction: it confirms `.nxt`
+can be decoded **directly to HTML (+ a JSON metadata sidecar)**, without ever
+producing `.fff` or running it through `folioxml` — see the "pipeline shape"
+decision point in `plans/re-plan.md` Phase 5. Text-content extraction is
+solid across two different document eras; what's left rough is decorative
+markup and a handful of still-uncatalogued short opcodes.
 
 ### New structure found: per-document manifest block
 
@@ -137,29 +156,43 @@ a **generation timestamp** (`2025-08-31 17:02:13 UTC` — i.e. this is when
 Rocket's tooling built this particular `.nxt`, not a statute date). Not yet
 fully parsed field-by-field, but the sibling-ID list is a second candidate
 (besides the TOC anchors from Phase 1) for building the citation → offset
-index in Phase 3.
+index in Phase 3. The same `\xff\xff\xff\xff\x01\x00\x16\x00\x16...` byte
+signature that opens this manifest block was also found to recur **inline,
+mid-document** (see below) — so it's a generic embedded-record marker, not
+something confined to document headers.
 
-### Known gaps in the POC decoder
+### Known gaps
 
-- Boilerplate `<head>`/`<meta>` tags and a couple of `<link>` attributes come
-  out mangled — they route through opcodes the decoder doesn't know, so the
-  "skip one unknown byte at a time" fallback eats into them unevenly.
-- `<CATCHLINE></CATCHLINE>` decodes **empty** in the body — the catchline
-  text ("Definitions.") isn't duplicated inline here; it lives in the
-  TOC/index block found in Phase 1 and is presumably substituted at render
-  time. Confirms the JSON-sidecar plan should pull title/catchline from the
-  index structures, not expect to find it in every document body.
-- One isolated attribute corruption mid-document (`class="Text Intro  #<binary>Vietnam War:`
-  instead of `class="Text Intro Justify"` before item (f)) — an unknown
-  opcode landed inside a tag's attribute list. Notably this did **not**
-  cascade or desync the rest of the decode — everything after it decoded
-  correctly, which is a good sign the format is reasonably self-synchronizing
-  even when an opcode is mishandled.
+- Boilerplate `<head>` still has minor rough edges from opcodes not yet
+  catalogued (the decoder handles the big DOCTYPE/meta run fine now via the
+  2-byte length fix, but a handful of surrounding bytes are still opaque).
+- Two stray digit characters (`"0"` before/after `<CATCHLINE>`, previously a
+  `"9"` near an EM SPACE) leak into output from an unresolved ~6-byte block
+  (`10 00 03 82 <byte> 01`) that recurs before hidden/structural tags — one
+  of its bytes happens to be a printable ASCII digit, which the
+  printable-run sniffer picks up as if it were content. Cosmetic only; does
+  not affect actual legal text.
+- Confirmed **not a bug**: what looked like a mid-document corruption near
+  item (f) turned out to be a real embedded binary record (the same
+  `\xff\xff\xff\xff...` signature as the per-document manifest block,
+  appearing inline before the literal, unprefixed text `Justify">`) — a
+  likely revision/edit-tracking marker. The decoder now passes through the
+  unprefixed text correctly; the embedded record itself is still opaque
+  (skipped byte-by-byte) but doesn't need to be understood to get the text
+  right.
+- The redundant-looking `<EM SPACE char> + &#x2003;` sequence appearing
+  after every subsection/item number (e.g. `(1)` then both a literal Unicode
+  EM SPACE and the equivalent HTML entity) was checked against multiple
+  instances and is consistently present — a real feature of the format
+  (probably: raw character for full-text search indexing, entity for
+  guaranteed-correct rendering), not a decoder artifact.
 
 ## Not yet investigated
 
-- The exact terminator rule for `\x08` text runs, and the full byte-value
-  vocabulary of control opcodes (Phase 2).
+- The full byte-value vocabulary of remaining short control opcodes (Phase 2
+  continued) — current fallback (skip unknown bytes one at a time, but pass
+  through anything printable) is good enough for reliable text extraction,
+  but doesn't explain everything structurally.
 - Whether there's a true random-access offset index anywhere in the file, vs.
   relying on a single linear scan (Phase 3).
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
