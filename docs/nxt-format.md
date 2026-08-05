@@ -161,31 +161,52 @@ signature that opens this manifest block was also found to recur **inline,
 mid-document** (see below) — so it's a generic embedded-record marker, not
 something confined to document headers.
 
-### Known gaps
+### Chased down: the character-formatting toggle
 
-- Boilerplate `<head>` still has minor rough edges from opcodes not yet
-  catalogued (the decoder handles the big DOCTYPE/meta run fine now via the
-  2-byte length fix, but a handful of surrounding bytes are still opaque).
-- Two stray digit characters (`"0"` before/after `<CATCHLINE>`, previously a
-  `"9"` near an EM SPACE) leak into output from an unresolved ~6-byte block
-  (`10 00 03 82 <byte> 01`) that recurs before hidden/structural tags — one
-  of its bytes happens to be a printable ASCII digit, which the
-  printable-run sniffer picks up as if it were content. Cosmetic only; does
-  not affect actual legal text.
-- Confirmed **not a bug**: what looked like a mid-document corruption near
-  item (f) turned out to be a real embedded binary record (the same
-  `\xff\xff\xff\xff...` signature as the per-document manifest block,
-  appearing inline before the literal, unprefixed text `Justify">`) — a
-  likely revision/edit-tracking marker. The decoder now passes through the
-  unprefixed text correctly; the embedded record itself is still opaque
-  (skipped byte-by-byte) but doesn't need to be understood to get the text
-  right.
-- The redundant-looking `<EM SPACE char> + &#x2003;` sequence appearing
-  after every subsection/item number (e.g. `(1)` then both a literal Unicode
-  EM SPACE and the equivalent HTML entity) was checked against multiple
-  instances and is consistently present — a real feature of the format
-  (probably: raw character for full-text search indexing, entity for
-  guaranteed-correct rendering), not a decoder artifact.
+The stray digit leaks (`"0"` around `<CATCHLINE>`, `"9"` near an EM SPACE)
+traced back to one specific, now-fully-resolved opcode:
+
+**`0x10 <0|1> 0x03 0x82 <style-id> 0x01`** — a paired open/close
+character-formatting toggle, redundant with the literal `<B>`/`<I>`/`<TITLE>`
+tags it wraps (e.g. `10 00 03 82 3a 01` before `<TITLE>`, `10 00 03 82 3e 01`
+before `<B>`, `10 01 03 82 3e 01` after `</B>`). Verified against 1,936
+instances in the first 3MB of `fs2025.nxt`: `<0|1>` splits evenly (970 open /
+966 close), and `<style-id>` is a small per-style integer that happens to
+land in printable ASCII range often enough (`:`, `>`, `@`, `'0'`, `'6'`...)
+to fool a printable-byte sniffer into treating it as leaked content. The
+decoder now matches this 6-byte shape explicitly and discards it whole,
+which fixed more than the stray digits — it also **recovered previously-lost
+content that shared the same root cause**: the `<title>` tag was empty
+before (now correctly `F.S. 1.01`), and the `<HISTORY>` section's citation
+links were empty `<a href="...">` before (now contain their visible text,
+e.g. `<a href="#!-- #ID=LAW90-092 --#">90-92</a>`) — both were unprefixed
+text sitting right after one of these toggle blocks, which the old decoder's
+byte-by-byte unknown-skip was eating alongside the block itself.
+
+Not present at all in `uscon.nxt` (0 matches) — consistent with that file's
+older, non-XHTML tag vocabulary (`<P CLASS="...">` instead of `<span>`based
+character styling), so this opcode is likely specific to the newer render
+pipeline. No regression there either; output is byte-for-byte identical to
+before this fix.
+
+### Remaining known gap (diagnosed, not resolved — low value)
+
+One isolated spot mid-§1.01 (inside item (f)'s `class="Text Intro Justify"`
+attribute) still decodes with ~10 bytes of garbage before `Justify">`. Traced
+to a distinct 34-byte embedded record sharing the per-document manifest
+block's signature (`\xff\xff\xff\xff\x01\x00\x16\x00\x16...`) but with a
+different flag byte (`\xe0` here vs. `\xc0` in document headers) — plausibly
+an editorial revision/edit-tracking stamp left behind by Rocket's authoring
+tool. This affects a single decorative CSS class name, once, in the whole
+file; the substantive statute text on both sides of it is unaffected. Not
+worth chasing further unless it turns out to recur densely elsewhere.
+
+The redundant-looking `<EM SPACE char> + &#x2003;` sequence appearing after
+every subsection/item number (e.g. `(1)` then both a literal Unicode EM
+SPACE and the equivalent HTML entity) was checked against multiple instances
+and is consistently present — a real feature of the format (probably: raw
+character for full-text search indexing, entity for guaranteed-correct
+rendering), not a decoder artifact.
 
 ## Not yet investigated
 

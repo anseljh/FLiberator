@@ -19,6 +19,16 @@ Opcode rules (see docs/nxt-format.md for how these were derived):
                                       just another byte that happens to often
                                       precede a text run, so it's treated the
                                       same as any other unrecognized byte.
+  0x10 <0|1> 0x03 0x82 <id> 0x01  -- paired character-formatting toggle
+                                      (0=open/1=close), redundant with the
+                                      literal <B>/<I>/<TITLE> tags it wraps.
+                                      <id> is a small per-style integer that
+                                      sometimes lands in printable ASCII range
+                                      (':', '>', '@', '0'...) -- without this
+                                      explicit rule it gets misread as stray
+                                      text by the printable-run sniffer.
+                                      Confirmed via 1,936 instances split
+                                      evenly 970 open / 966 close.
   anything else < 0x20            -- unrecognized opcode; skipped one byte at a
                                       time (logged) as a deliberately dumb
                                       fallback, so decoding degrades instead of
@@ -68,6 +78,16 @@ def decode(data: bytes, start: int, end: int) -> tuple[str, dict]:
             stats["tag_tokens"] += 1
             subtypes[subtype] += 1
             i += header_len + length
+        elif (
+            b == 0x10
+            and i + 5 < end
+            and data[i + 1] in (0x00, 0x01)
+            and data[i + 2] == 0x03
+            and data[i + 3] == 0x82
+            and data[i + 5] == 0x01
+        ):
+            stats["format_toggles"] = stats.get("format_toggles", 0) + 1
+            i += 6
         elif is_text_byte(data, i):
             j = i
             while j < end:
@@ -104,15 +124,14 @@ def main() -> None:
 
     data = (library / filename).read_bytes()
 
-    total_stats = {"tag_tokens": 0, "text_runs": 0, "unknown_bytes_skipped": 0}
+    total_stats: Counter = Counter()
     subtypes: Counter = Counter()
     for n, (body_start, body_end) in enumerate(iter_documents(data, search_from)):
         if n >= limit:
             break
         html, stats = decode(data, body_start, body_end)
         subtypes.update(stats.pop("tag_subtypes"))
-        for k in total_stats:
-            total_stats[k] += stats[k]
+        total_stats.update(stats)
         print(f"--- doc {n} @ [{body_start}:{body_end}] ({body_end - body_start} bytes) ---")
         print("stats:", stats)
         print(html)
