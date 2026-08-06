@@ -55,7 +55,13 @@ TAG_RE = re.compile(r"<[^>]+>")
 # Matching from the outer <body> pulls in all of that chrome; matching from
 # <div class="Section"> goes straight to the content on both the live page
 # and our own decoded output.
-SECTION_START_RE = re.compile(r'<div class="Section">', re.IGNORECASE)
+SECTION_START_RE = re.compile(r'<div class="(?:Section|ChapterTitle)">', re.IGNORECASE)
+# Part indexes need their own anchor. The live Part page starts at
+# <div class="PartTitle"> with no chapter heading above it, while our decoded
+# Part document carries the chapter heading first -- anchoring both sides on
+# PartTitle lines them up; anchoring on the default would leave our side with
+# an extra "CHAPTER n" the live side never had.
+PART_START_RE = re.compile(r'<div class="(?:Part|SubPart)Title">', re.IGNORECASE)
 BODY_CLOSE_RE = re.compile(r"</body>", re.IGNORECASE)
 
 DEFAULT_CITATIONS = [
@@ -68,9 +74,23 @@ DEFAULT_CITATIONS = [
 
 
 def build_url(citation: str) -> str:
-    """F.S. <chapter>.<rest> -> leg.state.fl.us section URL. Chapters are
-    grouped into century-wide folders (e.g. chapter 626 -> 0600-0699/0626/),
-    confirmed against known-good URLs used earlier in this project."""
+    """Citation -> leg.state.fl.us URL. Chapters are grouped into century-wide
+    folders (e.g. chapter 626 -> 0600-0699/0626/), confirmed against known-good
+    URLs used earlier in this project. Two shapes are handled:
+      "F.S. 15.01" -> .../0015/Sections/0015.01.html   (a statute section)
+      "CHAPTER 15" -> .../0015/0015ContentsIndex.html  (a chapter TOC page)"""
+    if citation.startswith("CHAPTER "):
+        rest = citation.removeprefix("CHAPTER ")
+        number, _, part = rest.partition(" PART ")
+        chapter = int(number)
+        century = (chapter // 100) * 100
+        padded = f"{chapter:04d}"
+        page = f"{padded}Part{part}ContentsIndex.html" if part else f"{padded}ContentsIndex.html"
+        return (
+            "https://www.leg.state.fl.us/Statutes/index.cfm?App_mode=Display_Statute"
+            f"&URL={century:04d}-{century + 99:04d}/{padded}/{page}"
+            "&StatuteYear=2025"
+        )
     num = citation.removeprefix("F.S. ")
     chapter_str, _, rest = num.partition(".")
     chapter = int(chapter_str)
@@ -97,30 +117,27 @@ def normalize(fragment: str) -> str:
     return re.sub(r"\s+([;:,.)])", r"\1", text)
 
 
-# Known, understood, non-bug differences between decoded and live text --
-# folded away before the match/mismatch verdict so it reflects real content
-# fidelity rather than these two already-documented cosmetic quirks:
-#  - the raw NXT stream encodes some punctuation twice (a literal Unicode
-#    character immediately followed by its own HTML-entity twin -- e.g.
-#    em-space, confirmed in docs/nxt-format.md as deliberate, probably one
-#    copy for full-text search indexing and one for guaranteed rendering).
-#    Collapsing "each char run + its own entity" isn't practical generically,
-#    so this only folds the two confirmed-common cases, doubled em-dash and
-#    doubled en-dash (the latter found by the Phase 2d 200-section sample,
-#    in F.S. 381.00316's "21 U.S.C. 360bbb--3" citation).
-#  - leg.state.fl.us applies a "smart quotes" typographic upgrade when
-#    rendering straight ASCII apostrophes from the source data (confirmed:
-#    the raw .nxt bytes for one such case contain a plain 0x27 apostrophe,
-#    not a curly one) -- cosmetic, not a decoding gap, so both sides are
-#    normalized to plain ASCII quotes for comparison.
+# One known, understood, non-bug difference between decoded and live text,
+# folded away before the match/mismatch verdict: leg.state.fl.us applies a
+# "smart quotes" typographic upgrade when rendering straight ASCII apostrophes
+# from the source data (confirmed: the raw .nxt bytes for one such case contain
+# a plain 0x27 apostrophe, not a curly one) -- cosmetic, not a decoding gap, so
+# both sides are normalized to plain ASCII quotes for comparison.
+#
+# This used to also fold doubled em-dashes and en-dashes, on the theory that
+# the doubling was a quirk of the source data. It wasn't -- it was our own
+# decoder emitting both halves of a 0x15-marked character pair, a real defect
+# in the output HTML that this fold was hiding from the score (see
+# nxt_decode_poc.py's 0x15 rule). The fold is deliberately gone: with the
+# decoder fixed it is unnecessary, and keeping it would let the same class of
+# defect return unnoticed.
 def comparable(text: str) -> str:
-    text = text.replace("——", "—").replace("––", "–")
     text = text.replace("‘", "'").replace("’", "'")
     text = text.replace("“", '"').replace("”", '"')
     return text
 
 
-def extract_body_text(full_html: str) -> str:
+def extract_body_text(full_html: str, anchor: re.Pattern | None = None) -> str:
     """Grab the <div class="Section">...</div> content. Anchored on
     </body> when present (the live page always has one -- it's what keeps
     the surrounding site chrome out of the comparison); falls back to "rest
@@ -131,7 +148,7 @@ def extract_body_text(full_html: str) -> str:
     title). That fallback deliberately keeps whatever partial garbage
     trails off the end rather than discarding it -- this harness is
     supposed to surface exactly that kind of damage, not hide it."""
-    start = SECTION_START_RE.search(full_html)
+    start = (anchor or SECTION_START_RE).search(full_html)
     if not start:
         return normalize(full_html)
     rest = full_html[start.end() :]
@@ -144,7 +161,7 @@ CACHE_DIR = pathlib.Path("data/live_cache")
 FETCH_DELAY_SECONDS = 0.4
 
 
-def fetch_live_text(citation: str) -> tuple[str, str]:
+def fetch_live_text(citation: str, anchor: re.Pattern | None = None) -> tuple[str, str]:
     """Fetch and reduce the live page, caching the reduced text on disk.
 
     The cache exists so a corpus-wide run (`--sample N`) is a one-time cost
@@ -152,7 +169,9 @@ def fetch_live_text(citation: str) -> tuple[str, str]:
     -- which is what makes this usable as a routine regression gate rather
     than a thing to be run once and quoted from memory."""
     url = build_url(citation)
-    cached = CACHE_DIR / f"{citation.removeprefix('F.S. ')}.txt"
+    cached = CACHE_DIR / (citation.replace(" ", "_") + ".txt"
+                          if citation.startswith("CHAPTER ")
+                          else f"{citation.removeprefix('F.S. ')}.txt")
     if cached.exists():
         return cached.read_text(), url
 
@@ -161,7 +180,7 @@ def fetch_live_text(citation: str) -> tuple[str, str]:
     )
     with urllib.request.urlopen(req, timeout=20) as resp:
         raw = resp.read().decode("utf-8", errors="replace")
-    text = extract_body_text(raw)
+    text = extract_body_text(raw, anchor)
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cached.write_text(text)
@@ -169,14 +188,25 @@ def fetch_live_text(citation: str) -> tuple[str, str]:
     return text, url
 
 
-def decode_local_text(citation: str, index: dict, records: list[bytes]) -> str:
-    by_title = {e["title"]: e for e in index["entries"]}
-    entry = by_title.get(citation)
-    if entry is None:
-        raise KeyError(f"{citation!r} not found in index")
-    span = records[entry["record"]]
+def decode_local_text(
+    citation: str,
+    index: dict,
+    records: list[bytes],
+    record: int | None = None,
+    anchor: re.Pattern | None = None,
+) -> str:
+    """Decode one document. `record` wins when given -- resolving by title
+    alone is only safe for `F.S. n` citations, which are unique; CHAPTER
+    titles repeat once per Part, so chapter mode passes the record it means."""
+    if record is None:
+        by_title = {e["title"]: e for e in index["entries"]}
+        entry = by_title.get(citation)
+        if entry is None:
+            raise KeyError(f"{citation!r} not found in index")
+        record = entry["record"]
+    span = records[record]
     decoded_html, _stats = decode(span, 0, len(span))
-    return extract_body_text(decoded_html)
+    return extract_body_text(decoded_html, anchor)
 
 
 RATIO_PASS_THRESHOLD = 0.99
@@ -189,31 +219,105 @@ def sample_citations(index: dict, count: int, seed: int) -> list[str]:
     return sorted(random.Random(seed).sample(pool, min(count, len(pool))))
 
 
+# The chapter-level table-of-contents documents. These are the only ones of
+# the 1,440 non-section documents that have a directly comparable page on
+# leg.state.fl.us, and happily the live site emits the *same* class vocabulary
+# for them (`ChapterTitle`, `ChapterNumber`, `CatchlineIndex`, `IndexItem`,
+# `Catchline`) that our decoder produces, so they diff exactly like sections do.
+CHAPTER_CLASS_RE = re.compile(rb'class="Chapter"')
+PART_CLASS_RE = re.compile(rb'class="(?:Part|SubPart)"')
+PART_NUMBER_RE = re.compile(r'<div class="(?:Part|SubPart)Number">\s*(?:PART|SUBPART)\s+([IVXL]+)')
+
+
+def chapter_index_records(index: dict, records: list[bytes]) -> dict[str, int]:
+    """Map "CHAPTER n" -> the record holding that chapter's *chapter-level*
+    TOC. Many documents share a title like "CHAPTER 39" (one per Part -- see
+    docs/nxt-format.md), so the title alone does not identify a document:
+    only the one carrying `class="Chapter"` without a `class="Part"` is the
+    chapter-level index. Callers must pass the record explicitly rather than
+    re-resolving by title, or they'll silently get a Part index instead."""
+    found: dict[str, int] = {}
+    for entry in index["entries"]:
+        title = entry["title"]
+        if not title.startswith("CHAPTER "):
+            continue
+        record = records[entry["record"]]
+        if not CHAPTER_CLASS_RE.search(record) or PART_CLASS_RE.search(record):
+            continue
+        found.setdefault(title, entry["record"])
+    return found
+
+
+def part_index_records(index: dict, records: list[bytes]) -> dict[str, int]:
+    """Map "CHAPTER n PART R" -> the record holding that Part's TOC. The Part
+    number lives only in the decoded markup (`<div class="PartNumber">PART
+    III</div>`), not in the document title -- every Part index of a chapter
+    shares the bare title "CHAPTER n", which is why they need disambiguating
+    the same way chapter-level indexes do."""
+    found: dict[str, int] = {}
+    for entry in index["entries"]:
+        title = entry["title"]
+        if not title.startswith("CHAPTER "):
+            continue
+        record = records[entry["record"]]
+        if not PART_CLASS_RE.search(record):
+            continue
+        decoded, _stats = decode(record, 0, len(record))
+        match = PART_NUMBER_RE.search(decoded)
+        if match:
+            found.setdefault(f"{title} PART {match.group(1)}", entry["record"])
+    return found
+
+
+def sample_chapters(
+    index: dict, records: list[bytes], count: int, seed: int
+) -> tuple[list[str], dict[str, int]]:
+    pool = chapter_index_records(index, records)
+    chosen = random.Random(seed).sample(sorted(pool), min(count, len(pool)))
+    chosen.sort(key=lambda t: int(t.removeprefix("CHAPTER ")))
+    return chosen, pool
+
+
 def main() -> None:
     args = sys.argv[1:]
     index = json.loads(INDEX_PATH.read_text())
+
+    records = load_records(NXT_PATH)
+    record_overrides: dict[str, int] = {}
+    anchor: re.Pattern | None = None
 
     if args and args[0] == "--sample":
         count = int(args[1]) if len(args) > 1 else 100
         seed = int(args[2]) if len(args) > 2 else 0
         citations = sample_citations(index, count, seed)
+    elif args and args[0] in ("--chapters", "--parts"):
+        count = int(args[1]) if len(args) > 1 else 100
+        seed = int(args[2]) if len(args) > 2 else 0
+        if args[0] == "--chapters":
+            citations, record_overrides = sample_chapters(index, records, count, seed)
+        else:
+            anchor = PART_START_RE
+            record_overrides = part_index_records(index, records)
+            pool = sorted(record_overrides)
+            citations = sorted(random.Random(seed).sample(pool, min(count, len(pool))))
     else:
         citations = args or DEFAULT_CITATIONS
 
-    records = load_records(NXT_PATH)
     ratios: list[float] = []
 
     all_ok = True
     for citation in citations:
         try:
-            local_text = decode_local_text(citation, index, records)
+            local_text = decode_local_text(
+                citation, index, records, record_overrides.get(citation), anchor
+            )
         except KeyError as e:
             print(f"[{citation}] SKIP -- {e}")
             all_ok = False
             continue
 
         try:
-            live_text, url = fetch_live_text(citation)
+            live_text, url = fetch_live_text(citation, anchor)
         except Exception as e:
             print(f"[{citation}] SKIP -- fetch failed: {e}")
             all_ok = False

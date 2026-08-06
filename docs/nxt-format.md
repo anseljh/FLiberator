@@ -896,15 +896,241 @@ and carried as the project's main unquantified risk. It was never a missing
 opcode rule and never needed one — the interruptions were fragment
 boundaries, and reassembling the fragments removes them entirely.
 
+## Phase 2e: tallying the skipped bytes, and the two defects it found
+
+The decoder's fallback — skip unrecognized control bytes one at a time, pass
+through anything printable — was never measured, only trusted. Counting what
+it actually skipped across all 26,306 reassembled documents turned up
+**3,852,947 skipped bytes, 2.52% of the content**, spread over only **nine
+distinct byte values**. Two of those skips were producing wrong output.
+
+### `\x15` decoded: two shapes, one of them a real defect
+
+`\x15` accounted for 696,638 skips and turned out to be two unrelated things.
+
+**`\x15\x04\x01\x05` and `\x15\x04\x01\x06` — 184,764 each, exactly balanced.**
+Field markers inside History notes: `…05` always introduces a hyperlink (every
+instance is immediately followed by a `\x13\x37` token opening
+`<a href="#!--`), `…06` introduces a non-link field (plain text, a `<div>`, or
+`</HISTORY>`). The literal `<a>` markup is present either way, so skipping
+these loses nothing — the same redundancy already documented for the `\x10`
+formatting toggle. **Correctly skipped.**
+
+**`\x15\x01\x01\x01` — 327,110 occurrences — the character-doubling marker.**
+It precedes a literal UTF-8 character which is then immediately repeated as an
+HTML entity in a `\x13\x39` token:
+
+```
+\x15\x01\x01\x01 \xe2\x80\x83 \x13\x39\x08 &#x2003;     (EM SPACE)
+\x15\x01\x01\x01 \x08 \xe2\x80\x94 \x13\x39\x08 &#x2014  (EM DASH)
+\x15\x01\x01\x01 \x08 \xc2\xa0 \x13\x39\x06 &#xA0;       (NBSP)
+```
+
+This confirms the long-standing guess (see the doubled-punctuation note in the
+Phase 4 harness) that the format stores some punctuation twice — but the
+consequence had been misattributed. It is not a quirk to normalize away at
+comparison time: the decoder was emitting **both** halves, so the output HTML
+rendered the character twice. Measured before the fix: **327,048 pairs across
+24,926 documents — 94.8% of the corpus.**
+
+| Character | Instances |
+| --- | --- |
+| U+2003 EM SPACE | 254,468 |
+| U+2014 EM DASH | 63,428 |
+| U+00A0 NO-BREAK SPACE | 8,894 |
+| U+2002 EN SPACE / U+2013 EN DASH / curly quotes | 258 |
+
+Only **62** occurrences of `\x15\x01\x01\x01` corpus-wide don't fit the shape,
+so the rule is effectively universal; those fall through to the old
+byte-at-a-time behaviour. The fix drops the literal copy and keeps the entity
+token — `\x13\x39` is a real markup subtype, so the entity is the rendering
+copy and the literal is presumably what the full-text index reads.
+
+**Why no metric ever caught this.** `nxt_validate.py`'s `normalize()` collapses
+`\s+` to a single space, which hides all 263,569 doubled-whitespace cases
+outright, and `comparable()` explicitly folded doubled em- and en-dashes,
+hiding the other 63,455. Masking was total: 100% of a defect affecting 94.8%
+of documents was invisible to a harness reporting 96% byte-exact. The
+dash-folding has been **deleted** rather than kept — with the decoder fixed it
+is unnecessary, and keeping it would let the same class of defect return
+unnoticed.
+
+### `LPDD` was leaking into every document
+
+The record marker `\x11\x06\x0b\x04\x00LPDD\x00\x00\x00\x00\x00` contains four
+printable ASCII bytes, so the text sniffer emitted them. Every one of the
+26,306 decoded documents began `LPDD<!DOCTYPE html PUBLIC …`. Invisible to
+validation because `extract_body_text()` anchors on `<div class="Section">`
+and discards everything before it. Now skipped as a 14-byte unit.
+
+### After the fix
+
+| Measure | Before | After |
+| --- | --- | --- |
+| Unknown bytes skipped | 3,852,947 (2.52%) | **2,214,078 (1.45%)** |
+| Doubled characters in output | 327,048 | **0** |
+| Documents starting with `LPDD` | 26,306 | **0** |
+| Documents starting with `<!DOCTYPE` | 0 | **1,000 / 1,000 sampled** |
+
+Every remaining skipped byte is now accounted for exactly: 735,718 `\x08`
+text-run prefixes, and 1,478,360 bytes making up the 369,528 History field
+markers plus the 62 non-conforming `\x15` runs. Nothing unexplained is left in
+`fs2025.nxt`'s content layer.
+
+Live-site validation was re-run afterwards *without* the dash-folding crutch —
+a strictly harder comparison than before — and holds at **200/200 above the
+0.99 threshold, 192/200 byte-exact, mean 0.99993**. The eight non-exact cases
+are unchanged and share one cause: leg.state.fl.us renders footnote markers as
+superscripts, which reduce to a bare `1` after tag-stripping, where the source
+encodes a literal `[1]`. Every difference remains an insertion on our side.
+
+### HTML structural fidelity: a first look
+
+Worth recording what this *doesn't* cover. Every fidelity number in this
+document comes from stripping all tags and comparing plain text, so nesting,
+attributes and table structure have never been checked. A first spot check —
+six deliberately awkward documents (a real `<table>`, 32 cross-reference
+anchors, 59 History citations, non-ASCII coordinates, a Part Index) plus 1,000
+random documents, parsed with a strict tag-matching parser — found **1,000 /
+1,000 structurally clean**: no unclosed tags, no mismatched closers, no
+implicit closes, and balanced `<div>` / `<span>` / `<table>` counts in every
+one. That is less surprising than it first looks: the format stores tags as
+literal text, so there is no tag-reconstruction step that could get nesting
+wrong. The residual risk is narrower than "is the HTML valid" — it is
+attribute- and entity-level fidelity, which would need a tag-and-attribute
+sequence comparison rather than another nesting check.
+
+## Phase 4b: closing the three verification gaps
+
+Phase 2e left three things unverified rather than unknown. All three are now
+measured.
+
+### Is anything missing? The `0x1BC` count says 26,348; we find 26,306
+
+The header field at `0x1BC` exceeds the reassembled document count by 42, and
+that gap is the one completeness question the three-signal agreement cannot
+answer — Section divs, index titles and CatchlineIndex anchors all derive from
+documents already found, so unreachable documents would be invisible to every
+one of them. Four independent checks say nothing is missing:
+
+- Every `LPDD` record marker in the entire 240 MB file — all **26,306** of them
+  — lies in a type-5 content page. Zero appear in any other page type, so no
+  document text hides in the pages reassembly skips.
+- Every one of the 63,741 type-5 fragments is reachable: 26,306 chain heads +
+  37,435 successor targets, **zero unreachable**.
+- Every chain head begins with the `LPDD` marker — no chain starts mid-document.
+- The fragment tiling covers **every byte** of every type-5 page after its
+  header: zero unaccounted byte ranges between fragments or at page ends.
+
+`0x1BC` is therefore not a count of reachable documents. Across all 13 files it
+is always slightly *more* than the true count — never fewer, never equal — by
+between 1 and 44, with no correlation to file size, page count, page-type
+histogram, or B-tree entry count (checked all four). Six of the 13 files are
+off by exactly 1. That pattern fits an allocation high-water mark or a counter
+that still includes deleted records; it does not fit missing content. Moved to
+trivia.
+
+The same sweep incidentally confirmed that **`nxt_depage.py` reassembles all 13
+`.nxt` files without error** — the page/fragment model is not specific to
+`fs2025.nxt`. Nine of the 13 produce documents with intact titles; the other
+four (`Law_Download_Help_PDF`, `rtt2025`, `sct2025`, `TT2025`) reassemble but
+carry no `<title>` tags, which is a Phase 8 question, not a reassembly failure.
+
+### The 1,440 documents with no Section div
+
+All fidelity work before this was section-based, against the 24,866 documents
+that have a `<div class="Section">`. The remaining 1,440 had no evidence of any
+kind. They break down cleanly, and **no statute section is among them** — every
+`F.S. n` document has a body:
+
+| Kind | Count | Validation |
+| --- | --- | --- |
+| Chapter-level TOC (`class="Chapter"`) | 638 | 120 sampled — **120/120 exact** |
+| Part TOC (`class="Part"`) | 753 | 120 sampled — **120/120 exact** |
+| SubPart TOC (`class="SubPart"`) | 47 | no live page exists; see below |
+| `Preface, Florida Statutes 2025` | 1 | boilerplate, no live equivalent |
+| `Obsolete Cross-reference` | 1 | boilerplate, no live equivalent |
+
+leg.state.fl.us publishes chapter and Part contents pages using the *same*
+class vocabulary our decoder emits (`ChapterTitle`, `ChapterNumber`,
+`CatchlineIndex`, `IndexItem`, `Catchline`), so they diff exactly like sections
+do — `nxt_validate.py` gained `--chapters N` and `--parts N` for this. Both
+score **1.00000 mean**, byte-exact on every sampled document.
+
+SubParts have no live counterpart at all: the site's Part page lists subpart
+*headings* only and publishes no subpart contents page. What can be checked,
+is: all **47/47** subpart headings (letter + title, e.g. "A. Registration and
+Enforcement of Support Order") appear verbatim in the live Part page for their
+chapter, and all **490/490** section anchors they list resolve to real indexed
+documents.
+
+One latent bug surfaced here and is worth knowing about before Phase 9:
+**resolving a document by title is unsafe for `CHAPTER n` titles.** Every Part
+index of a chapter shares the bare title `CHAPTER 39`, so a `{title: entry}`
+dict silently keeps whichever happens to be last. Only `F.S. n` titles are
+unique. `nxt_validate.py` now passes record numbers explicitly.
+
+### Markup fidelity: `nxt_validate_markup.py`
+
+Every fidelity number before this stripped all tags first, so it measured
+whether the words were right and nothing more — the blind spot both Phase 2e
+defects lived in. `scripts/nxt_validate_markup.py` compares the *element
+stream* instead: the ordered sequence of (tag, class, other attributes), plus
+every anchor's target citation normalized so the two sides are comparable
+(ours encodes `#!-- #ID=FS20250001.01 --#`, the live site a real URL; both mean
+"1.01").
+
+200 random sections, seed 0:
+
+| | |
+| --- | --- |
+| Live elements | 7,042 |
+| Our elements | 8,290 |
+| **Aligned exactly** | **7,004 (99.46% of live)** |
+| Live elements missing from ours | **0** (see below) |
+| Live link targets missing from ours | **0** |
+
+The 38 elements that first appear as "missing" are all the same thing, and it
+is not data loss: the live site rewrites `<span class="Text X Justify">` as
+`<p class="X Justify">`. Verified against raw bytes — the `.nxt` file literally
+contains `<span xml:space="preserve" class="Text Reversion Justify">`, so our
+output is the faithful one and the transformation is the website's. Counting
+those as matches, **no live element is unaccounted for**.
+
+Our output is a strict superset of the live markup, by 1,286 elements:
+
+| Extra element | Count | Why |
+| --- | --- | --- |
+| `<a>` | 610 | session-law citations in History notes, which the live site renders as plain text |
+| `<catchline>` `<secbody>` `<history>` | 200 each | Folio's own semantic tags, which the live site strips |
+| `<notes>` | 38 | same |
+| `<span class="Text …">` | 38 | the counterparts of the `<p>` rewrite above |
+
+**Methodology note worth keeping.** The first version of this comparison
+reported 167 missing elements, 131 of them in F.S. 39.303 alone — against text
+that matches the live page character for character (ratio 1.0, identical
+length). The cause was `difflib.SequenceMatcher`'s `autojunk` heuristic, which
+discards elements appearing in more than 1% of a sequence of length ≥ 200 as
+"popular". Statute markup repeats `div.Subsection` and `span.Number` hundreds
+of times, so exactly the anchors alignment depends on were thrown away.
+`autojunk=False` is mandatory here; with it on, the measurement invents
+differences.
+
 ## Not yet investigated
 
-- The full byte-value vocabulary of remaining short control opcodes (Phase 2
-  continued), including `\x15` (above). The current fallback (skip unknown
-  bytes one at a time, but pass through anything printable) is good enough
-  for reliable text extraction and no longer masks any known content loss,
-  but it still doesn't explain everything structurally. The paging/record
-  model that used to be listed here alongside it is **solved** — see Phase
-  2d above.
+- Entity-level fidelity *within* elements. The element stream and the
+  tag-stripped text are both verified; what has not been compared is the
+  exact entity encoding of text inside each element (e.g. whether a given
+  character arrives as `&#x2003;` or as a literal). Low risk — the text
+  comparison unescapes both sides and matches — but it is not zero.
+- Whitespace-class defects remain invisible to live-site diffing, because
+  `normalize()` collapses `\s+` and that collapsing is load-bearing for other
+  reasons. This is how 263,569 of Phase 2e's 327,048 doubled characters hid.
+  Catching that class needs a check against the decoder's own output rather
+  than against the live page.
+- Page geometry has only ever been exercised on the 2025 edition. The
+  reassembler should assert its assumptions rather than silently produce
+  garbage if a future year's layout differs.
 - The meaning of the remaining page-header fields: the `uint32` at offset 2
   of every page (varies per page, not sequential — plausibly a checksum),
   and the constant `ffffffff` at offset 12 of content pages. Not needed for

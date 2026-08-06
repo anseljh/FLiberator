@@ -301,6 +301,80 @@ still default to reading `FLLawDL2025/` for now, since that's what they
 were developed and checked against; pointing the real pipeline at
 `download/` instead is part of Phase 7.
 
+### Remaining work, after Phase 2e — items 1-3 ✅ done, 4-7 ⬜ open
+
+**Items 1, 2 and 3 are done** (Phase 4b — see `docs/nxt-format.md`):
+nothing is missing (all 26,306 `LPDD` markers are in content pages, every
+fragment is reachable, the fragment tiling covers every byte, and `0x1BC`
+is a bookkeeping counter, now trivia); the 1,440 non-section documents are
+validated (chapter TOCs 120/120 exact, Part TOCs 120/120 exact, all 47
+SubPart headings verbatim in the live Part pages, and no statute section
+is among them); and markup fidelity is measured (99.46% of live elements
+align exactly, **0 live elements and 0 link targets missing** once the
+site's own `<span>`→`<p>` rewrite is accounted for). Items 4-7 below
+remain open, unchanged.
+
+
+Phase 2e's opcode tally closed the last genuinely *unknown* thing about
+`fs2025.nxt`'s content layer — every byte is now accounted for. What's
+left that matters is verification not yet done and decisions not yet
+made, which is different work and worth keeping separate from the
+reverse-engineering phases above. In the order they should be tackled:
+
+1. **The `0x1BC` count says 26,348; we find 26,306.** (item 3 in the
+   ordering below, but do it first — cheapest, and the only candidate for
+   a real completeness hole.) A 42-document discrepancy against a count
+   that is now exact. This is the one completeness question the
+   three-signal agreement *cannot* answer: all three signals derive from
+   documents already found, so 42 unreachable documents would be
+   invisible to every one of them.
+2. **The 1,440 documents with no Section div have never been validated.**
+   All fidelity work to date is section-based, against the 24,866
+   documents that have one. Prefaces, `CHAPTER n` pages and Part Indexes
+   — 5.5% of the corpus — have zero fidelity evidence of any kind, and
+   nobody has confirmed all 1,440 are legitimately structural rather than
+   something broken.
+3. **Attribute- and entity-level HTML fidelity is unmeasured.** Every
+   fidelity number in this project strips all tags before comparing, and
+   the Phase 2e structural check verified nesting only. `href` values,
+   `class` names, `colspan`, entity correctness — never checked against
+   the live site. Both defects found in Phase 2e hid in exactly this
+   blind spot, and this is the deliverable itself.
+4. **Does the page/fragment model generalize?** (Phase 8, below.) Not a
+   curiosity: if `flcnst2025.nxt` or `uscon.nxt` hold real content and
+   reassembly breaks on them, that's content loss in a file we'd publish.
+   Do the narrow version first — *which* of the 12 hold documents at all
+   — since that decides whether Phase 8 is one file or twelve, and should
+   inform Phase 7's API before it's frozen.
+5. **The `[n]` footnote-marker representation is undecided.** Not an
+   unknown: the source encodes a literal `[1]`, leg.state.fl.us renders a
+   superscript. It is the only remaining difference in the 200-section
+   sample (~4% of it). Which representation the output should use is a
+   Phase 9 call. Open sub-question: whether a 200-section sample is large
+   enough to have surfaced every editorial notation of this kind, or just
+   the most common one.
+6. **Some output defects the harness structurally cannot see.**
+   `normalize()` collapses `\s+`, which hid 263,569 of Phase 2e's 327,048
+   doubled characters. That collapsing is load-bearing for other reasons,
+   so whitespace-class defects are permanently invisible to live-site
+   diffing. Catching them needs a check against the decoder's own output
+   rather than against the live page.
+7. **Page geometry has only ever been tested on one file from one year.**
+   The pipeline is meant to re-run against a fresh download annually.
+   This needs no research — it needs `nxt_depage.py` to assert its
+   assumptions and fail loudly rather than silently reassembling garbage
+   if a future edition differs.
+
+**Closed as trivia** (understood well enough, or irrelevant to the
+deliverable — recorded so they stop being re-litigated): the
+checksum-shaped fields at `0x11E`/`0x1AE` and page offset 2; the 8-byte
+ID at `0x100` (a file hash serves the one real use); the physical
+storage order of documents; `data1.cab`/`data2.cab`; the internals of the
+21,020 search-index pages (only relevant if reproducing Folio's
+full-text search, which FLiberator doesn't do); the exact meaning of
+`\x08`; the 62 non-conforming `\x15\x01\x01\x01` runs; the single record
+not ending in `</html>`; and the lone `Obsolete Cross-reference` title.
+
 ### Phase 7 — Promote scripts/ into the installable package ⬜ open
 `src/fliberator/` is still just a scaffold (`__version__` only). Move the
 decoder (`nxt_decode_poc.py`), index builder (`nxt_build_index.py`), and

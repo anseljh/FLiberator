@@ -29,6 +29,33 @@ Opcode rules (see docs/nxt-format.md for how these were derived):
                                       text by the printable-run sniffer.
                                       Confirmed via 1,936 instances split
                                       evenly 970 open / 966 close.
+  0x15 0x01 0x01 0x01 [0x08] <ch> -- "the character that follows is stored
+                                      twice": one literal UTF-8 copy (here),
+                                      then a 0x13 0x39 token carrying the *same*
+                                      character as an HTML entity. Emitting both
+                                      renders it twice, so the literal copy is
+                                      dropped and the entity token is kept -- the
+                                      entity is the markup copy (0x39 is a real
+                                      token subtype), the literal is presumably
+                                      the plain-text copy the search index reads.
+                                      Confirmed across 327,048 pairs in 94.8% of
+                                      documents, dominated by EM SPACE (254,468),
+                                      EM DASH (63,428) and NBSP (8,894); only 62
+                                      occurrences corpus-wide don't fit the shape,
+                                      and those fall through to the old behaviour.
+  0x15 0x04 0x01 <0x05|0x06>      -- field marker inside History notes: 0x05
+                                      introduces a hyperlink (every instance is
+                                      followed by a 0x13 0x37 token opening
+                                      `<a href="#!--`), 0x06 a non-link field.
+                                      Perfectly balanced at 184,764 each, and
+                                      redundant with the literal <a> markup that
+                                      follows either way -- so skipping them
+                                      loses nothing, same as the 0x10 toggle.
+  0x11 0x06 0x0b 0x04 0x00 "LPDD" -- start-of-document record marker, 14 bytes
+    + 5 zero bytes                    including trailing padding. Skipped as a
+                                      unit: "LPDD" is printable ASCII, so without
+                                      this rule the sniffer emitted it as literal
+                                      text at the head of all 26,306 documents.
   anything else < 0x20            -- unrecognized opcode; skipped one byte at a
                                       time (logged) as a deliberately dumb
                                       fallback, so decoding degrades instead of
@@ -57,6 +84,32 @@ def is_text_byte(data: bytes, i: int) -> int:
     return 0
 
 
+LPDD_MARKER = b"\x11\x06\x0b\x04\x00LPDD\x00\x00\x00\x00\x00"
+DOUBLED_CHAR_MARKER = b"\x15\x01\x01\x01"
+
+
+def doubled_char_len(data: bytes, i: int, end: int) -> int:
+    """If a doubled-character marker starts at i, return the number of bytes to
+    drop (marker + optional 0x08 + the literal copy of the character), leaving
+    the 0x13 0x39 entity token that follows to be emitted normally. Returns 0 if
+    the bytes at i don't match the confirmed shape."""
+    if data[i : i + 4] != DOUBLED_CHAR_MARKER:
+        return 0
+    j = i + 4
+    if j < end and data[j] == 0x08:
+        j += 1
+    n = is_text_byte(data, j)
+    # The literal copy is always a multi-byte UTF-8 character (em space, em
+    # dash, NBSP, ...); a 1-byte run here would be ordinary ASCII text, which
+    # means this isn't the doubled-character shape.
+    if n < 2:
+        return 0
+    j += n
+    if data[j : j + 2] != b"\x13\x39":
+        return 0
+    return j - i
+
+
 def decode(data: bytes, start: int, end: int) -> tuple[str, dict]:
     out = []
     i = start
@@ -64,7 +117,13 @@ def decode(data: bytes, start: int, end: int) -> tuple[str, dict]:
     subtypes: Counter = Counter()
     while i < end:
         b = data[i]
-        if b == 0x13 and i + 1 < end:
+        if b == 0x11 and data[i : i + len(LPDD_MARKER)] == LPDD_MARKER:
+            stats["record_markers"] = stats.get("record_markers", 0) + 1
+            i += len(LPDD_MARKER)
+        elif b == 0x15 and (skip := doubled_char_len(data, i, end)):
+            stats["doubled_chars_dropped"] = stats.get("doubled_chars_dropped", 0) + 1
+            i += skip
+        elif b == 0x13 and i + 1 < end:
             subtype = data[i + 1]
             b1 = data[i + 2]
             if b1 & 0x80:
