@@ -301,7 +301,12 @@ still default to reading `FLLawDL2025/` for now, since that's what they
 were developed and checked against; pointing the real pipeline at
 `download/` instead is part of Phase 7.
 
-### Remaining work, after Phase 2e — items 1-3 ✅ done, 4-7 ⬜ open
+### Remaining work, after Phase 2e — items 1-4 ✅ done, 5-7 ⬜ open
+
+**Item 4 is done** (Phase 8a): the page/fragment model is a property of
+the container, not of `fs2025.nxt` — all 13 files reassemble cleanly, and
+running the corpus caught a decoder defect that `fs2025.nxt` alone never
+could have surfaced. Details in item 4 below.
 
 **Items 1, 2 and 3 are done** (Phase 4b — see `docs/nxt-format.md`):
 nothing is missing (all 26,306 `LPDD` markers are in content pages, every
@@ -311,7 +316,7 @@ validated (chapter TOCs 120/120 exact, Part TOCs 120/120 exact, all 47
 SubPart headings verbatim in the live Part pages, and no statute section
 is among them); and markup fidelity is measured (99.46% of live elements
 align exactly, **0 live elements and 0 link targets missing** once the
-site's own `<span>`→`<p>` rewrite is accounted for). Items 4-7 below
+site's own `<span>`→`<p>` rewrite is accounted for). Items 5-7 below
 remain open, unchanged.
 
 
@@ -340,12 +345,17 @@ reverse-engineering phases above. In the order they should be tackled:
    `class` names, `colspan`, entity correctness — never checked against
    the live site. Both defects found in Phase 2e hid in exactly this
    blind spot, and this is the deliverable itself.
-4. **Does the page/fragment model generalize?** (Phase 8, below.) Not a
-   curiosity: if `flcnst2025.nxt` or `uscon.nxt` hold real content and
-   reassembly breaks on them, that's content loss in a file we'd publish.
-   Do the narrow version first — *which* of the 12 hold documents at all
-   — since that decides whether Phase 8 is one file or twelve, and should
-   inform Phase 7's API before it's frozen.
+4. ~~**Does the page/fragment model generalize?**~~ ✅ **done** (Phase 8a
+   — see `docs/nxt-format.md`). Yes: all 13 files reassemble with zero
+   chain conflicts, 45,520 documents total, and 12 of 13 decode to
+   well-formed HTML (0 unclosed, 0 mismatched) — the 13th is a PDF
+   payload. Every file is now identified from its decoded content rather
+   than its filename, which corrected several wrong guesses. Worth having
+   done for its own sake: the corpus exposed a decoder defect
+   `fs2025.nxt` structurally could not reveal — the `0x15 0x04 0x01 <id>`
+   field marker had only ever been seen with non-printable ids, so ids
+   `0x4d`/`0x4e` leaked 39,200 stray `M`/`N` characters into 10 files.
+   Fixed and re-validated (40/40 sections, no regression).
 5. **The `[n]` footnote-marker representation is undecided.** Not an
    unknown: the source encodes a literal `[1]`, leg.state.fl.us renders a
    superscript. It is the only remaining difference in the 200-section
@@ -382,13 +392,24 @@ eventually the downloader into real modules under `src/fliberator/`, add a
 CLI entry point, and add unit tests (decoder opcode rules, index builder
 against a small fixture) to replace ad hoc script runs.
 
-### Phase 8 — Extend to the rest of the corpus ⬜ open
-All work so far targets `fs2025.nxt` only. The other 12 `.nxt` files
-(`flcnst2025.nxt` = FL Constitution, `uscon.nxt` = US Constitution, plus
-various index/table files whose purpose is still guessed rather than
-confirmed — see `docs/nxt-format.md`'s Corpus table) need the same
-decode+index treatment, or an explicit decision that some of them (e.g.
-the index files) aren't in scope for FLiberator's output.
+### Phase 8 — Extend to the rest of the corpus 🟡 triage done, scope open
+**Phase 8a (done)** answered the structural half: all 13 files reassemble
+and decode cleanly, and every one is now identified from its decoded
+content rather than a filename guess (`scripts/nxt_corpus_triage.py`,
+write-up in `docs/nxt-format.md`). Four files hold primary law —
+`fs2025.nxt` (26,306 docs), `lf2025.nxt` (255 session-law chapters),
+`flcnst2025.nxt` (226) and `uscon.nxt` (2) — and the remaining eight
+markup files are finding aids derived from it (subject/definition/
+constitution indexes, cross-reference and tracing tables); the 13th is a
+help PDF.
+
+**Still open:** the per-file work those four need beyond reassembly —
+citation indexes of their own (`nxt_build_index.py` is `F.S. n`-specific),
+and validation against ground truth, which for `lf2025`/`flcnst2025`
+means a different URL scheme than `nxt_validate.py`'s. And the scope
+call: whether the eight finding-aid files are part of FLiberator's
+output at all, or whether "liberate the statutes" stops at primary law.
+That is a Phase 9 decision, but it is now a decision over a known list.
 
 ### Phase 9 — Decide and implement the actual output shape ⬜ open
 The "liberated" deliverable format has never been decided — one HTML file

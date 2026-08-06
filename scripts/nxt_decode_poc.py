@@ -43,14 +43,39 @@ Opcode rules (see docs/nxt-format.md for how these were derived):
                                       EM DASH (63,428) and NBSP (8,894); only 62
                                       occurrences corpus-wide don't fit the shape,
                                       and those fall through to the old behaviour.
-  0x15 0x04 0x01 <0x05|0x06>      -- field marker inside History notes: 0x05
-                                      introduces a hyperlink (every instance is
-                                      followed by a 0x13 0x37 token opening
-                                      `<a href="#!--`), 0x06 a non-link field.
-                                      Perfectly balanced at 184,764 each, and
-                                      redundant with the literal <a> markup that
-                                      follows either way -- so skipping them
-                                      loses nothing, same as the 0x10 toggle.
+  0x15 <0x03|0x04> 0x01 <id>      -- field marker: a 4-byte unit whose <id> says
+                                      which Folio field is being opened or
+                                      closed. Redundant with the literal markup
+                                      that follows either way, so the whole unit
+                                      is skipped, same as the 0x10 toggle.
+                                      Confirmed ids, all perfectly balanced in
+                                      open/close pairs:
+                                        0x05/0x06  History-note field -- 0x05
+                                                   introduces a hyperlink (always
+                                                   followed by a 0x13 0x37 token
+                                                   opening `<a href="#!--`), 0x06
+                                                   a non-link field. 549,848 each
+                                                   corpus-wide, 184,764 in
+                                                   fs2025.nxt alone.
+                                        0x4d/0x4e  the document Title field --
+                                                   0x4d sits immediately before
+                                                   <TITLE>, 0x4e immediately
+                                                   after </TITLE>. 19,600 each,
+                                                   in 10 of the 13 files but
+                                                   *not* in fs2025.nxt.
+                                        0x03 0x01  end-of-body marker, exactly
+                                                   one per document, xrt2025.nxt
+                                                   only (613).
+                                      The <id> byte matters: 0x4d/0x4e are the
+                                      printable ASCII "M"/"N", so before this
+                                      rule was generalized beyond 0x05/0x06 the
+                                      first three bytes were skipped one at a
+                                      time and the id fell through to the
+                                      printable-run sniffer, emitting a literal
+                                      "M" before every <TITLE> and "N" after
+                                      every </TITLE> -- 39,200 stray characters
+                                      across 10 files. fs2025.nxt was immune only
+                                      because both of its ids are non-printable.
   0x11 0x06 0x0b 0x04 0x00 "LPDD" -- start-of-document record marker, 14 bytes
     + 5 zero bytes                    including trailing padding. Skipped as a
                                       unit: "LPDD" is printable ASCII, so without
@@ -87,6 +112,11 @@ def is_text_byte(data: bytes, i: int) -> int:
 LPDD_MARKER = b"\x11\x06\x0b\x04\x00LPDD\x00\x00\x00\x00\x00"
 DOUBLED_CHAR_MARKER = b"\x15\x01\x01\x01"
 
+# 0x15 <kind> 0x01 <id>. Kind 0x01 is the doubled-character marker, which
+# carries a payload and is handled separately; these two are bare 4-byte
+# field markers whose trailing id byte must be consumed as part of the unit.
+FIELD_MARKER_KINDS = (0x03, 0x04)
+
 
 def doubled_char_len(data: bytes, i: int, end: int) -> int:
     """If a doubled-character marker starts at i, return the number of bytes to
@@ -110,6 +140,16 @@ def doubled_char_len(data: bytes, i: int, end: int) -> int:
     return j - i
 
 
+def is_field_marker(data: bytes, i: int, end: int) -> bool:
+    """True if a bare 4-byte 0x15 field marker starts at i."""
+    return (
+        i + 4 <= end
+        and data[i] == 0x15
+        and data[i + 1] in FIELD_MARKER_KINDS
+        and data[i + 2] == 0x01
+    )
+
+
 def decode(data: bytes, start: int, end: int) -> tuple[str, dict]:
     out = []
     i = start
@@ -123,6 +163,9 @@ def decode(data: bytes, start: int, end: int) -> tuple[str, dict]:
         elif b == 0x15 and (skip := doubled_char_len(data, i, end)):
             stats["doubled_chars_dropped"] = stats.get("doubled_chars_dropped", 0) + 1
             i += skip
+        elif b == 0x15 and is_field_marker(data, i, end):
+            stats["field_markers"] = stats.get("field_markers", 0) + 1
+            i += 4
         elif b == 0x13 and i + 1 < end:
             subtype = data[i + 1]
             b1 = data[i + 2]

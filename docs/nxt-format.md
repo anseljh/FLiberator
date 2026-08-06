@@ -19,6 +19,12 @@ decision.
 
 ## Corpus
 
+> **Superseded in part by Phase 8a** (below), which identifies every file from
+> its decoded content rather than its filename. Several "likely …" guesses in
+> this table are wrong — notably `conndx2025.nxt`, which is the **Florida
+> Constitution** index, not a "connection index." Kept here as written for
+> history; see the Phase 8a table for what each file actually holds.
+
 | file | size | notes |
 |---|---|---|
 | `uscon.nxt` | 319,488 | US Constitution. Older build (copyright range ends 2018). Best small test target. |
@@ -1116,6 +1122,116 @@ of times, so exactly the anchors alignment depends on were thrown away.
 `autojunk=False` is mandatory here; with it on, the measurement invents
 differences.
 
+## Phase 8a: the model generalizes — and the corpus found a defect `fs2025` couldn't
+
+Everything through Phase 4b was measured against `fs2025.nxt` alone. The open
+question ("remaining work" item 4) was whether the page/fragment model is a
+property of the *container* or just of that one file — a real risk rather than
+a curiosity, since `flcnst2025.nxt` and `lf2025.nxt` turn out to hold primary
+law FLiberator would publish.
+
+Reproduce with `uv run python scripts/nxt_corpus_triage.py`.
+
+### The storage layer is a container property
+
+All **13 files reassemble with zero chain conflicts** — no exceptions, no
+out-of-range back-pointers, no unreachable fragments. Nothing about
+`nxt_depage.py` is specific to `fs2025.nxt`. Combined across the corpus that
+is **45,520 documents**.
+
+### The content layer is nearly universal, and decodes to well-formed HTML
+
+12 of the 13 are tokenized markup; the 13th (`Law_Download_Help_PDF.nxt`) is a
+single record wrapping a PDF byte stream, which is why its "unknown byte"
+figures are meaningless. Across all 45,519 markup documents, the decoded output
+has **0 unclosed elements and 0 mismatched close tags** — with exactly one
+outlier, discussed below.
+
+After the fix in the next subsection, the byte-level skip rate falls to well
+under 1% almost everywhere, and **99.4% of everything still unaccounted for is
+the single byte `0x08`**, already closed as trivia (it emits nothing and
+precedes text runs). `rtt2025.nxt`'s comparatively high 3.3% is *entirely*
+`0x08` — an artifact of that file being a dense table of short cells, not a
+defect.
+
+### The defect: 39,200 stray characters, in 10 files, invisible in `fs2025`
+
+Phase 2e established the `0x15 0x04 0x01 <id>` field marker from its two
+`fs2025.nxt` instances, `0x05` and `0x06`, and the decoder hardcoded those two
+ids. The corpus has two more: **`0x4d`/`0x4e`**, bracketing the document Title
+field (`0x4d` immediately before `<TITLE>`, `0x4e` immediately after
+`</TITLE>`), perfectly balanced at 19,600 each, present in 10 of the 13 files.
+
+`0x4d` and `0x4e` are the printable ASCII `M` and `N`. Because the rule didn't
+match, the decoder skipped the first three bytes one at a time and then handed
+the id to the printable-run sniffer, which emitted it as literal text:
+
+```
+<HTML>\r\n<HEAD>\r\nM<TITLE>Constitution of the United States</TITLE>N\r\n<link ...
+                   ^                                                ^
+```
+
+**`fs2025.nxt` was immune purely by luck** — both of its ids happen to be
+non-printable, so the identical bug produced no visible output there. No amount
+of further work on `fs2025.nxt` would have found this; only running the corpus
+did. This is the same failure mode as Phase 2e's leaked `LPDD`, and the third
+defect of that shape.
+
+Fixed by generalizing the rule to `0x15 <0x03|0x04> 0x01 <id>` for any id,
+consuming all four bytes as a unit. A fourth shape confirmed at the same time:
+`0x15 0x03 0x01 0x01`, an end-of-body marker appearing exactly once per
+document in `xrt2025.nxt` (613 of them). Skip rates before → after:
+
+| file | before | after |
+|---|---|---|
+| `stin2025.nxt` | 5.61% | 0.83% |
+| `xrt2025.nxt` | 6.47% | 1.30% |
+| `fs2025.nxt` | 1.45% | 0.48% |
+
+Re-validated `fs2025.nxt` against the live site afterwards: 40/40 sections
+pass, mean ratio 0.99999 — no regression.
+
+### The one structural outlier is real content, not damage
+
+`lf2025.nxt` record 197 — *Chapter 2025-198*, the General Appropriations Act,
+2,025,026 bytes decoded — closes with `</approp>` rather than `</html>` and
+uses a custom tag vocabulary (`<LAWBODY>`, `<LSECT>`, `<approp>`, `<PRE>`).
+That is what the source contains. It is the sole source of the corpus-wide 3
+unclosed / 1 mismatched element counts, and is the same class as `fs2025.nxt`'s
+single non-`</html>` record already closed as trivia.
+
+### What each file actually holds
+
+The filenames are abbreviations, and several earlier guesses in the Corpus
+table above were wrong. These are identified from each file's decoded `<title>`
+and first document body, not from the filename:
+
+| file | documents | contents |
+|---|---|---|
+| `fs2025.nxt` | 26,306 | **Florida Statutes** — the main target |
+| `defx2025.nxt` | 12,692 | index of **defined terms** → statute section (`AAF intercity rail passenger, 343.545`) |
+| `stin2025.nxt` | 3,783 | the general **statutes subject index** |
+| `lndx2025.nxt` | 1,018 | index to the **Laws of Florida**, keyed to session-law chapters (`…authentication by judge, 2025-163`) |
+| `xrt2025.nxt` | 613 | **cross-reference tables**, one document per statutes chapter |
+| `conndx2025.nxt` | 374 | index to the **Florida Constitution**, keyed to article/section (`ADVERSE MEDICAL INCIDENTS, A10 S25`) |
+| `lf2025.nxt` | 255 | **Laws of Florida** — 2025 session laws, one document per chapter |
+| `flcnst2025.nxt` | 226 | **Florida Constitution** |
+| `TT2025.nxt` | 217 | **Tracing Table** |
+| `rtt2025.nxt` | 21 | **Repealed and Transferred Sections Table** |
+| `sct2025.nxt` | 12 | **Section Changes Table** |
+| `uscon.nxt` | 2 | **US Constitution** + its index |
+| `Law_Download_Help_PDF.nxt` | 1 | the help PDF, wrapped in the container |
+
+Four files (`conndx`, `lndx`, `defx`, `stin`) all self-title `Subject Index`,
+so the `<title>` alone doesn't separate them — the distinction above comes from
+what their entries point *at*. Note this corrects the Corpus table's earlier
+guesses: `conndx` is the **Constitution** index, not a "connection index."
+
+**Consequence for Phase 8/9 scope:** three files hold primary law
+(`fs2025`, `flcnst2025`, `lf2025`, plus `uscon`), and the rest are
+finding aids derived from it. That is a scope decision for Phase 9, but it is
+now a decision over a known list rather than an unknown one.
+
 ## Not yet investigated
 
 - Entity-level fidelity *within* elements. The element stream and the
@@ -1128,9 +1244,17 @@ differences.
   reasons. This is how 263,569 of Phase 2e's 327,048 doubled characters hid.
   Catching that class needs a check against the decoder's own output rather
   than against the live page.
-- Page geometry has only ever been exercised on the 2025 edition. The
-  reassembler should assert its assumptions rather than silently produce
-  garbage if a future year's layout differs.
+- Page geometry has only ever been exercised on the 2025 edition. Phase 8a
+  widened this to all 13 files of that edition — the 4096-byte page and the
+  slot/chain layout hold across every one — but they were all built by the
+  same tooling in the same year, so this says nothing about a future
+  edition. The reassembler should still assert its assumptions rather than
+  silently produce garbage if a later year's layout differs.
+- Fidelity for the non-`fs2025` files is unmeasured. Phase 8a shows they
+  reassemble and decode to well-formed HTML, and the Florida Constitution
+  spot-checks verbatim against the live text, but no systematic diff
+  against ground truth has been run for `flcnst2025.nxt`, `lf2025.nxt` or
+  `uscon.nxt` — `nxt_validate.py`'s URL builder is `F.S. n`-specific.
 - The meaning of the remaining page-header fields: the `uint32` at offset 2
   of every page (varies per page, not sequential — plausibly a checksum),
   and the constant `ffffffff` at offset 12 of content pages. Not needed for

@@ -442,7 +442,7 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">FLiberator field notes · after Phase 4b</div>
+    <div class="eyebrow">FLiberator field notes · after Phase 8a</div>
     <h1>The <em>NXT</em> Ledger</h1>
     <p class="lede">
       A running account of what we've proven, guessed, and still can't explain
@@ -451,13 +451,14 @@
       the Florida Statutes. Phase 2d rewrote most of this page: the file turned
       out to be a <strong>paged store</strong>, and nearly everything previously
       logged as corruption was storage metadata being read as content. Phase 2e
-      then accounted for every remaining byte, and Phase 4b started checking the
-      markup rather than just the words.
+      then accounted for every remaining byte, Phase 4b started checking the
+      markup rather than just the words, and Phase 8a finally ran both layers
+      over the whole corpus instead of one file.
     </p>
     <div class="stat-strip">
-      <div class="stat"><div class="n">13</div><div class="l">.nxt files in the corpus</div></div>
-      <div class="stat"><div class="n">13</div><div class="l">reassemble without error</div></div>
-      <div class="stat"><div class="n">26,306</div><div class="l">documents in fs2025</div></div>
+      <div class="stat"><div class="n">13 / 13</div><div class="l">files reassemble &amp; decode</div></div>
+      <div class="stat"><div class="n">45,520</div><div class="l">documents corpus-wide</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">unclosed or mismatched tags</div></div>
       <div class="stat"><div class="n">99.46%</div><div class="l">live elements matched</div></div>
       <div class="stat"><div class="n">0</div><div class="l">missing elements or links</div></div>
     </div>
@@ -526,7 +527,7 @@
           <tr><td class="off">(any position)</td><td>Printable/UTF-8 runs are sniffed everywhere, not gated by any specific opcode — plenty of real text is completely unprefixed.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">10 &lt;0|1&gt; 03 82 &lt;id&gt; 01</td><td>Paired character-formatting toggle, redundant with the literal &lt;B&gt;/&lt;I&gt;/&lt;TITLE&gt; tags it wraps.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">15 01 01 01 [08] &lt;ch&gt;</td><td><strong>Character-doubling marker.</strong> The character that follows is stored twice — once literally, then again as an HTML entity in a <code>13 39</code> token. Emitting both rendered it twice; the literal copy is now dropped and the entity kept. 327,048 pairs across 94.8% of documents.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">15 04 01 &lt;05|06&gt;</td><td>Field marker inside History notes: <code>05</code> introduces a hyperlink, <code>06</code> a non-link field. Perfectly balanced at 184,764 each and redundant with the literal markup that follows, so skipping them loses nothing.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">15 &lt;03|04&gt; 01 &lt;id&gt;</td><td><strong>Field marker</strong>, 4 bytes, redundant with the literal markup that follows. Confirmed ids, all balanced in open/close pairs: <code>05</code>/<code>06</code> wrap a History-note field (<code>05</code> introduces a hyperlink, <code>06</code> a non-link field — 549,848 each corpus-wide); <code>4d</code>/<code>4e</code> wrap the document Title; <code>15 03 01 01</code> ends a body. <em>The <code>id</code> byte is the catch</em> — see the Phase 8a note below.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">11 06 0b 04 00 "LPDD" …</td><td>Start-of-document record marker. It does <em>not</em> mark a page boundary — it marks where a document begins, which is why a document's own chain can cross many pages without one. Counting these gives 26,306, the true document count.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">6 bytes interrupting a token</td><td>Not part of the content layer at all: a fragment's inline back-pointer, <code>uint32</code> page + <code>uint16</code> reverse fragment index. Strip it and follow it, and the interrupted token resumes exactly where it left off. See the paging section below.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">anything else &lt; 0x20</td><td>Unrecognized opcode. The decoder skips one byte at a time and keeps going rather than halting.</td><td><span class="status-chip unknown">Unknown</span></td></tr>
@@ -666,6 +667,50 @@
   <p class="legend-note" style="margin-top:18px;"><strong>A measurement trap worth recording.</strong> The first run of this comparison reported 167 missing elements, 131 of them in F.S. 39.303 alone — against text matching the live page character for character. The cause was <code>difflib</code>'s <code>autojunk</code> heuristic, which discards any element appearing in more than 1% of a sequence of 200+ as "popular". Statute markup repeats <code>div.Subsection</code> and <code>span.Number</code> hundreds of times, so exactly the anchors the alignment depends on were thrown away. With <code>autojunk=False</code> the number is 0.</p>
 </section>
 
+<section id="corpus">
+  <div class="section-head">
+    <div class="eyebrow">Phase 8a · all 13 files, not just one</div>
+    <h2>The model is a property of the container</h2>
+    <p>Everything above was measured against <code>fs2025.nxt</code> alone. Running both layers over the whole corpus was logged as a risk, not a curiosity — two of the other files turn out to hold primary law that FLiberator would publish.</p>
+  </div>
+
+  <p class="legend-note"><strong>All 13 files reassemble with zero chain conflicts</strong> — no exceptions, no out-of-range back-pointers, no unreachable fragments. Twelve are tokenized markup and decode to well-formed HTML across all 45,519 of their documents: <strong>0 unclosed elements, 0 mismatched close tags</strong>. The thirteenth is a PDF wrapped in the container. Nothing in the paging model was specific to the statutes file.</p>
+
+  <p class="legend-note" style="margin-top:18px;"><strong>The defect only the corpus could find.</strong> Phase 2e derived the <code>15 04 01 &lt;id&gt;</code> field marker from the two ids present in <code>fs2025.nxt</code>, <code>05</code> and <code>06</code>, and hardcoded them. The corpus has two more — <code>4d</code> and <code>4e</code>, bracketing the document Title, in 10 of the 13 files. Those are the printable ASCII <code>M</code> and <code>N</code>: with no matching rule, the decoder skipped the first three bytes and handed the id to the printable-run sniffer, which emitted it as text.</p>
+
+  <div class="anatomy" style="margin-top:20px;">
+    <div class="field data">&lt;HEAD&gt;<div class="cap">literal</div></div>
+    <div class="field op">M<div class="cap">leaked id</div></div>
+    <div class="field data">&lt;TITLE&gt;Constitution of the United States&lt;/TITLE&gt;<div class="cap">literal</div></div>
+    <div class="field op">N<div class="cap">leaked id</div></div>
+  </div>
+  <p class="diagram-caption">39,200 stray characters across 10 files. <code>fs2025.nxt</code> was immune purely by luck — both of <em>its</em> ids happen to be non-printable, so the identical bug produced no visible output there. No further work on the statutes file alone would ever have surfaced this. It is the third defect of exactly this shape, after the doubled characters and the leaked <code>LPDD</code>.</p>
+
+  <div class="table-scroll" style="margin-top:32px;">
+    <div class="table-card">
+      <table>
+        <thead><tr><th>File</th><th>Documents</th><th>What it actually holds</th></tr></thead>
+        <tbody>
+          <tr><td class="off">fs2025.nxt</td><td class="off">26,306</td><td><strong>Florida Statutes</strong> — the main target</td></tr>
+          <tr><td class="off">defx2025.nxt</td><td class="off">12,692</td><td>Index of <strong>defined terms</strong> → statute section</td></tr>
+          <tr><td class="off">stin2025.nxt</td><td class="off">3,783</td><td>The general <strong>statutes subject index</strong></td></tr>
+          <tr><td class="off">lndx2025.nxt</td><td class="off">1,018</td><td>Index to the <strong>Laws of Florida</strong>, keyed to session-law chapters</td></tr>
+          <tr><td class="off">xrt2025.nxt</td><td class="off">613</td><td><strong>Cross-reference tables</strong>, one document per statutes chapter</td></tr>
+          <tr><td class="off">conndx2025.nxt</td><td class="off">374</td><td>Index to the <strong>Florida Constitution</strong> — <em>not</em> a "connection index", as the filename suggested</td></tr>
+          <tr><td class="off">lf2025.nxt</td><td class="off">255</td><td><strong>Laws of Florida</strong> — 2025 session laws, one document per chapter</td></tr>
+          <tr><td class="off">flcnst2025.nxt</td><td class="off">226</td><td><strong>Florida Constitution</strong></td></tr>
+          <tr><td class="off">TT2025.nxt</td><td class="off">217</td><td><strong>Tracing Table</strong></td></tr>
+          <tr><td class="off">rtt2025.nxt</td><td class="off">21</td><td><strong>Repealed and Transferred Sections Table</strong></td></tr>
+          <tr><td class="off">sct2025.nxt</td><td class="off">12</td><td><strong>Section Changes Table</strong></td></tr>
+          <tr><td class="off">uscon.nxt</td><td class="off">2</td><td><strong>US Constitution</strong> and its index</td></tr>
+          <tr><td class="off">Law_Download_Help_PDF.nxt</td><td class="off">1</td><td>The help PDF, wrapped in the container</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legend-note" style="margin-top:18px;">Identified from each file's decoded <code>&lt;title&gt;</code> and first document body, not from its filename — which corrected several earlier guesses. Four of these self-title <code>Subject Index</code>, so what separates them is what their entries point <em>at</em>. <strong>Four files hold primary law</strong> and the remaining eight markup files are finding aids derived from it; whether those are in FLiberator's scope is now a decision over a known list rather than an unknown one.</p>
+</section>
+
 <section id="phases">
   <div class="section-head">
     <div class="eyebrow">Plan status</div>
@@ -685,13 +730,13 @@
   </div>
 
   <div class="qgrid">
-    <div class="qcard"><h3>Does the page model survive a new year?</h3><p>The 4096-byte geometry was derived from the 2025 edition alone, and the pipeline is meant to re-run annually. Untested — and the reassembler currently assumes rather than asserts, so a changed layout would produce garbage quietly.</p></div>
+    <div class="qcard"><h3>Does the page model survive a new year?</h3><p>Phase 8a widened this from one file to all 13 — the geometry holds across every one. But they were all built by the same tooling in the same year, so it still says nothing about a future edition, and the reassembler assumes rather than asserts, so a changed layout would produce garbage quietly.</p></div>
+    <div class="qcard"><h3>How faithful are the non-statute files?</h3><p>Phase 8a shows all 13 reassemble and decode to well-formed HTML, and the Florida Constitution spot-checks verbatim. But no systematic diff against ground truth has been run for the constitution, the session laws or the US Constitution — the validation harness's URL builder only knows how to address <code>F.S.&nbsp;n</code>.</p></div>
     <div class="qcard"><h3>Entity encoding inside elements</h3><p>The element stream and the tag-stripped text both check out. What hasn't been compared is the exact entity encoding of text within each element — low risk, since both sides unescape to the same characters, but not zero.</p></div>
     <div class="qcard"><h3>What are the checksum-shaped fields?</h3><p>Bytes 0x11E–0x11F and 0x1AE–0x1AF in the file header, plus the <code>uint32</code> at offset 2 of every page, all vary with no obvious correlation to anything else we've checked. None are needed for reassembly.</p></div>
     <div class="qcard"><h3>What order are documents stored in?</h3><p>Reassembly confirms physical storage order has nothing to do with statutory order — only the table-of-contents preserves the canonical sequence. What <em>does</em> determine the layout (build order? insertion order?) is still unknown.</p></div>
     <div class="qcard"><h3>What's the 8-byte ID at 0x100?</h3><p>Unique per file, doesn't match any other observable property. Hash? GUID? Timestamp? Unclear.</p></div>
     <div class="qcard"><h3>What's inside data1.cab / data2.cab?</h3><p>Unextracted InstallShield cabinets. Likely contain the real Folio/NXT rendering engine (<code>nfoenu6.dll</code> is referenced by name inside <code>fs2025.nxt</code> but isn't present as a file in this download).</p></div>
-    <div class="qcard"><h3>What do the other 12 files hold?</h3><p>Only <code>fs2025.nxt</code> is decoded and indexed. <code>xrt2025.nxt</code> is confirmed as a catchline keyword index; the rest (constitution, connection index, name index, tables) are filename-based guesses only.</p></div>
     <div class="qcard"><h3>What's in the 21,020 non-content pages?</h3><p>Types 3, 7, 9, 10, 16 and 2 were sampled and are clearly B-tree and search-index machinery — this is where the <code>binaryindex</code> / <code>strindex</code> / <code>PruneHitThreshold</code> vocabulary lives. Whether any of it is a usable citation lookup table is untested; reassembly is fast enough that nothing has needed it.</p></div>
   </div>
 
@@ -705,6 +750,8 @@
     <p><strong>Content is missing somewhere — the header says 26,348 documents, we find 26,306:</strong> false. All 26,306 <code>LPDD</code> record markers in the 240&nbsp;MB file lie in content pages, every one of the 63,741 fragments is reachable, every chain starts at a record marker, and the fragment tiling covers every byte of every content page. Across all 13 files <code>0x1BC</code> always exceeds the true count by 1&ndash;44 with no correlation to size, page counts or index entries — an allocation high-water mark, not missing content.</p>
     <p><strong>The 1,440 documents without a Section div were never validated:</strong> now they are. Chapter and Part contents pages diff byte-exact against the live site (120/120 each), all 47 SubPart headings appear verbatim in their chapter's live Part page, and all 490 section anchors they list resolve to real documents. Also settled: no statute section lacks a body.</p>
     <p><strong>Mid-token interruptions and the doubled punctuation were source-data quirks:</strong> half true, and the half that wasn't mattered. The doubling is real in the source, but our decoder was emitting <em>both</em> copies — 327,048 characters across 94.8% of documents rendered twice — and the validation harness was folding exactly that away before scoring. Fixed at the decoder, and the fold deleted rather than kept so the defect can't return unnoticed.</p>
+    <p><strong>The paging model might only work on <code>fs2025.nxt</code>:</strong> false. All 13 files reassemble with zero chain conflicts and 12 of 13 decode to well-formed HTML — 45,520 documents, 0 unclosed and 0 mismatched tags. The lone structural outlier is real content, not damage: the 2&nbsp;MB General Appropriations Act closes with <code>&lt;/approp&gt;</code> and uses a custom tag vocabulary, which is what the source contains.</p>
+    <p><strong>Guessing file contents from filenames:</strong> closed, and several guesses were wrong. Every file is now identified from its decoded title and body — <code>conndx2025.nxt</code> is the Florida Constitution index, not a "connection index." Four files hold primary law; the other eight markup files are finding aids derived from it.</p>
     <p><strong>Phase 3 v1's document count was wrong:</strong> false, and worth recording. Its figure of 26,306 — taken straight from the record markers — was right from the beginning. What v1 got wrong was assuming those documents sat contiguously in file order; versions 2 through 4 were three rounds of increasingly elaborate machinery built to work around that single wrong assumption, and v5 discards all of it.</p>
   </div>
 </section>
@@ -713,7 +760,7 @@
 
 <footer>
   <div class="wrap">
-    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 4b closed the last three verification gaps in <span class="mono">fs2025.nxt</span>. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against — all 13 now reassemble without error, but only <span class="mono">fs2025.nxt</span> has been decoded, indexed and validated.
+    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 8a took both layers across the whole corpus. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against — all 13 reassemble without error and 12 of 13 decode to well-formed HTML, but only <span class="mono">fs2025.nxt</span> has been indexed and validated against ground truth.
   </div>
 </footer>
 
@@ -800,6 +847,7 @@
     ["2d", "Undo the paged store", "done"],
     ["2e", "Account for every byte", "done"],
     ["4b", "Validate the markup", "done"],
+    ["8a", "Triage the whole corpus", "done"],
     [5, "Pipeline decision", "done"],
     [6, "Download automation", "done"],
     [7, "Package promotion", "open"],
