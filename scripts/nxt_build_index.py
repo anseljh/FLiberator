@@ -1,4 +1,4 @@
-"""Phase 3: build a citation -> byte-offset index for a .nxt file.
+"""Phase 3: build a citation -> document index for a .nxt file.
 
 Approach history (see docs/nxt-format.md for the full story):
 
@@ -77,14 +77,33 @@ Approach history (see docs/nxt-format.md for the full story):
    mid-token LPDD interruption -- real content loss inside a document
    body, not an index-boundary bug, and not new: their old (buggy,
    artificially short) span just didn't reach that far before.
+6. v5 deletes nearly all of the above, because Phase 2d
+   (`scripts/nxt_depage.py`) removed the problem those five versions were
+   working around. Every one of them read `fs2025.nxt` as a flat byte
+   stream, so every one of them had to guess at document boundaries in
+   bytes where the file's paging metadata had been decoded as if it were
+   content. Reassembling documents from the paged store first makes
+   boundaries exact rather than inferred: all 26,306 reassembled records
+   contain exactly one `<title>...</title>` and at most one
+   `<div class="Section">`. So a record *is* a document, its title *is*
+   its title, and the whole apparatus above -- the DOCTYPE lookback, the
+   orphaned-section recovery, the stub-duplicate dedup, the ownership
+   rule -- has nothing left to do. Measured against v4: garbled titles 0
+   (unchanged), duplicate titles 1 -> 0 (`F.S. 559.921` was never
+   genuinely duplicated -- it was one document counted twice by a scan
+   that couldn't see where the first one ended), documents
+   26,428 -> 26,306 (v4's count was inflated by the same effect).
 
 This is throwaway analysis code, not part of the installable package.
 """
 
+import collections
 import json
 import pathlib
 import re
 import sys
+
+from nxt_depage import load_records
 
 TITLE_RE = re.compile(
     rb"<title>([^\x13]{0,80})\x13\x37\x08</title>"
@@ -93,145 +112,46 @@ TITLE_RE = re.compile(
 )
 SECTION_DIV_RE = re.compile(rb'<div class="Section">')
 SECNUM_RE = re.compile(rb'class="SectionNumber">[^0-9]{0,2}([0-9][0-9.]*)')
-DOCTYPE_LOOKBACK = 300
 
 
 def clean_title(raw: bytes) -> str:
     return raw.decode("utf-8", errors="replace").strip()
 
 
-def find_doc_start(data: bytes, title_pos: int) -> int:
-    """Best-effort: find this document's own <!DOCTYPE.../<HTML> opening
-    within a bounded lookback window, so the index entry captures the head
-    boilerplate too. Falls back to the title tag's own position (losing
-    only boilerplate, never body content) if no marker is found nearby."""
-    window_start = max(0, title_pos - DOCTYPE_LOOKBACK)
-    window = data[window_start:title_pos]
-    best = -1
-    for marker in (b"<!DOCTYPE", b"<HTML>\r\n<HEAD>\r\n"):
-        i = window.rfind(marker)
-        if i != -1:
-            best = max(best, window_start + i)
-    return best if best != -1 else title_pos
-
-
 def citation_number(title: str) -> str | None:
     return title.removeprefix("F.S. ") if title.startswith("F.S. ") else None
 
 
-def find_orphaned_sections(data: bytes, title_entries: list[dict]) -> list[dict]:
-    """Find every `<div class="Section">` in the file and decide, per
-    title-scan span, whether that span's own title owns the *first* div in
-    it -- the only div position a title-entry's offset+length can actually
-    reach contiguously. It owns that div (silently, no separate entry) only
-    if the div's own SectionNumber matches the title exactly. Every other
-    div in the span -- the first one when it doesn't match (which subsumes
-    the CHAPTER/Preface case, since those titles never parse as
-    `F.S. <number>` and so never match), and every div after the first
-    regardless -- is an orphan: real content the v4 tag-aware title scan
-    correctly declined to attach to a neighboring title (see `TITLE_RE`'s
-    docstring note above), recovered here under its own SectionNumber
-    instead.
-
-    Only the first div can ever be silently owned -- not "the first div
-    whose number matches," which was tried and reverted. A document's
-    title and its own Section div aren't always contiguous (confirmed: a
-    title-entry can have a *different* document's div physically
-    interleaved between it and its own real body, e.g. F.S. 175.341's
-    title sits before F.S. 175.333's body, which sits before 175.341's
-    own body) -- offset+length can only describe one contiguous range, so
-    granting ownership to a non-first match corrupts the length assigned
-    to whatever's in between. Letting a mismatched first div fall through
-    to drop_stub_duplicates (stub title vs. real orphan-recovered entry,
-    same as any other mismatch) handles this correctly instead."""
-    spans = []
-    for i, e in enumerate(title_entries):
-        end = title_entries[i + 1]["offset"] if i + 1 < len(title_entries) else len(data)
-        spans.append((e["offset"], end))
-
-    div_positions = [m.start() for m in SECTION_DIV_RE.finditer(data)]
-
-    orphans = []
-    di = 0
-    n_divs = len(div_positions)
-    for e, (start, end) in zip(title_entries, spans):
-        while di < n_divs and div_positions[di] < start:
-            di += 1
-        expected = citation_number(e["title"])
-        first = True
-        while di < n_divs and div_positions[di] < end:
-            pos = div_positions[di]
-            m = SECNUM_RE.search(data[pos : pos + 120])
-            number = m.group(1).decode() if m else ""
-            if first and expected is not None and number == expected:
-                pass  # owned: contiguous with its own title, no separate entry needed
-            else:
-                title = f"F.S. {number}" if number else f"[unrecovered section @ {pos}]"
-                orphans.append({"title": title, "offset": pos, "source": "section-number"})
-            first = False
-            di += 1
-
-    return orphans
-
-
-def drop_stub_duplicates(data: bytes, entries: list[dict]) -> tuple[list[dict], int]:
-    """Some real <title> matches are stubs: their whole body, not just the
-    preamble, was swallowed by a page-boundary interruption right after the
-    title, so the entry's span never reaches a <div class="Section"> at all.
-    When that happens the section's real content still gets recovered
-    separately by find_orphaned_sections, so the title ends up on two
-    entries -- one empty stub, one real. When exactly that pattern holds for
-    a title (excludes CHAPTER N headers, which legitimately repeat as
-    part-boundary markers with no Section div of their own), drop the
-    stub(s) and keep the entry/entries that actually contain a section."""
-    ordered = sorted(entries, key=lambda e: e["offset"])
-    for i, e in enumerate(ordered):
-        end = ordered[i + 1]["offset"] if i + 1 < len(ordered) else len(data)
-        e["_has_section"] = b'<div class="Section">' in data[e["offset"] : end]
-
-    by_title: dict[str, list[dict]] = {}
-    for e in ordered:
-        by_title.setdefault(e["title"], []).append(e)
-
-    drop_ids = set()
-    for title, group in by_title.items():
-        if len(group) < 2 or title.startswith("CHAPTER"):
+def build_index(records: list[bytes]) -> dict:
+    """One entry per reassembled document. `record` is the document's index
+    in `nxt_depage.reconstruct()`'s output, which is what callers should
+    slice with -- there is no meaningful byte offset into the original file
+    any more, since a document's bytes are scattered across a chain of
+    fragments on non-adjacent pages."""
+    entries = []
+    mismatched = []
+    for i, record in enumerate(records):
+        m = TITLE_RE.search(record)
+        if m is None:
+            entries.append({"title": f"[untitled record {i}]", "record": i, "length": len(record)})
             continue
-        has = [e for e in group if e["_has_section"]]
-        hasnt = [e for e in group if not e["_has_section"]]
-        if has and hasnt:
-            drop_ids.update(id(e) for e in hasnt)
+        title = clean_title(m.group(1) if m.group(1) is not None else m.group(2))
+        entries.append({"title": title, "record": i, "length": len(record)})
 
-    kept = [e for e in ordered if id(e) not in drop_ids]
-    for e in kept:
-        del e["_has_section"]
-    return kept, len(drop_ids)
-
-
-def build_index(data: bytes) -> dict:
-    matches = list(TITLE_RE.finditer(data))
-    title_entries = []
-    for m in matches:
-        raw_title = m.group(1) if m.group(1) is not None else m.group(2)
-        title = clean_title(raw_title)
-        offset = find_doc_start(data, m.start())
-        title_entries.append({"title": title, "offset": offset, "source": "title"})
-    title_entries.sort(key=lambda e: e["offset"])
-
-    orphans = find_orphaned_sections(data, title_entries)
-
-    entries = sorted(title_entries + orphans, key=lambda e: e["offset"])
-    entries, dropped = drop_stub_duplicates(data, entries)
-
-    for i, e in enumerate(entries):
-        next_offset = entries[i + 1]["offset"] if i + 1 < len(entries) else len(data)
-        e["length"] = next_offset - e["offset"]
+        # Cross-check the title against the document's own SectionNumber.
+        # These are independent encodings of the same citation, so a
+        # disagreement means a document got assembled wrong.
+        div = SECTION_DIV_RE.search(record)
+        expected = citation_number(title)
+        if div is not None and expected is not None:
+            num = SECNUM_RE.search(record[div.start() : div.start() + 120])
+            if num is not None and num.group(1).decode() != expected:
+                mismatched.append((title, num.group(1).decode()))
 
     return {
         "total_documents": len(entries),
         "entries": entries,
-        "recovered_sections": len(orphans),
-        "dropped_stub_duplicates": dropped,
+        "title_vs_sectionnumber_mismatches": mismatched,
     }
 
 
@@ -240,35 +160,29 @@ def main() -> None:
     filename = sys.argv[1] if len(sys.argv) > 1 else "fs2025.nxt"
     out_path = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else None
 
-    data = (library / filename).read_bytes()
-    index = build_index(data)
+    records = load_records(library / filename)
+    index = build_index(records)
+    mismatches = index["title_vs_sectionnumber_mismatches"]
 
-    print(f"{filename}: {index['total_documents']} documents "
-          f"({index['recovered_sections']} recovered via SectionNumber, "
-          f"{index['dropped_stub_duplicates']} empty-stub duplicates dropped)")
+    print(f"{filename}: {index['total_documents']} documents")
+    print(f"  title vs. SectionNumber mismatches: {len(mismatches)} {mismatches[:5]}")
+
+    counts = collections.Counter(e["title"] for e in index["entries"])
+    dupes = sorted(t for t, n in counts.items() if n > 1 and not t.startswith("CHAPTER"))
+    print(f"  duplicate non-CHAPTER titles: {len(dupes)} {dupes[:5]}")
 
     by_title = {e["title"]: e for e in index["entries"]}
     for sample in (
         "Preface, Florida Statutes 2025",
         "CHAPTER 1",
         "F.S. 1.01",
-        "F.S. 1.02",
-        "F.S. 626.6215",
+        "F.S. 15.16",
+        "F.S. 15.182",
+        "F.S. 44.404",
+        "F.S. 559.921",
         "F.S. 626.631",
-        "F.S. 6.01",
-        "F.S. 6.02",
-        "F.S. 7.08",
-        "F.S. 7.07",
     ):
-        e = by_title.get(sample)
-        print(f"  {sample!r} -> {e}")
-
-    still_merged = 0
-    for e in index["entries"]:
-        span = data[e["offset"] : e["offset"] + e["length"]]
-        if span.count(b'<div class="Section">') > 1:
-            still_merged += 1
-    print(f"  entries still containing >1 <div class=\"Section\">: {still_merged}")
+        print(f"  {sample!r} -> {by_title.get(sample)}")
 
     if out_path:
         out_path.write_text(json.dumps(index, indent=1))

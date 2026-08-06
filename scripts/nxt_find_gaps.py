@@ -26,6 +26,14 @@ Any chapter.section number that (a) appears as a clean, confirmed
 CatchlineIndex entry but (b) is absent from the built citation index is a
 confirmed double-failure gap, the same category as F.S. 145.11.
 
+Since Phase 2d this scans the *reassembled* documents rather than the raw
+file (see scripts/nxt_depage.py). That matters in both directions: a
+CatchlineIndex anchor split across a fragment boundary is no longer
+scrambled, so more citations are confirmed rather than discarded, and the
+index it is checked against is now derived from the same reassembly -- so
+the two signals stay independent in what they read (TOC anchors vs.
+<title> tags) without one of them silently working from damaged bytes.
+
 This is throwaway analysis code, not part of the installable package.
 """
 
@@ -33,6 +41,8 @@ import json
 import pathlib
 import re
 import sys
+
+from nxt_depage import load_records
 
 ANCHOR_RE = re.compile(rb'#ID=FS2025(\d{4})\.([0-9.]+) --#">\x08([0-9.]+)')
 
@@ -76,7 +86,7 @@ def main() -> None:
         "data/fs2025_citation_index.json"
     )
 
-    data = (library / filename).read_bytes()
+    data = b"".join(load_records(library / filename))
     index = json.loads(index_path.read_text())
 
     gaps = find_gaps(data, index)

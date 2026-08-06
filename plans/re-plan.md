@@ -2,7 +2,7 @@
 
 ## Status
 
-Phases 1, 2, 2b, 2c, 3, 4, 5, and 6 are **done**. Phase 5's pipeline
+Phases 1, 2, 2b, 2c, 2d, 3, 4, 5, and 6 are **done**. Phase 5's pipeline
 decision is settled: FLiberator decodes `.nxt` **directly to HTML + JSON**,
 with no `.fff` intermediate and no dependency on `folioxml` — see
 README.md and CLAUDE.md. Phase 4 (validation harness,
@@ -14,21 +14,35 @@ detection signal, found 95 gaps caused by "closing-tag theft" (not true
 data loss), patched it down to 28 in two passes, then closed the rest with
 a v4 rewrite of `nxt_build_index.py`'s title-scan itself (tag-aware
 matching, requiring an intact closing tag, plus a unified div-ownership
-rule) — confirmed gaps now **0**, out of 26,428 documents. See
-docs/nxt-format.md "Phase 2c" for the full history. Phase 6
-(`scripts/download.py`) established the `download/`/`output/`
-working-folder convention alongside the frozen `FLLawDL2025/` reference
-copy — see CLAUDE.md "Working conventions". Phases 7-9 (package promotion,
-rest-of-corpus, output format) are scoped but not started.
+rule) — confirmed gaps now **0**. See docs/nxt-format.md "Phase 2c" for
+the full history. Phase 2d (`scripts/nxt_depage.py`) then found the cause
+underneath all of it: `fs2025.nxt` is a **paged store** (exactly
+58,626 × 4096 bytes) whose documents are stored as chains of fragments
+scattered across non-adjacent pages, and every phase before it had been
+reading page headers and chain pointers as if they were content.
+Reassembling the fragments first makes document boundaries exact instead
+of inferred and eliminates the whole corruption class — see
+docs/nxt-format.md "Phase 2d". Phase 6 (`scripts/download.py`)
+established the `download/`/`output/` working-folder convention alongside
+the frozen `FLLawDL2025/` reference copy — see CLAUDE.md "Working
+conventions". Phases 7-9 (package promotion, rest-of-corpus, output
+format) are scoped but not started.
 
-**Known content gaps, as of Phase 2c v4** (see "Verification" below for
-detail): index-level completeness is done (0 confirmed gaps). What
-remains open is entirely decoder-level and unquantified across the full
-corpus — mid-body content loss/corruption on `fs2025.nxt` documents whose
-real length crosses an LPDD page boundary mid-token (confirmed via
-live-site spot checks on ~9 citations, not measured corpus-wide), 1
-unexplained duplicate title (`F.S. 559.921`), and the other 12 `.nxt`
-files entirely untouched (Phase 8).
+**Known content gaps, as of Phase 2d**: on `fs2025.nxt`, none are known.
+All 26,306 reassembled documents carry exactly one intact title and at
+most one Section div; title vs. `SectionNumber` disagreements, duplicate
+titles, garbled titles and confirmed index gaps are all **0**; and the
+three independent completeness signals (Section divs, index titles,
+CatchlineIndex anchors) agree exactly at 24,866 sections with zero
+corrupt anchors. A 200-section random sample validated against the live
+site scores 100% at/above the 0.99 threshold and 96% byte-exact, with
+every non-exact case traced to a footnote-marker notation difference
+(`[1]` vs. a stripped superscript) rather than to missing content — the
+mid-body content loss that had been open since Phase 2b is gone, not
+merely smaller. What remains open: the `\x15` opcode vocabulary (cosmetic,
+no known loss), and the other 12 `.nxt` files, still entirely untouched
+(Phase 8) — nothing yet confirms the reassembly generalizes beyond
+`fs2025.nxt`.
 
 ## Context
 
@@ -101,6 +115,9 @@ than one Section div (was 991); a small number of duplicate/garbled titles
 (~68 + ~48) remained as a documented, quantified residual at the time --
 superseded by Phase 2c's v4 rewrite, which eliminated garbled titles
 entirely and cut duplicates to 1. See `docs/nxt-format.md` "Phase 2b".
+The "not worth modeling" call above was wrong: Phase 2d modelled it, in
+0.6s and ~150 lines, and doing so removed this whole failure class at the
+source rather than compensating for it downstream.
 
 ### Phase 3 — Document boundaries & the citation index ✅ done
 Two iterations before Phase 2b's fix — see `docs/nxt-format.md` "Phase 3"
@@ -114,6 +131,12 @@ file directly for literal `<title>` bytes instead (0.3s, 26,197 documents,
 zero duplicate real-section citations, ~3.8% merge gap — closed by Phase
 2b above). Settles the "is a random-access index needed" question: no,
 linear scan is fast enough. Index saved to `data/fs2025_citation_index.json`.
+Footnote worth keeping: v1's document *count* — 26,306, straight from the
+`LPDD` markers — was correct all along, as Phase 2d's reassembly confirms
+independently. What v1 got wrong was assuming those documents were laid
+out contiguously in file order; v2-v4's increasingly elaborate title
+scans were all attempts to work around that one wrong assumption, and v5
+discards them.
 
 ### Phase 4 — Validation harness ✅ done
 `scripts/nxt_validate.py` decodes a citation via the Phase 2/3 index,
@@ -208,6 +231,39 @@ the live site and re-ran the Phase 4 validation harness -- content
 fidelity unaffected, confirming this was purely an index-boundary fix.
 See `docs/nxt-format.md` "Phase 2c" for the full writeup.
 
+### Phase 2d — Undo the paged storage layer ✅ done
+Phases 2b and 2c both ended at the same wall: an interruption mechanism
+that could be worked around at the index level but not explained, and a
+resulting mid-body content loss written off as "a real paging model, not
+a single missing opcode rule -- not worth solving." That verdict was
+wrong, and cheaply so. `fs2025.nxt` is exactly 58,626 × 4096 bytes: a
+**paged store**, with a typed header on every page.
+
+`scripts/nxt_depage.py` parses that structure — page type, slot
+directory, and the chain pointers that link a document's fragments — and
+reassembles documents before anything else looks at them. Only page type
+5 carries document text (37,606 of 58,626 pages); the rest is
+search-index machinery. Documents are stored as chains of fragments
+scattered across non-adjacent pages and interleaved with unrelated
+documents, linked by backwards `(page, reverse-fragment-index)` pointers.
+The bytes earlier phases saw as "garbage interrupting a title" are those
+pointers.
+
+**Result:** the corruption class disappears rather than shrinking.
+37,435 chain edges resolve with **zero** conflicts; 26,306 documents
+reassemble, 100% with exactly one intact `<title>`, 100% ending in
+`</html>`, at most one Section div each, and **0** title-vs-
+`SectionNumber` disagreements. Three independent completeness signals
+agree exactly at 24,866 sections, with zero CatchlineIndex anchors
+discarded as corrupt (previously some always were). The `F.S. 559.921`
+"duplicate" turned out never to have been duplicated. A 200-section
+random sample against the live site scores **100% ≥ 0.99, 96%
+byte-exact**, and the previously-failing citations (15.16, 44.404) are
+now exact. This made `nxt_build_index.py` v5 almost trivial — the
+DOCTYPE lookback, orphan recovery, stub dedup and ownership rule all had
+nothing left to do and were deleted. Reassembly takes 0.6s.
+See `docs/nxt-format.md` "Phase 2d" for the format details.
+
 ### Phase 5 — Pipeline decision & write-up ✅ done
 **Decision confirmed:** FLiberator decodes `.nxt` directly to HTML + a
 JSON metadata sidecar (citation → offset/length, from the Phase 3/2b
@@ -286,14 +342,16 @@ the liberated Florida Statutes."
 ## Verification
 
 - The Phase 4 harness (`scripts/nxt_validate.py`: extract → strip tags →
-  diff against live-fetched ground truth) is built and re-runnable. It has
-  been run against a hand-picked sample of `fs2025.nxt` sections (simple
-  baseline, a table, heavy History citations, cross-references, non-ASCII
-  coordinates, plus several citations from the Phase 2c gap
-  investigation) -- not a systematic, corpus-wide pass, and not yet run
-  against `uscon.nxt` or any of the other 12 `.nxt` files at all (Phase
-  8). So: content fidelity is verified-by-sample on the one file that's
-  been worked, not proven across the full corpus.
+  diff against live-fetched ground truth) is built and re-runnable. As of
+  Phase 2d it also takes `--sample N [seed]` for a reproducible random
+  sample, caching the fetched ground truth under `data/live_cache/`
+  (git-ignored) so it stays cheap to re-run as a regression gate. Current
+  result on `fs2025.nxt`: 200 random sections, 100% at/above the 0.99
+  threshold, 96% byte-exact, mean ratio 0.99993, and every non-exact case
+  attributable to footnote-marker notation rather than missing content.
+  That is a statistical result on a random sample, not an exhaustive
+  proof — and it covers only `fs2025.nxt`; `uscon.nxt` and the other 11
+  files have not been run at all (Phase 8).
 - `scripts/nxt_find_gaps.py` is the complementary index-completeness
   check (CatchlineIndex cross-reference, independent of the decoder) --
   this one *is* exhaustive over `fs2025.nxt`'s citations, currently 0

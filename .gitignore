@@ -226,3 +226,6 @@ __marimo__/
 # - output/ is where decoded HTML/JSON output belongs.
 /download
 /output
+
+# Cached live leg.state.fl.us page text for scripts/nxt_validate.py --sample
+/data/live_cache

@@ -323,6 +323,26 @@
   .field.data { background: var(--surface-2); color: var(--ink); border: 1px solid var(--border); flex: 1 1 200px; }
   .diagram-caption { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
 
+  /* ---------- Page / fragment map ---------- */
+  .pagemap { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin: 24px 0 6px; }
+  .pagecard { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+  .pagecard .ptitle {
+    font-family: "Plex Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 7px 12px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .frag { padding: 9px 12px; font-family: "Plex Mono", monospace; font-size: 0.74rem; border-bottom: 1px solid var(--border); }
+  .frag:last-child { border-bottom: none; }
+  .frag .fl { display: block; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; margin-bottom: 2px; }
+  .frag.meta { background: var(--violet-bg); color: var(--violet); }
+  .frag.mine { background: var(--gold-bg); color: var(--gold); font-weight: 700; }
+  .frag.other { color: var(--muted); }
+
   /* ---------- Paging interruption diagram ---------- */
   .stream-row { display: flex; align-items: center; gap: 14px; margin: 14px 0; }
   .stream-label { width: 128px; flex: none; font-family: "Plex Mono", monospace; font-size: 0.78rem; color: var(--muted); text-align: right; }
@@ -422,18 +442,21 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">FLiberator field notes · after Phase 2c (v4)</div>
+    <div class="eyebrow">FLiberator field notes · after Phase 2d</div>
     <h1>The <em>NXT</em> Ledger</h1>
     <p class="lede">
       A running account of what we've proven, guessed, and still can't explain
       about Florida's proprietary Rocket&nbsp;Folio&nbsp;NXT statute container —
       the format standing between <code>fs2025.nxt</code> and an open copy of
-      the Florida Statutes.
+      the Florida Statutes. Phase 2d rewrote most of this page: the file turned
+      out to be a <strong>paged store</strong>, and nearly everything previously
+      logged as corruption was storage metadata being read as content.
     </p>
     <div class="stat-strip">
       <div class="stat"><div class="n">13</div><div class="l">.nxt files in the corpus</div></div>
       <div class="stat"><div class="n">1</div><div class="l">fully decoded &amp; indexed</div></div>
-      <div class="stat"><div class="n">26,428</div><div class="l">statute documents indexed</div></div>
+      <div class="stat"><div class="n">26,306</div><div class="l">documents reassembled</div></div>
+      <div class="stat"><div class="n">100%</div><div class="l">with an intact title</div></div>
       <div class="stat"><div class="n">0</div><div class="l">confirmed index gaps</div></div>
     </div>
   </div>
@@ -501,8 +524,8 @@
           <tr><td class="off">(any position)</td><td>Printable/UTF-8 runs are sniffed everywhere, not gated by any specific opcode — plenty of real text is completely unprefixed.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">10 &lt;0|1&gt; 03 82 &lt;id&gt; 01</td><td>Paired character-formatting toggle, redundant with the literal &lt;B&gt;/&lt;I&gt;/&lt;TITLE&gt; tags it wraps.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">15 &lt;bytes&gt;</td><td>Short field near special characters (one instance preceded a literal EM SPACE). Never fully decoded.</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
-          <tr><td class="off">"LPDD" + ~16–50 bytes</td><td>Marks something close to a 4KB storage page boundary — confirmed by length clustering, but its internal field structure isn't decoded.</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
-          <tr><td class="off">short field replacing a closer</td><td>When a &lt;title&gt;'s own closing tag is destroyed, a short byte run sometimes appears in its place that decodes as a little-endian page number — verified byte-exact (page × 4096 + 33) against a real LPDD marker elsewhere in the file, twice, independently. Not noise, but its purpose (why it's here at all) is unconfirmed.</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
+          <tr><td class="off">11 06 0b 04 00 "LPDD" …</td><td>Start-of-document record marker. It does <em>not</em> mark a page boundary — it marks where a document begins, which is why a document's own chain can cross many pages without one. Counting these gives 26,306, the true document count.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">6 bytes interrupting a token</td><td>Not part of the content layer at all: a fragment's inline back-pointer, <code>uint32</code> page + <code>uint16</code> reverse fragment index. Strip it and follow it, and the interrupted token resumes exactly where it left off. See the paging section below.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">anything else &lt; 0x20</td><td>Unrecognized opcode. The decoder skips one byte at a time and keeps going rather than halting.</td><td><span class="status-chip unknown">Unknown</span></td></tr>
         </tbody>
       </table>
@@ -512,48 +535,73 @@
 
 <section id="paging">
   <div class="section-head">
-    <div class="eyebrow">Document boundaries &amp; paging</div>
-    <h2>Where it still breaks: mid-token interruptions</h2>
-    <p>The single biggest open problem. A recurring binary marker — built around the literal string <code>LPDD</code> — can appear <em>inside</em> a literal-text token, not just between documents, and swallow whatever it interrupts.</p>
+    <div class="eyebrow">Document boundaries &amp; paging · solved in Phase 2d</div>
+    <h2>It was never corruption. It's a paged store.</h2>
+    <p>For four phases this was logged as the project's biggest open problem: a binary marker built around the string <code>LPDD</code> that appeared <em>inside</em> literal-text tokens and swallowed whatever it interrupted. The premise was wrong. Nothing was ever damaged — the file was being read as a flat byte stream when it isn't one.</p>
   </div>
 
-  <div class="stream-row">
-    <div class="stream-label">normal token</div>
-    <div class="stream">
-      <div class="chunk ok" style="flex:3;">&lt;!DOCTYPE html PUBLIC …&gt;</div>
-      <div class="chunk ok" style="flex:1;">&lt;title&gt;F.S. 7.08&lt;/title&gt;</div>
+  <p>The tell was in plain sight. <code>fs2025.nxt</code> is <strong>exactly</strong> 58,626 × 4096 bytes — not approximately. Every page carries a typed header, and only page type 5 holds document text (37,606 of them; the rest are search-index and B-tree structures). A page is divided into <strong>fragments</strong>, and a fragment is a slice of one document. A document longer than the space available is stored as a <em>chain</em> of fragments scattered across non-adjacent pages, interleaved with fragments of entirely unrelated documents.</p>
+
+  <div class="pagemap">
+    <div class="pagecard">
+      <div class="ptitle">page 761 · 4 fragments</div>
+      <div class="frag meta"><span class="fl">bytes 0–33</span>page header + slot directory</div>
+      <div class="frag mine"><span class="fl">fragment 0</span>F.S. 15.182 begins — cut off mid-<code>&lt;/title&gt;</code></div>
+      <div class="frag other"><span class="fl">fragment 1</span>tail of a document from page 764</div>
+      <div class="frag other"><span class="fl">fragment 2</span>tail of a document from page 763</div>
+      <div class="frag other"><span class="fl">fragment 3</span>tail of a document from page 760</div>
     </div>
-  </div>
-  <div class="stream-row">
-    <div class="stream-label">F.S. 7.08, actual bytes</div>
-    <div class="stream">
-      <div class="chunk ok" style="flex:1.1;">&lt;!DOCTYPE html PUBLIC "-//W3…</div>
-      <div class="chunk marker">6-byte marker</div>
-      <div class="chunk lost" style="flex:2;">unrelated body text resumes — the rest of this token is gone</div>
+    <div class="pagecard">
+      <div class="ptitle">page 767 · 2 fragments</div>
+      <div class="frag meta"><span class="fl">bytes 0–27</span>page header + slot directory</div>
+      <div class="frag other"><span class="fl">fragment 0</span>an unrelated document, starting fresh</div>
+      <div class="frag mine"><span class="fl">fragment 1</span>F.S. 15.182 resumes — back-pointer to page 761</div>
+    </div>
+    <div class="pagecard">
+      <div class="ptitle">the reassembled document</div>
+      <div class="frag mine"><span class="fl">chain</span>p761 f0 → p767 f1</div>
+      <div class="frag"><span class="fl">result</span><code>&lt;title&gt;F.S. 15.182&lt;/title&gt;</code> — intact, and an exact match against the live statute site</div>
     </div>
   </div>
   <p class="diagram-caption">
-    Confirmed example: a 239-byte <code>&lt;!DOCTYPE…&gt;</code> token gets cut off after ~29 bytes by a second,
-    unrecognized marker, and decoding resumes mid-sentence inside a <em>different</em> document entirely.
-    When this destroys a document's own <code>&lt;title&gt;</code> closing tag specifically, the old title-scan
-    regex used to swallow forward and steal a neighbor's closer instead — silently merging two documents into
-    one mislabeled entry ("closing-tag theft"). That's now fixed at the index level (see below), but the
-    underlying mid-body content loss this diagram shows is still real and still unsolved — it just no longer
-    also breaks the index around it.
+    Chain links always point <em>backwards</em>, as <code>(page, reverse-fragment-index)</code>. A fragment after
+    the first on its page carries that pointer inline as its own first six bytes; fragment 0 has no room, so its
+    pointer lives in the page header instead. Those six bytes are exactly what earlier phases logged as
+    "garbage interrupting a title" — the guess that they encoded a page number was right, and this is what
+    they're for. Reassembly takes 0.6&nbsp;seconds for the whole 240&nbsp;MB file.
   </p>
 
-  <div class="legend" style="margin-top:26px;">
-    <span class="pill confirmed"><span class="dot"></span>LPDD ≈ 4KB storage page, not one document</span>
-    <span class="pill hypothesis"><span class="dot"></span>marker can be 5–50+ bytes, shape varies</span>
-    <span class="pill unknown"><span class="dot"></span>no real paging/record model built yet</span>
+  <div class="table-scroll" style="margin-top:28px;">
+    <div class="table-card">
+      <table>
+        <caption>Page layout, type 5 (document content). All integers little-endian; offsets are within the page.</caption>
+        <thead><tr><th>Offset</th><th>Field</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="off">0</td><td><code>uint16</code> page type — 5 is document content</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">2</td><td><code>uint32</code>, varies per page and isn't sequential — plausibly a checksum</td><td><span class="status-chip unknown">Unknown</span></td></tr>
+          <tr><td class="off">12</td><td>Constant <code>ff ff ff ff</code> on content pages</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
+          <tr><td class="off">16</td><td><code>uint16</code> slot count — one slot per fragment on the page</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">18</td><td><code>uint16</code> end-of-slot-array offset</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">20…</td><td>Slot directory, descending offset order. Low 13 bits are the fragment's page offset; high 3 bits are flags. The last slot is a sentinel whose flags declare which chain pointers follow: bit&nbsp;0 a back-pointer, bit&nbsp;1 a forward pointer.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">…</td><td>6 bytes per flag bit set, back-pointer first: <code>uint32</code> page, <code>uint16</code> reverse fragment index</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
+  <div class="legend" style="margin-top:26px;">
+    <span class="pill confirmed"><span class="dot"></span>37,435 chain edges resolve with zero conflicts</span>
+    <span class="pill confirmed"><span class="dot"></span>every fragment has exactly one predecessor and one successor</span>
+    <span class="pill confirmed"><span class="dot"></span>26,306 documents, 100% with an intact title</span>
+  </div>
+  <p class="legend-note">Zero conflicts across 37,435 independent links is the load-bearing evidence here — a wrong model would produce collisions almost immediately, not a perfect bijection.</p>
 </section>
 
 <section id="index">
   <div class="section-head">
     <div class="eyebrow">The citation index · fs2025.nxt only</div>
-    <h2>26,428 documents, 0 confirmed gaps</h2>
-    <p>Built by scanning for literal <code>&lt;title&gt;</code> text, then recovering documents whose title didn't survive via their <code>&lt;div class="Section"&gt;</code> content instead. What changed since Phase 6: the title-scan itself turned out to have a swallowing bug that silently merged and mislabeled documents whenever a closing tag was destroyed. A cross-reference against the file's own table-of-contents anchors (independent of the decoder) quantified it at 95 confirmed gaps, then closed it in stages — two patches, then a rewrite of the scan's matching rule itself.</p>
+    <h2>26,306 documents, and three signals that agree exactly</h2>
+    <p>Five successive versions of the index builder tried to infer document boundaries from bytes — scanning for literal <code>&lt;title&gt;</code> text, recovering orphaned <code>&lt;div class="Section"&gt;</code> content, de-duplicating stubs, arbitrating ownership. All of it was compensating for one wrong assumption: that documents sit contiguously in file order. Once Phase 2d reassembles them from the paged store, boundaries are <em>exact</em> rather than inferred, and every one of those mechanisms had nothing left to do. Version 5 deletes them all.</p>
   </div>
 
   <div class="table-scroll">
@@ -561,23 +609,31 @@
       <table>
         <thead><tr><th>Count</th><th>What it is</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td class="off">26,428</td><td>Total indexed documents in <code>fs2025.nxt</code></td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">1,204</td><td>Recovered via SectionNumber after their own &lt;title&gt; didn't survive, or wasn't theirs to claim</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">972</td><td>Duplicate/stub titles identified and dropped automatically</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">0</td><td>Garbled titles remaining (was ~48) — eliminated by the tag-aware rewrite, not just patched</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">1</td><td>Unexplained duplicate title remaining (<code>F.S. 559.921</code>) — not investigated</td><td><span class="status-chip unknown">Unknown</span></td></tr>
-          <tr><td class="off">0</td><td>Confirmed gaps against the file's own table-of-contents anchors (was 95) — see "Resolved" below</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">26,306</td><td>Documents in <code>fs2025.nxt</code>, each exactly one reassembled record</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">100%</td><td>Carry exactly one intact <code>&lt;title&gt;…&lt;/title&gt;</code> — one, never zero, never two (read linearly: 26,196)</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">100%</td><td>End in <code>&lt;/html&gt;</code></td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">0</td><td>Documents whose title disagrees with their own <code>SectionNumber</code> — two independent encodings of the same citation, checked across all 26,306</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">0</td><td>Garbled titles, and 0 duplicate titles. <code>F.S. 559.921</code> was never duplicated in the file — it was one document counted twice by a scan that couldn't see where the first one ended.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">0</td><td>Confirmed gaps against the file's own table-of-contents anchors — with <em>zero</em> anchors discarded as corrupt, where previously some always were</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
+
+  <div class="legend" style="margin-top:26px;">
+    <span class="pill confirmed"><span class="dot"></span>24,866 documents contain a Section div</span>
+    <span class="pill confirmed"><span class="dot"></span>24,866 index entries titled <code>F.S. …</code></span>
+    <span class="pill confirmed"><span class="dot"></span>24,866 self-verifying table-of-contents anchors</span>
+  </div>
+  <p class="legend-note">Three signals derived from different parts of the file, agreeing to the document. That mutual agreement — not any single count — is what makes completeness credible here.</p>
 </section>
 
 <section id="validation">
   <div class="section-head">
-    <div class="eyebrow">Phase 4 &amp; Phase 2c · validated against leg.state.fl.us</div>
+    <div class="eyebrow">Phase 4 &amp; Phase 2d · validated against leg.state.fl.us</div>
     <h2>How close is decoded text to the live statute?</h2>
-    <p>The original five sections, chosen for distinct edge cases, decoded and diffed against the live page word-for-word (after folding away two confirmed cosmetic quirks: doubled em-dashes and the live site's smart-quote typography) — plus a handful of citations spot-checked during the index-gap investigation. Gold line marks the 0.99 pass threshold. Note the last two: both now index correctly, but decode far enough into their real body to hit the same mid-token content loss the paging section above describes — a decoder-level gap, not an index one, newly visible only because the index entry is finally the right length.</p>
+    <p>Decoded text is diffed against the live page word-for-word, after folding away confirmed cosmetic quirks (doubled em- and en-dashes, and the live site's smart-quote typography). Gold line marks the 0.99 pass threshold; the "was" figures are the same citations before reassembly. The harness now also takes a reproducible random sample, so this is a statement about the corpus rather than a hand-picked shortlist — <strong>200 random sections, 100% at or above threshold, 96% byte-exact, mean ratio 0.99993</strong>.</p>
+    <p>All eight non-exact cases in that sample share one cause, and it isn't content loss: leg.state.fl.us renders footnote markers as superscripts, which reduce to a bare <code>1</code> after tag-stripping, where the source encodes a literal <code>[1]</code>. Every difference is an <em>insertion</em> on our side. Nothing is missing from any of the 200 — arguably our output is the more faithful of the two.</p>
   </div>
 
   <div id="valchart"></div>
@@ -603,21 +659,22 @@
 
   <div class="qgrid">
     <div class="qcard"><h3>What does <code>\x15</code> encode?</h3><p>Seen near special characters (an EM SPACE once followed it) but never decoded field-by-field.</p></div>
-    <div class="qcard"><h3>What triggers a mid-token interruption?</h3><p>No model exists for when a page marker splices into a literal run versus sitting cleanly between documents.</p></div>
-    <div class="qcard"><h3>What's the purpose of the short page-number field?</h3><p>Confirmed it decodes to a real LPDD page number when a title's closer is destroyed (see the content-layer table above) — but following it doesn't lead anywhere useful; linear reading reaches that same page on its own regardless. Why it's there at all is still unexplained.</p></div>
-    <div class="qcard"><h3>What are the two checksum-shaped fields?</h3><p>Bytes 0x11E–0x11F and 0x1AE–0x1AF vary per file with no obvious correlation to anything else we've checked.</p></div>
+    <div class="qcard"><h3>What are the checksum-shaped fields?</h3><p>Bytes 0x11E–0x11F and 0x1AE–0x1AF in the file header, plus the <code>uint32</code> at offset 2 of every page, all vary with no obvious correlation to anything else we've checked. None are needed for reassembly.</p></div>
+    <div class="qcard"><h3>What order are documents stored in?</h3><p>Reassembly confirms physical storage order has nothing to do with statutory order — only the table-of-contents preserves the canonical sequence. What <em>does</em> determine the layout (build order? insertion order?) is still unknown.</p></div>
     <div class="qcard"><h3>What's the 8-byte ID at 0x100?</h3><p>Unique per file, doesn't match any other observable property. Hash? GUID? Timestamp? Unclear.</p></div>
     <div class="qcard"><h3>What's inside data1.cab / data2.cab?</h3><p>Unextracted InstallShield cabinets. Likely contain the real Folio/NXT rendering engine (<code>nfoenu6.dll</code> is referenced by name inside <code>fs2025.nxt</code> but isn't present as a file in this download).</p></div>
     <div class="qcard"><h3>What do the other 12 files hold?</h3><p>Only <code>fs2025.nxt</code> is decoded and indexed. <code>xrt2025.nxt</code> is confirmed as a catchline keyword index; the rest (constitution, connection index, name index, tables) are filename-based guesses only.</p></div>
-    <div class="qcard"><h3>Is there a real offset index anywhere?</h3><p>Linear scanning is fast enough (0.7s for the whole 240MB file) that no one has needed to look for a binary lookup table — so it's untested, not ruled out.</p></div>
-    <div class="qcard"><h3>Why is <code>F.S. 559.921</code> indexed twice?</h3><p>Both copies have real, distinct content. The only duplicate title left in the index (down from ~68) — not yet investigated.</p></div>
+    <div class="qcard"><h3>What's in the 21,020 non-content pages?</h3><p>Types 3, 7, 9, 10, 16 and 2 were sampled and are clearly B-tree and search-index machinery — this is where the <code>binaryindex</code> / <code>strindex</code> / <code>PruneHitThreshold</code> vocabulary lives. Whether any of it is a usable citation lookup table is untested; reassembly is fast enough that nothing has needed it.</p></div>
   </div>
 
   <div class="closed">
     <h3>Resolved, for the record</h3>
     <p>The bundled installer executables (<code>Work-Set.exe</code>, <code>Serv-Go.exe</code>, <code>Serv-Out.exe</code>, and their DLLs) are confirmed <strong>WinBatch</strong>-compiled install/service helpers, not the Infobase engine — a dead end, closed.</p>
     <p><strong>"Double failure" sections, like §145.11, missing from the index with no way to detect them:</strong> traced to a real bug (the old title-scan swallowed forward past a destroyed closing tag and stole a neighbor's, silently merging and mislabeling two documents — "closing-tag theft"), quantified at 95 confirmed cases via a decoder-independent cross-reference, and closed completely by rewriting the title-scan to require an intact closing tag. §145.11 itself turned out to have been a misdiagnosis from an earlier, incomplete check — it was never actually broken.</p>
-    <p><strong>Document body order follows statutory section-number order:</strong> false. Only the file's own table-of-contents (CatchlineIndex) preserves canonical numeric order — the document bodies themselves are laid out in some other order (plausibly build/insertion order), confirmed by a run of locally out-of-order section pairs in chapter 15.</p>
+    <p><strong>Document body order follows statutory section-number order:</strong> false. Only the file's own table-of-contents (CatchlineIndex) preserves canonical numeric order — the document bodies themselves are laid out in some other order (plausibly build/insertion order), confirmed by a run of locally out-of-order section pairs in chapter 15, and again at file-structure level by Phase 2d.</p>
+    <p><strong>Mid-token interruptions cause real, irrecoverable content loss:</strong> false, and this was the project's longest-standing wrong belief — carried from Phase 2b through Phase 2c, and twice written off as "a real paging model, not worth solving." It was worth solving: it took about 150 lines and runs in 0.6&nbsp;seconds. The interruptions were fragment boundaries in a paged store, and reassembling the fragments removes the entire failure class rather than reducing it.</p>
+    <p><strong><code>F.S. 559.921</code> is indexed twice:</strong> false. It appears exactly once in the file. The apparent duplicate was one document counted twice by a scan that couldn't see where the first one ended.</p>
+    <p><strong>Phase 3 v1's document count was wrong:</strong> false, and worth recording. Its figure of 26,306 — taken straight from the record markers — was right from the beginning. What v1 got wrong was assuming those documents sat contiguously in file order; versions 2 through 4 were three rounds of increasingly elaborate machinery built to work around that single wrong assumption, and v5 discards all of it.</p>
   </div>
 </section>
 
@@ -625,7 +682,7 @@
 
 <footer>
   <div class="wrap">
-    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 2c's v4 index rewrite closed the last confirmed citation gap. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against.
+    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 2d's page/fragment reassembly closed the last known content gap in <span class="mono">fs2025.nxt</span>. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against — the other 12 remain untouched, and nothing yet confirms the reassembly generalizes beyond this one file.
   </div>
 </footer>
 
@@ -653,7 +710,7 @@
     [0x1B0, 4,  "uint32 = 2, constant — likely format version", "hypothesis", "0x1B0–0x1B3"],
     [0x1B4, 4,  "uint32, varies 39–67 — hypothesis: field/schema count", "hypothesis", "0x1B4–0x1B7"],
     [0x1B8, 4,  "uint32 = 1, constant", "hypothesis", "0x1B8–0x1BB"],
-    [0x1BC, 4,  "uint32, tracks content volume — storage pages, not document count (26,197 real docs vs. 26,348 here)", "hypothesis", "0x1BC–0x1BF"],
+    [0x1BC, 4,  "uint32 = 26,348 — close to the true document count (26,306) but not equal, and not the page count (58,626) either. Still unexplained.", "unknown", "0x1BC–0x1BF"],
     [0x1C0, 64, "Zero", "confirmed", "0x1C0–0x1FF"],
   ];
 
@@ -677,13 +734,14 @@
   });
 
   const validations = [
-    ["F.S. 1.01", "simple baseline", 0.9930],
-    ["F.S. 145.10", "has a table — real content loss found", 0.6535],
-    ["F.S. 215.22", "59 History citations", 0.9387],
-    ["F.S. 775.082", "32 cross-reference anchors", 0.9804],
-    ["F.S. 6.081", "non-ASCII coordinates", 0.8264],
-    ["F.S. 105.08 / 39.0142 / 39.0143", "formerly-missing citations, now recovered", 1.0000],
-    ["F.S. 15.16 / 44.404", "recovered, but now hits mid-token loss", 0.8907],
+    ["200 random sections", "mean ratio across the sample — 100% pass, 96% byte-exact", 0.99993],
+    ["F.S. 1.01", "simple baseline (was 0.993)", 1.0000],
+    ["F.S. 145.10", "has a table (was 0.654)", 1.0000],
+    ["F.S. 215.22", "59 History citations (was 0.939)", 0.9992],
+    ["F.S. 775.082", "32 cross-reference anchors (was 0.980)", 1.0000],
+    ["F.S. 6.081", "non-ASCII coordinates (was 0.826)", 1.0000],
+    ["F.S. 15.16 / 44.404", "hit mid-token loss before reassembly (was 0.891)", 1.0000],
+    ["F.S. 105.08 / 15.182 / 39.0143", "formerly missing or mislabeled entirely", 1.0000],
   ];
   const valChart = document.getElementById("valchart");
   const threshold = 0.99;
@@ -706,6 +764,7 @@
     [3, "Citation index", "done"],
     [4, "Validation harness", "done"],
     ["2c", "Close all index gaps (v4)", "done"],
+    ["2d", "Undo the paged store", "done"],
     [5, "Pipeline decision", "done"],
     [6, "Download automation", "done"],
     [7, "Package promotion", "open"],

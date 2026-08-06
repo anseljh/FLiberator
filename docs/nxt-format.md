@@ -757,20 +757,162 @@ out of reach for an index-building fix -- it just wasn't visible on these
 two citations before because their old spans, corrupted by closing-tag
 theft, happened to stop short of the interruption point.
 
+## Phase 2d: the file is a paged store — everything above was reading it wrong
+
+Every phase up to here treated `fs2025.nxt` as one flat byte stream and read
+it linearly. It isn't, and that single wrong assumption is the origin of
+*every* corruption symptom this document has been chasing: the destroyed
+closing tags, the "garbage" interrupting titles, the 3.8% merge gap, the
+double-failure sections, the mid-token `LPDD` content loss. None of it was
+damage in the data. It was storage metadata being decoded as if it were
+content.
+
+The tell was sitting in plain sight: the file is **exactly** 58,626 × 4096
+bytes. Not approximately — exactly. Every page after the header page opens
+with its own typed header.
+
+### Page layout
+
+Offsets are within the page; integers are little-endian.
+
+| Offset | Type | Meaning |
+| --- | --- | --- |
+| `0` | `uint16` | page type — **5** is the document-content type |
+| `16` | `uint16` | slot count |
+| `18` | `uint16` | end-of-slot-array offset |
+| `20` | `uint16[]` | slot directory, one per fragment, in *descending* offset order |
+| … | 6 bytes each | page-level chain pointers, back-pointer first |
+
+Slot entries pack two things into 16 bits: the low 13 bits are a fragment's
+page offset, the high 3 bits are flags. The final slot is a sentinel — its
+offset field repeats the value at offset `18`, and its flag bits declare
+which 6-byte page-level pointers follow it: bit 0 (`1`) a back-pointer,
+bit 1 (`2`) a forward pointer. Bit 2 (`4`) is always set on the sentinel.
+So the header length is `field@18 + 6 × (bit0 + bit1)`.
+
+Only page type 5 carries document text. Types 2, 3, 7, 9, 10 and 16 were
+sampled and are all search-index / B-tree machinery — this is where the
+`binaryindex`/`strindex`/`PruneHitThreshold` vocabulary from the Phase 1
+survey lives. Of 58,626 pages, 37,606 are content pages.
+
+### Fragments and chains
+
+A page holds one or more **fragments**, packed contiguously from the end of
+the header to the end of the page. A fragment is a slice of *one* document.
+A document too long for the space available is stored as a **chain** of
+fragments scattered across the file — not in increasing page order, and
+interleaved with fragments of entirely unrelated documents.
+
+Page 761 is a clean illustration. It has four fragments:
+
+| Fragment | Content |
+| --- | --- |
+| 0 | start of F.S. 15.182 — cut off mid-token inside its own `</title>` |
+| 1 | tail of a document that started on page 764 |
+| 2 | tail of a document that started on page 763 |
+| 3 | tail of a document that started on page 760 |
+
+Chain links are always encoded *backwards*, as `(uint32 page, uint16 index)`
+where `index` counts fragments from the **end** of that page's fragment list
+(so index 0 is the last fragment). There are two places the back-pointer can
+live:
+
+- **Fragments after the first on their page** carry it inline, as their own
+  first 6 bytes. These are exactly the bytes the earlier "The 'garbage' is a
+  real field, not noise" section identified as encoding a real page number —
+  that guess was right, and this is what the field is for. They are *not*
+  content and must be stripped.
+- **Fragment 0** has no room for an inline prefix, so its back-pointer is
+  the page-level bit-0 pointer instead.
+- A fragment beginning with the `LPDD` record marker starts a fresh document
+  and has no back-pointer at all.
+
+Inverting those links gives a successor map. Across the whole file that is
+**37,435 edges with zero conflicts** — every fragment has exactly one
+predecessor and one successor, which is about as strong a confirmation as a
+reverse-engineered format offers. Following them yields 26,306 chains.
+
+A chain can hold more than one whole document (a short section can start and
+end inside a single fragment), so documents are split out of the reassembled
+chains on the `LPDD` record marker.
+
+Implemented in `scripts/nxt_depage.py`; the whole reassembly takes 0.6s.
+
+### What reassembly fixes
+
+Read as a flat stream vs. reassembled from the paged store:
+
+| Measure | Linear read | Reassembled |
+| --- | --- | --- |
+| Documents | 26,428 (inflated) | **26,306** |
+| Intact `<title>…</title>` | 26,196 | **26,306 (100%)** |
+| Documents ending in `</html>` | — | **26,305 (100.0%)** |
+| `<title>` per document | 1 or 0 or merged | **exactly 1, always** |
+| `<div class="Section">` per document | up to several | **at most 1** |
+| Title vs. own `SectionNumber` mismatches | (patched around) | **0** |
+| Garbled titles | 0 (after v4) | **0** |
+| Duplicate non-CHAPTER titles | 1 (`F.S. 559.921`) | **0** |
+| CatchlineIndex anchors confirmed / discarded | 24,667 / some | **24,866 / 0** |
+| Confirmed index gaps | 0 (after v4) | **0** |
+
+Three independent signals now agree exactly: 24,866 documents contain a
+`<div class="Section">`, 24,866 index entries are titled `F.S. …`, and
+24,866 CatchlineIndex table-of-contents anchors pass their self-reference
+check — with zero anchors discarded as corrupt, where before some always
+were. That mutual agreement, plus zero title-vs-`SectionNumber`
+disagreements across all 26,306 documents, is the real evidence the
+reassembly is correct; the per-section live-site checks below are
+confirmation on top of it.
+
+The `F.S. 559.921` duplicate is resolved rather than explained away: it was
+never duplicated in the file. It was one document counted twice by a scan
+that couldn't see where the first one ended.
+
+### Content fidelity, measured corpus-wide
+
+`nxt_validate.py --sample N [seed]` now takes a reproducible random sample of
+section citations, fetches each from leg.state.fl.us, and caches the reduced
+text under `data/live_cache/` (git-ignored) so re-runs are free and offline.
+
+200 randomly sampled sections, seed 0:
+
+- **200 / 200 (100%)** at or above the 0.99 pass threshold
+- **192 / 200 (96%)** byte-exact
+- mean ratio **0.99993**, worst **0.9903**
+
+All eight non-exact cases have the same single cause, and it is not content
+loss: leg.state.fl.us renders footnote markers as superscripts, which reduce
+to a bare `1` after tag-stripping, where the NXT source encodes them as a
+literal `[1]`. Every difference is an *insertion* on our side — nothing is
+missing from any of the 200. Arguably our output is the more faithful of the
+two.
+
+The previously-failing citations are now exact. F.S. 15.16 and F.S. 44.404,
+which sat at ~0.89 under v4 because they reached into a mid-token `LPDD`
+interruption, both score **1.0000**. So do 15.182, 105.08 and 39.0143.
+
+This closes the mid-body content-loss item that had been open since Phase 2b
+and carried as the project's main unquantified risk. It was never a missing
+opcode rule and never needed one — the interruptions were fragment
+boundaries, and reassembling the fragments removes them entirely.
+
 ## Not yet investigated
 
 - The full byte-value vocabulary of remaining short control opcodes (Phase 2
-  continued), including `\x15` (above) and the real paging/record model
-  behind the `LPDD` mid-token interruptions (Phase 2b/Phase 4) — current
-  fallback (skip unknown bytes one at a time, but pass through anything
-  printable) is good enough for reliable text extraction, but doesn't
-  explain everything structurally, and it's still real, if usually small,
-  content loss inside document bodies whenever a document's real length
-  crosses a page boundary (see the v4 write-up above). The index-level
-  side of this (missing/mislabeled/duplicated *entries*) is now fully
-  closed as of the Phase 2c v4 rewrite: 0 confirmed gaps, 0 garbled
-  titles, 1 duplicate title remaining (`F.S. 559.921`, unexplained, not
-  yet investigated) out of 26,428 documents.
+  continued), including `\x15` (above). The current fallback (skip unknown
+  bytes one at a time, but pass through anything printable) is good enough
+  for reliable text extraction and no longer masks any known content loss,
+  but it still doesn't explain everything structurally. The paging/record
+  model that used to be listed here alongside it is **solved** — see Phase
+  2d above.
+- The meaning of the remaining page-header fields: the `uint32` at offset 2
+  of every page (varies per page, not sequential — plausibly a checksum),
+  and the constant `ffffffff` at offset 12 of content pages. Not needed for
+  reassembly, which uses only the slot directory and the chain pointers.
+- What determines the *order* of documents in the file. Reassembly confirms
+  the earlier chapter-15 and chapter-39 finding at file-structure level:
+  physical storage order has nothing to do with statutory order, and only
+  the CatchlineIndex preserves the canonical sequence.
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
   unextracted; likely contain the real Folio/NXT rendering engine
   (`nfoenu6.dll`, referenced by name inside `fs2025.nxt` itself, isn't present

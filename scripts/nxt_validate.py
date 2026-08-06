@@ -35,11 +35,14 @@ import difflib
 import html as html_module
 import json
 import pathlib
+import random
 import re
 import sys
+import time
 import urllib.request
 
 from nxt_decode_poc import decode
+from nxt_depage import load_records
 
 INDEX_PATH = pathlib.Path("data/fs2025_citation_index.json")
 NXT_PATH = pathlib.Path("FLLawDL2025/Library/fs2025.nxt")
@@ -102,14 +105,16 @@ def normalize(fragment: str) -> str:
 #    em-space, confirmed in docs/nxt-format.md as deliberate, probably one
 #    copy for full-text search indexing and one for guaranteed rendering).
 #    Collapsing "each char run + its own entity" isn't practical generically,
-#    so this only folds the one confirmed-common case, doubled em-dash.
+#    so this only folds the two confirmed-common cases, doubled em-dash and
+#    doubled en-dash (the latter found by the Phase 2d 200-section sample,
+#    in F.S. 381.00316's "21 U.S.C. 360bbb--3" citation).
 #  - leg.state.fl.us applies a "smart quotes" typographic upgrade when
 #    rendering straight ASCII apostrophes from the source data (confirmed:
 #    the raw .nxt bytes for one such case contain a plain 0x27 apostrophe,
 #    not a curly one) -- cosmetic, not a decoding gap, so both sides are
 #    normalized to plain ASCII quotes for comparison.
 def comparable(text: str) -> str:
-    text = text.replace("——", "—")
+    text = text.replace("——", "—").replace("––", "–")
     text = text.replace("‘", "'").replace("’", "'")
     text = text.replace("“", '"').replace("”", '"')
     return text
@@ -135,22 +140,41 @@ def extract_body_text(full_html: str) -> str:
     return normalize(fragment)
 
 
+CACHE_DIR = pathlib.Path("data/live_cache")
+FETCH_DELAY_SECONDS = 0.4
+
+
 def fetch_live_text(citation: str) -> tuple[str, str]:
+    """Fetch and reduce the live page, caching the reduced text on disk.
+
+    The cache exists so a corpus-wide run (`--sample N`) is a one-time cost
+    against leg.state.fl.us and every re-run afterwards is free and offline
+    -- which is what makes this usable as a routine regression gate rather
+    than a thing to be run once and quoted from memory."""
     url = build_url(citation)
+    cached = CACHE_DIR / f"{citation.removeprefix('F.S. ')}.txt"
+    if cached.exists():
+        return cached.read_text(), url
+
     req = urllib.request.Request(
         url, headers={"User-Agent": "FLiberator/0.1 (+https://github.com/anseljh/FLiberator)"}
     )
     with urllib.request.urlopen(req, timeout=20) as resp:
         raw = resp.read().decode("utf-8", errors="replace")
-    return extract_body_text(raw), url
+    text = extract_body_text(raw)
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cached.write_text(text)
+    time.sleep(FETCH_DELAY_SECONDS)  # be a polite guest on a state web server
+    return text, url
 
 
-def decode_local_text(citation: str, index: dict, data: bytes) -> str:
+def decode_local_text(citation: str, index: dict, records: list[bytes]) -> str:
     by_title = {e["title"]: e for e in index["entries"]}
     entry = by_title.get(citation)
     if entry is None:
         raise KeyError(f"{citation!r} not found in index")
-    span = data[entry["offset"] : entry["offset"] + entry["length"]]
+    span = records[entry["record"]]
     decoded_html, _stats = decode(span, 0, len(span))
     return extract_body_text(decoded_html)
 
@@ -158,15 +182,31 @@ def decode_local_text(citation: str, index: dict, data: bytes) -> str:
 RATIO_PASS_THRESHOLD = 0.99
 
 
+def sample_citations(index: dict, count: int, seed: int) -> list[str]:
+    """A reproducible random sample of real section citations, so the pass
+    rate below describes the corpus rather than a hand-picked shortlist."""
+    pool = sorted(e["title"] for e in index["entries"] if e["title"].startswith("F.S. "))
+    return sorted(random.Random(seed).sample(pool, min(count, len(pool))))
+
+
 def main() -> None:
-    citations = sys.argv[1:] or DEFAULT_CITATIONS
+    args = sys.argv[1:]
     index = json.loads(INDEX_PATH.read_text())
-    data = NXT_PATH.read_bytes()
+
+    if args and args[0] == "--sample":
+        count = int(args[1]) if len(args) > 1 else 100
+        seed = int(args[2]) if len(args) > 2 else 0
+        citations = sample_citations(index, count, seed)
+    else:
+        citations = args or DEFAULT_CITATIONS
+
+    records = load_records(NXT_PATH)
+    ratios: list[float] = []
 
     all_ok = True
     for citation in citations:
         try:
-            local_text = decode_local_text(citation, index, data)
+            local_text = decode_local_text(citation, index, records)
         except KeyError as e:
             print(f"[{citation}] SKIP -- {e}")
             all_ok = False
@@ -185,9 +225,12 @@ def main() -> None:
         ok = ratio >= RATIO_PASS_THRESHOLD
         all_ok &= ok
 
+        ratios.append(ratio)
         status = "MATCH" if exact else ("CLOSE" if ok else "MISMATCH")
         print(f"[{citation}] {status} ratio={ratio:.4f} ({len(local_text)} chars) -- {url}")
-        if exact:
+        # In a large sample the near-misses are noise; only the real
+        # failures are worth the screenfuls of word-level diff.
+        if exact or (ok and len(citations) > 10):
             continue
 
         diff = difflib.unified_diff(
@@ -202,6 +245,13 @@ def main() -> None:
         print()
 
     print("=" * 60)
+    if ratios:
+        exact = sum(1 for r in ratios if r == 1.0)
+        passing = sum(1 for r in ratios if r >= RATIO_PASS_THRESHOLD)
+        n = len(ratios)
+        print(f"compared {n} citations: {exact} exact ({exact / n:.1%}), "
+              f"{passing} at/above {RATIO_PASS_THRESHOLD} ({passing / n:.1%})")
+        print(f"mean ratio {sum(ratios) / n:.5f}, worst {min(ratios):.4f}")
     print("ALL PASS" if all_ok else "SOME BELOW THRESHOLD")
     sys.exit(0 if all_ok else 1)
 
