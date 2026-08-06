@@ -2,18 +2,20 @@
 
 ## Status
 
-Phases 1, 2, 2b, 3, 4, 5, and 6 are **done**. Phase 5's pipeline decision
-is settled: FLiberator decodes `.nxt` **directly to HTML + JSON**, with no
-`.fff` intermediate and no dependency on `folioxml` — see README.md and
-CLAUDE.md. Phase 4 (validation harness, `scripts/nxt_validate.py`) found
-that content loss/corruption from the Phase 2b paging-interruption
-mechanism is more widespread than previously quantified — see
-docs/nxt-format.md "Phase 4" — which motivated the new Phase 2c below.
-Phase 6 (`scripts/download.py`) established the `download/`/`output/`
+Phases 1, 2, 2b, 2c, 3, 4, 5, and 6 are **done**. Phase 5's pipeline
+decision is settled: FLiberator decodes `.nxt` **directly to HTML + JSON**,
+with no `.fff` intermediate and no dependency on `folioxml` — see
+README.md and CLAUDE.md. Phase 4 (validation harness,
+`scripts/nxt_validate.py`) found that content loss/corruption from the
+Phase 2b paging-interruption mechanism is more widespread than previously
+quantified — see docs/nxt-format.md "Phase 4" — which motivated Phase 2c.
+Phase 2c (`scripts/nxt_find_gaps.py`) added a third, decoder-independent
+detection signal and confirmed 95 "double failure" gaps (0.38% of indexed
+citations) — see docs/nxt-format.md "Phase 2c". Phase 6
+(`scripts/download.py`) established the `download/`/`output/`
 working-folder convention alongside the frozen `FLLawDL2025/` reference
-copy — see CLAUDE.md "Working conventions". Phases 2c and 7-9 (gap
-detection, package promotion, rest-of-corpus, output format) are scoped
-but not started.
+copy — see CLAUDE.md "Working conventions". Phases 7-9 (package promotion,
+rest-of-corpus, output format) are scoped but not started.
 
 ## Context
 
@@ -117,18 +119,26 @@ failed to survive, a "double failure" the existing quality checks can't
 detect. Not fixed -- this phase's job was to measure and characterize;
 see Phase 2c below for the follow-up this motivates.
 
-### Phase 2c — Investigate "double failure" section loss ⬜ open, new
-Phase 4 found at least one section (§ 145.11) missing from the index
-entirely because *both* Phase 3 (title scan) and Phase 2b (SectionNumber
-recovery) failed to find it -- a category the existing quality checks
-(which rely on exactly those two signals) can't detect, so its true
-prevalence across the full 26,317-document index is unknown. Next step:
-find a third, independent signal to detect "gap" cases -- e.g. compare
-decoded section-body length/word-count against a live-fetched baseline for
-a large citation sample, or check for suspicious byte-distance jumps
-between consecutive numerically-adjacent citations (e.g. 145.10 directly
-followed by 145.121 with no 145.11 or 145.11x in between is itself a
-detectable signal, independent of decoding content at all). Not started.
+### Phase 2c — Investigate "double failure" section loss ✅ done
+Built `scripts/nxt_find_gaps.py`: a third detection signal, independent of
+both Phase 3 (title scan) and Phase 2b (SectionNumber recovery). Scans the
+raw file for `fs2025.nxt`'s CatchlineIndex table-of-contents anchors
+(`<a href="#!-- #ID=FS20250145.10 --#">145.10</a>`), which redundantly
+encode each citation twice (the href target and the display text) --
+requiring agreement between the two both filters out page-boundary
+corruption and makes the signal a plain byte-level check with no
+dependency on the decoder or index-builder. Result: 24,667 confirmed-clean
+CatchlineIndex citations vs. 24,796 in the built index, with **95
+confirmed double-failure gaps** (0.38%) -- real sections completely absent
+from the index, the same category as § 145.11. Spot-checked § 105.08 and
+found a distinct root cause from § 145.11 (title bytes fully intact but
+"stolen" as the closing tag for a preceding corrupted title, rather than
+destroyed outright) with the same net effect. Full list in
+`data/fs2025_gap_report.json`. Not fixed -- measured and characterized, per
+the same posture as Phase 4; see `docs/nxt-format.md` "Phase 2c" for full
+writeup, including the fix approaches identified (tag-aware title
+matching, or synthesizing index entries directly from the CatchlineIndex
+scan).
 
 ### Phase 5 — Pipeline decision & write-up ✅ done
 **Decision confirmed:** FLiberator decodes `.nxt` directly to HTML + a

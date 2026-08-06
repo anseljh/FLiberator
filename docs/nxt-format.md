@@ -467,6 +467,63 @@ inside documents that pass every existing index-quality check. Left as a
 documented, better-characterized gap; see `plans/re-plan.md` for the
 follow-up phase this motivates.
 
+## Phase 2c: quantifying the "double failure" gap
+
+Phase 4 found F.S. 145.11 silently absent from the index because *both*
+existing detection paths -- the Phase 3 `<title>` scan and the Phase 2b
+`SectionNumber` recovery -- failed for it. The index-quality checks in
+`scripts/nxt_build_index.py` rely on exactly those two signals, so this
+category of loss was invisible to them; its true prevalence was unknown.
+
+**A third, independent signal.** `fs2025.nxt` embeds a "CatchlineIndex"
+table of contents near the front of each chapter, where every section gets
+a self-referencing link:
+
+```
+<a href="#!-- #ID=FS20250145.10 --#">145.10</a>
+```
+
+The href's `#ID=` citation and the link's own display text both encode the
+same chapter.section number redundantly. `scripts/nxt_find_gaps.py`
+regex-scans the raw file for these anchors and only trusts a match when
+the two encodings agree -- this is what makes it independent of the
+decoder/index-builder (a plain byte-level check against the raw file) and
+self-correcting for corruption (page-boundary interruption scrambles
+digits, so agreement between the two independent encodings confirms this
+stretch of bytes survived intact). Any citation confirmed present in the
+CatchlineIndex but absent from the built index is a confirmed
+double-failure gap, the same category as F.S. 145.11.
+
+**Result:** 24,667 confirmed-clean CatchlineIndex citations survived the
+self-reference check (out of 25,325 raw anchor matches; 42 discarded as
+corrupted or non-self-referencing, the rest deduplicated). Comparing that
+set against the built index's 24,796 F.S. citations found **95 confirmed
+gaps** -- real sections completely absent from
+`data/fs2025_citation_index.json` (0.38%). Spot-checked F.S. 105.08 by
+hand to confirm the mechanism: its `<title>F.S. 105.08</title>` bytes are
+fully intact in the file, but the *preceding* document's own `<title>` had
+its closing tag destroyed by an LPDD splice, so the Phase 3 regex's
+non-greedy match swallowed forward past the corruption and consumed
+105.08's genuine closing tag as its own -- leaving 105.08 with an opening
+tag but no closing tag of its own to match against, so it never becomes a
+title-scan hit. Because 105.08's `<div class="Section">` is the *first*
+one in that merged span (not an extra one), Phase 2b's orphan-recovery
+doesn't catch it either -- both signals fail via the same root cause for a
+structurally different reason than 145.11's total byte destruction, but
+with the same net effect.
+
+Full list of the 95 gap citations: `data/fs2025_gap_report.json` (written
+by `scripts/nxt_find_gaps.py`).
+
+**Not fixed.** Same posture as Phase 4: this measures and characterizes
+the gap rather than closing it. A real fix would need to make the Phase 3
+title-scan tag-aware (matching each `<title>` to its own nearest `</title>`
+rather than any following one) or generate synthetic entries directly from
+the CatchlineIndex scan itself, which Phase 2c shows is a viable
+per-citation ground truth independent of the decoder. Left as a documented,
+quantified residual for whichever future phase tackles index completeness
+directly.
+
 ## Not yet investigated
 
 - The full byte-value vocabulary of remaining short control opcodes (Phase 2
@@ -476,7 +533,8 @@ follow-up phase this motivates.
   is good enough for reliable text extraction, but doesn't explain
   everything structurally. This is also what's behind the small residual
   gap in the Phase 3/2b index (~68 duplicate + ~48 garbled titles out of
-  26,317 — down from the original ~4%, see "Phase 2b" above).
+  26,317 — down from the original ~4%, see "Phase 2b" above) and the 95
+  confirmed double-failure gaps quantified in "Phase 2c" above.
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
   unextracted; likely contain the real Folio/NXT rendering engine
   (`nfoenu6.dll`, referenced by name inside `fs2025.nxt` itself, isn't present
