@@ -1,22 +1,36 @@
 {
-  "sections_classified": 3068,
-  "byte_exact": 2990,
-  "below_threshold": 4,
-  "below_threshold_but_only_known_classes": 4,
+  "sections_classified": 9231,
+  "byte_exact": 8935,
+  "below_threshold": 7,
+  "below_threshold_but_only_known_classes": 7,
   "difference_shapes": {
-    "footnote-marker": 204
+    "footnote-marker": 784,
+    "tag-boundary-space": 1
   },
   "sections_affected_by_shape": {
-    "footnote-marker": 78
+    "footnote-marker": 295,
+    "tag-boundary-space": 1
   },
   "unclassified_examples": [],
   "threshold_artifacts": [
+    [
+      "F.S. 290.001",
+      0.9865771812080537
+    ],
     [
       "F.S. 125.571",
       0.9876160990712074
     ],
     [
+      "F.S. 166.0483",
+      0.9876160990712074
+    ],
+    [
       "F.S. 125.0102",
+      0.9882352941176471
+    ],
+    [
+      "F.S. 166.0425",
       0.9882352941176471
     ],
     [

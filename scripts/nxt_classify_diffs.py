@@ -56,6 +56,16 @@ def classify(live: list[str], ours: list[str]) -> str:
     live_join, our_join = " ".join(live).strip(), " ".join(ours).strip()
     if live_join == our_join:
         return "whitespace-only"
+    # Same characters, different spacing. `normalize()` turns every tag into
+    # a space, and our output legitimately carries anchors the live page
+    # doesn't (the <a> wrapping on History citations -- a confirmed bonus,
+    # not a gap), so a tag we have and they don't becomes a space we have
+    # and they don't. normalize() already folds this away before punctuation;
+    # it can't when the next character is a letter, which happens where a
+    # citation anchor is followed immediately by more text. Both sides'
+    # actual output agrees here -- the space is an artifact of comparing.
+    if live_join.replace(" ", "") == our_join.replace(" ", ""):
+        return "tag-boundary-space"
     live_m, our_m = FOOTNOTE_RE.match(live_join), FOOTNOTE_RE.match(our_join)
     if live_m and our_m and live_m.group(1) == our_m.group(1):
         return "footnote-marker"
