@@ -1122,6 +1122,90 @@ of times, so exactly the anchors alignment depends on were thrown away.
 `autojunk=False` is mandatory here; with it on, the measurement invents
 differences.
 
+## Phase 4c: checking the decoder against the source, not the site
+
+The fidelity harness has a permanent blind spot. `normalize()` collapses
+`\s+` before scoring, and that collapsing is load-bearing — the live pages
+and our decoded output carry different template indentation, so without it
+nothing would ever match. The consequence is that **extra whitespace is
+invisible to it**: 263,569 of Phase 2e's 327,048 doubled characters were em
+spaces and NBSPs that collapsed away before the diff ran, so the harness
+scored 1.0000 on documents that were visibly wrong.
+
+That cannot be closed by diffing harder against the live site. It has to be
+closed by checking the decoder against the *source bytes*. That is
+`scripts/nxt_check_output.py`, which asserts four invariants:
+
+1. **Every `0x15 0x01 0x01 0x01` marker is claimed by the doubled-character
+   rule.** A marker that falls through gets emitted twice — once as the
+   literal copy, once as the entity token. This is a *complete* guard on
+   that defect class: at zero fall-throughs, no doubling of this kind can
+   be shipping.
+2. **No character sits next to its own entity form** in the output. The
+   same defect seen from the output side, so a new doubling shape that
+   invariant 1 doesn't know about still gets caught.
+3. **Every source byte is consumed exactly once** — no gaps, no overlapping
+   reads.
+4. **A whitespace census**, recorded as a baseline rather than judged.
+
+### The residual it found: 62 doubled ampersands
+
+Phase 2e's rule identified the doubled-character shape partly by *byte
+width*: the literal copy had to be multi-byte UTF-8, on the reasoning that
+a 1-byte run there would be ordinary ASCII text. That proxy held for
+327,048 of 327,110 markers and silently failed on the other 62 — every one
+a literal `&` paired with `&amp;`:
+
+```
+15 01 01 01  '&'  13 39 05  "&amp;"
+```
+
+Both copies were emitted, shipping `AT&&T Mobility`, `Child && Dependent
+Care Tax Credit` and `Flagler && Volusia` across **25 documents**.
+
+Fixed by replacing the width proxy with the real invariant: **the literal
+copy and the entity token must decode to the same character**. That is both
+stricter (a mismatched pair no longer matches on byte width alone) and
+correct for single-byte characters. Coverage went 327,048 → 327,110 of
+327,110, and corpus-wide **385,305 of 385,305 markers are now claimed, with
+0 adjacent duplicates** in any of the 12 markup files.
+
+Worth noting how this one hid. Unlike the em-space doublings, `&&` is *not*
+whitespace, so the live-site harness could see it — but only as a
+single-character difference in documents up to 171,038 characters, scoring
+0.9999 and passing the 0.99 threshold as `CLOSE` rather than `MATCH`. With
+only 250 of 24,866 sections sampled, none of the 25 affected documents had
+ever been drawn. Sampling plus a ratio threshold will systematically miss
+small defects in large documents; that is the argument for the census.
+
+Re-validated the affected sections against the live site afterwards: F.S.
+61.30, 215.61, 672.320 and 202.20 are now byte-exact, and the only residual
+difference in 921.0022 and 320.08058 is the known `[n]` footnote-marker
+representation question (the source encodes a literal `[1]`, the site
+renders a superscript) — a Phase 9 decision, not a defect.
+
+### Baseline census (fs2025.nxt, all 26,306 documents)
+
+All four invariants hold: 327,110/327,110 markers claimed, 0 adjacent
+duplicates, **0 gaps and 0 overlapping reads** — which turns Phase 2e's
+"every byte is accounted for" from an assertion into a mechanically
+checked claim.
+
+| whitespace character | count |
+|---|---|
+| U+0020 SPACE | 11,273,116 |
+| U+2003 EM SPACE | 254,468 |
+| U+00A0 NO-BREAK SPACE | 8,894 |
+| U+2002 EN SPACE | 207 |
+
+Adjacent-whitespace runs are legitimate here and each traces to a repeated
+source marker: 2,772 `NBSP NBSP` and 149 runs of five NBSPs are
+fill-in-the-blank rules in oath forms (`I, ␠␠, do solemnly swear`) and
+column alignment in the judge-count tables of F.S. 26.031 and 34.022.
+Their *counts* are exactly what the live-site harness cannot see — emitting
+three NBSPs where the source has five would still score 1.0000 — so
+recording them means a future change that alters them shows up as a diff.
+
 ## Phase 8a: the model generalizes — and the corpus found a defect `fs2025` couldn't
 
 Everything through Phase 4b was measured against `fs2025.nxt` alone. The open

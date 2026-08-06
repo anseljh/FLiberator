@@ -89,6 +89,7 @@ Opcode rules (see docs/nxt-format.md for how these were derived):
 This is throwaway analysis code, not part of the installable package.
 """
 
+import html
 import pathlib
 import sys
 from collections import Counter
@@ -122,20 +123,38 @@ def doubled_char_len(data: bytes, i: int, end: int) -> int:
     """If a doubled-character marker starts at i, return the number of bytes to
     drop (marker + optional 0x08 + the literal copy of the character), leaving
     the 0x13 0x39 entity token that follows to be emitted normally. Returns 0 if
-    the bytes at i don't match the confirmed shape."""
+    the bytes at i don't match the confirmed shape.
+
+    The shape is confirmed by *checking the pair*: the literal copy and the
+    entity token that follows must encode the same character. An earlier
+    version approximated this with "the literal copy is multi-byte UTF-8",
+    on the reasoning that a 1-byte run would be ordinary ASCII text. That
+    proxy held for 327,048 of 327,110 markers and silently failed on the
+    other 62, every one of them a literal `&` paired with `&amp;` -- so the
+    decoder emitted both and shipped `AT&&T`, `Child && Dependent` and
+    `Flagler && Volusia` across 25 documents. Comparing the two copies
+    directly is both stricter (a mismatched pair no longer matches on the
+    strength of byte width alone) and correct for single-byte characters.
+    """
     if data[i : i + 4] != DOUBLED_CHAR_MARKER:
         return 0
     j = i + 4
     if j < end and data[j] == 0x08:
         j += 1
     n = is_text_byte(data, j)
-    # The literal copy is always a multi-byte UTF-8 character (em space, em
-    # dash, NBSP, ...); a 1-byte run here would be ordinary ASCII text, which
-    # means this isn't the doubled-character shape.
-    if n < 2:
+    if n == 0:
         return 0
+    literal = data[j : j + n].decode("utf-8", errors="replace")
     j += n
     if data[j : j + 2] != b"\x13\x39":
+        return 0
+    length_byte = data[j + 2]
+    if length_byte & 0x80:
+        length, header = ((length_byte & 0x7F) << 8) | data[j + 3], 4
+    else:
+        length, header = length_byte, 3
+    entity = data[j + header : j + header + length].decode("utf-8", errors="replace")
+    if html.unescape(entity) != literal:
         return 0
     return j - i
 

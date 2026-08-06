@@ -210,6 +210,14 @@ def decode_local_text(
 
 
 RATIO_PASS_THRESHOLD = 0.99
+DEFAULT_REPORT_PATH = pathlib.Path("data/fs2025_validation_census.json")
+
+
+def citation_sort_key(citation: str) -> tuple:
+    """Sort F.S. citations numerically (1.01 < 1.015 < 1.02 < 2.01), so a
+    long run's progress output reads in statutory order."""
+    number = citation.removeprefix("F.S. ")
+    return tuple(int(p) if p.isdigit() else p for p in number.split("."))
 
 
 def sample_citations(index: dict, count: int, seed: int) -> list[str]:
@@ -286,7 +294,17 @@ def main() -> None:
     record_overrides: dict[str, int] = {}
     anchor: re.Pattern | None = None
 
-    if args and args[0] == "--sample":
+    report_path: pathlib.Path | None = None
+    if args and args[0] == "--all":
+        # Census rather than sample: every statute section in the index.
+        # Resumable -- fetch_live_text caches, so a re-run after a decoder
+        # change re-scores from disk in minutes instead of hours.
+        citations = sorted(
+            (e["title"] for e in index["entries"] if e["title"].startswith("F.S. ")),
+            key=citation_sort_key,
+        )
+        report_path = pathlib.Path(args[1]) if len(args) > 1 else DEFAULT_REPORT_PATH
+    elif args and args[0] == "--sample":
         count = int(args[1]) if len(args) > 1 else 100
         seed = int(args[2]) if len(args) > 2 else 0
         citations = sample_citations(index, count, seed)
@@ -304,15 +322,26 @@ def main() -> None:
         citations = args or DEFAULT_CITATIONS
 
     ratios: list[float] = []
+    results: list[dict] = []
+    started = time.time()
 
     all_ok = True
-    for citation in citations:
+    for n, citation in enumerate(citations):
+        if report_path is not None and n and n % 250 == 0:
+            done = time.time() - started
+            rate = n / done
+            print(
+                f"... {n:,}/{len(citations):,} in {done / 60:.0f}m "
+                f"({rate:.1f}/s, ~{(len(citations) - n) / rate / 60:.0f}m left)",
+                flush=True,
+            )
         try:
             local_text = decode_local_text(
                 citation, index, records, record_overrides.get(citation), anchor
             )
         except KeyError as e:
             print(f"[{citation}] SKIP -- {e}")
+            results.append({"citation": citation, "status": "SKIP", "reason": str(e)})
             all_ok = False
             continue
 
@@ -320,6 +349,7 @@ def main() -> None:
             live_text, url = fetch_live_text(citation, anchor)
         except Exception as e:
             print(f"[{citation}] SKIP -- fetch failed: {e}")
+            results.append({"citation": citation, "status": "FETCH_FAILED", "reason": str(e)})
             all_ok = False
             continue
 
@@ -331,7 +361,13 @@ def main() -> None:
 
         ratios.append(ratio)
         status = "MATCH" if exact else ("CLOSE" if ok else "MISMATCH")
-        print(f"[{citation}] {status} ratio={ratio:.4f} ({len(local_text)} chars) -- {url}")
+        results.append(
+            {"citation": citation, "status": status, "ratio": ratio, "chars": len(local_text)}
+        )
+        # A census prints only what isn't already known-good; at 24,866
+        # sections a per-citation MATCH line is 24,866 lines of noise.
+        if report_path is None or not exact:
+            print(f"[{citation}] {status} ratio={ratio:.4f} ({len(local_text)} chars) -- {url}")
         # In a large sample the near-misses are noise; only the real
         # failures are worth the screenfuls of word-level diff.
         if exact or (ok and len(citations) > 10):
@@ -356,6 +392,23 @@ def main() -> None:
         print(f"compared {n} citations: {exact} exact ({exact / n:.1%}), "
               f"{passing} at/above {RATIO_PASS_THRESHOLD} ({passing / n:.1%})")
         print(f"mean ratio {sum(ratios) / n:.5f}, worst {min(ratios):.4f}")
+    if report_path is not None:
+        failures = [r for r in results if r.get("status") not in ("MATCH",)]
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(
+            json.dumps(
+                {
+                    "compared": len(ratios),
+                    "exact": sum(1 for r in ratios if r == 1.0),
+                    "at_or_above_threshold": sum(1 for r in ratios if r >= RATIO_PASS_THRESHOLD),
+                    "mean_ratio": (sum(ratios) / len(ratios)) if ratios else None,
+                    "elapsed_seconds": round(time.time() - started, 1),
+                    "not_exact": sorted(failures, key=lambda r: r.get("ratio", -1)),
+                },
+                indent=2,
+            )
+        )
+        print(f"wrote {report_path} ({len(failures)} citations not byte-exact)")
     print("ALL PASS" if all_ok else "SOME BELOW THRESHOLD")
     sys.exit(0 if all_ok else 1)
 

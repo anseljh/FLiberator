@@ -28,6 +28,18 @@ the frozen `FLLawDL2025/` reference copy — see CLAUDE.md "Working
 conventions". Phases 7-9 (package promotion, rest-of-corpus, output
 format) are scoped but not started.
 
+**Since then**: Phase 2e accounted for every skipped byte and fixed two
+shipping defects; Phase 4b closed the three verification gaps (nothing is
+missing, the 1,440 non-section documents are validated, markup fidelity
+measured); Phase 8a (`scripts/nxt_corpus_triage.py`) took both layers
+across all 13 files — they all reassemble, 12 of 13 decode to well-formed
+HTML, and every file is now identified from its content rather than its
+filename; and Phase 4c (`scripts/nxt_check_output.py`) closed the
+whitespace blind spot by checking the decoder against the source bytes
+rather than the live site. The paragraph below is superseded on two
+points: the `\x15` vocabulary is now decoded, and the other 12 files are
+no longer untouched.
+
 **Known content gaps, as of Phase 2d**: on `fs2025.nxt`, none are known.
 All 26,306 reassembled documents carry exactly one intact title and at
 most one Section div; title vs. `SectionNumber` disagreements, duplicate
@@ -301,7 +313,7 @@ still default to reading `FLLawDL2025/` for now, since that's what they
 were developed and checked against; pointing the real pipeline at
 `download/` instead is part of Phase 7.
 
-### Remaining work, after Phase 2e — items 1-4 ✅ done, 5-7 ⬜ open
+### Remaining work, after Phase 2e — items 1-4, 6 ✅ done; 5, 7 ⬜ open
 
 **Item 4 is done** (Phase 8a): the page/fragment model is a property of
 the container, not of `fs2025.nxt` — all 13 files reassemble cleanly, and
@@ -316,8 +328,10 @@ validated (chapter TOCs 120/120 exact, Part TOCs 120/120 exact, all 47
 SubPart headings verbatim in the live Part pages, and no statute section
 is among them); and markup fidelity is measured (99.46% of live elements
 align exactly, **0 live elements and 0 link targets missing** once the
-site's own `<span>`→`<p>` rewrite is accounted for). Items 5-7 below
-remain open, unchanged.
+site's own `<span>`→`<p>` rewrite is accounted for). **Item 6 is done**
+(Phase 4c): the whitespace blind spot is closed by checking the decoder
+against the source bytes, which found 62 doubled ampersands the live-site
+harness had scored as passing. Items 5 and 7 remain open.
 
 
 Phase 2e's opcode tally closed the last genuinely *unknown* thing about
@@ -363,12 +377,19 @@ reverse-engineering phases above. In the order they should be tackled:
    Phase 9 call. Open sub-question: whether a 200-section sample is large
    enough to have surfaced every editorial notation of this kind, or just
    the most common one.
-6. **Some output defects the harness structurally cannot see.**
-   `normalize()` collapses `\s+`, which hid 263,569 of Phase 2e's 327,048
-   doubled characters. That collapsing is load-bearing for other reasons,
-   so whitespace-class defects are permanently invisible to live-site
-   diffing. Catching them needs a check against the decoder's own output
-   rather than against the live page.
+6. ~~**Some output defects the harness structurally cannot see.**~~ ✅
+   **done** (Phase 4c — see `docs/nxt-format.md`).
+   `scripts/nxt_check_output.py` closes this by checking the decoder
+   against the *source bytes* instead of the live page, asserting four
+   invariants: every doubled-character marker is claimed, no character
+   sits beside its own entity form, every source byte is consumed exactly
+   once, and a whitespace census is recorded as a baseline. It
+   immediately found the residual 62 markers Phase 2e's byte-width proxy
+   had rejected — a literal `&` paired with `&amp;`, shipping `AT&&T` and
+   `Child && Dependent` across 25 documents. Replaced the proxy with the
+   real invariant (literal and entity must decode to the same character);
+   coverage is now 385,305/385,305 corpus-wide with 0 adjacent
+   duplicates, and byte accounting reports 0 gaps and 0 overlaps.
 7. **Page geometry has only ever been tested on one file from one year.**
    The pipeline is meant to re-run against a fresh download annually.
    This needs no research — it needs `nxt_depage.py` to assert its
