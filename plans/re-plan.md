@@ -21,6 +21,15 @@ working-folder convention alongside the frozen `FLLawDL2025/` reference
 copy — see CLAUDE.md "Working conventions". Phases 7-9 (package promotion,
 rest-of-corpus, output format) are scoped but not started.
 
+**Known content gaps, as of Phase 2c v4** (see "Verification" below for
+detail): index-level completeness is done (0 confirmed gaps). What
+remains open is entirely decoder-level and unquantified across the full
+corpus — mid-body content loss/corruption on `fs2025.nxt` documents whose
+real length crosses an LPDD page boundary mid-token (confirmed via
+live-site spot checks on ~9 citations, not measured corpus-wide), 1
+unexplained duplicate title (`F.S. 559.921`), and the other 12 `.nxt`
+files entirely untouched (Phase 8).
+
 ## Context
 
 FLiberator's pipeline was originally assumed to be: download → unzip →
@@ -89,8 +98,9 @@ index-building level: recover orphaned `<div class="Section">` documents
 directly via their `SectionNumber` text, which survives every case
 checked. Result: 26,317 documents, 982 recovered, 0 entries left with more
 than one Section div (was 991); a small number of duplicate/garbled titles
-(~68 + ~48) remain as a documented, quantified residual. See
-`docs/nxt-format.md` "Phase 2b".
+(~68 + ~48) remained as a documented, quantified residual at the time --
+superseded by Phase 2c's v4 rewrite, which eliminated garbled titles
+entirely and cut duplicates to 1. See `docs/nxt-format.md` "Phase 2b".
 
 ### Phase 3 — Document boundaries & the citation index ✅ done
 Two iterations before Phase 2b's fix — see `docs/nxt-format.md` "Phase 3"
@@ -275,12 +285,19 @@ the liberated Florida Statutes."
 
 ## Verification
 
-- The Phase 4 harness (extract → strip tags → diff against live-fetched
-  ground truth) is the end-to-end check, not yet built. Success criterion:
-  a representative sample of `fs2025.nxt` sections (simple, table,
-  amendment history, cross-references, non-ASCII), plus all articles of
-  `uscon.nxt`, extract with text matching the live site (modulo
-  whitespace/HTML-entity normalization).
+- The Phase 4 harness (`scripts/nxt_validate.py`: extract → strip tags →
+  diff against live-fetched ground truth) is built and re-runnable. It has
+  been run against a hand-picked sample of `fs2025.nxt` sections (simple
+  baseline, a table, heavy History citations, cross-references, non-ASCII
+  coordinates, plus several citations from the Phase 2c gap
+  investigation) -- not a systematic, corpus-wide pass, and not yet run
+  against `uscon.nxt` or any of the other 12 `.nxt` files at all (Phase
+  8). So: content fidelity is verified-by-sample on the one file that's
+  been worked, not proven across the full corpus.
+- `scripts/nxt_find_gaps.py` is the complementary index-completeness
+  check (CatchlineIndex cross-reference, independent of the decoder) --
+  this one *is* exhaustive over `fs2025.nxt`'s citations, currently 0
+  confirmed gaps.
 - No existing test suite needs to change yet; this work still produces
   analysis scripts (not yet part of the `fliberator` package — see Phase
   7) plus the `docs/nxt-format.md` writeup.

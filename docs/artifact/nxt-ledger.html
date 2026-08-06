@@ -422,7 +422,7 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">FLiberator field notes · after Phase 6</div>
+    <div class="eyebrow">FLiberator field notes · after Phase 2c (v4)</div>
     <h1>The <em>NXT</em> Ledger</h1>
     <p class="lede">
       A running account of what we've proven, guessed, and still can't explain
@@ -433,8 +433,8 @@
     <div class="stat-strip">
       <div class="stat"><div class="n">13</div><div class="l">.nxt files in the corpus</div></div>
       <div class="stat"><div class="n">1</div><div class="l">fully decoded &amp; indexed</div></div>
-      <div class="stat"><div class="n">26,317</div><div class="l">statute documents indexed</div></div>
-      <div class="stat"><div class="n">6 / 9+</div><div class="l">plan phases complete</div></div>
+      <div class="stat"><div class="n">26,428</div><div class="l">statute documents indexed</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">confirmed index gaps</div></div>
     </div>
   </div>
 </header>
@@ -502,6 +502,7 @@
           <tr><td class="off">10 &lt;0|1&gt; 03 82 &lt;id&gt; 01</td><td>Paired character-formatting toggle, redundant with the literal &lt;B&gt;/&lt;I&gt;/&lt;TITLE&gt; tags it wraps.</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
           <tr><td class="off">15 &lt;bytes&gt;</td><td>Short field near special characters (one instance preceded a literal EM SPACE). Never fully decoded.</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
           <tr><td class="off">"LPDD" + ~16–50 bytes</td><td>Marks something close to a 4KB storage page boundary — confirmed by length clustering, but its internal field structure isn't decoded.</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
+          <tr><td class="off">short field replacing a closer</td><td>When a &lt;title&gt;'s own closing tag is destroyed, a short byte run sometimes appears in its place that decodes as a little-endian page number — verified byte-exact (page × 4096 + 33) against a real LPDD marker elsewhere in the file, twice, independently. Not noise, but its purpose (why it's here at all) is unconfirmed.</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
           <tr><td class="off">anything else &lt; 0x20</td><td>Unrecognized opcode. The decoder skips one byte at a time and keeps going rather than halting.</td><td><span class="status-chip unknown">Unknown</span></td></tr>
         </tbody>
       </table>
@@ -534,9 +535,11 @@
   <p class="diagram-caption">
     Confirmed example: a 239-byte <code>&lt;!DOCTYPE…&gt;</code> token gets cut off after ~29 bytes by a second,
     unrecognized marker, and decoding resumes mid-sentence inside a <em>different</em> document entirely.
-    Section bodies are usually intact on both sides — but not always: §&nbsp;145.11 is a confirmed real section
-    (present in the live table of contents) that both the title scan <em>and</em> the SectionNumber recovery
-    path failed to find at all. It's simply missing from the index today.
+    When this destroys a document's own <code>&lt;title&gt;</code> closing tag specifically, the old title-scan
+    regex used to swallow forward and steal a neighbor's closer instead — silently merging two documents into
+    one mislabeled entry ("closing-tag theft"). That's now fixed at the index level (see below), but the
+    underlying mid-body content loss this diagram shows is still real and still unsolved — it just no longer
+    also breaks the index around it.
   </p>
 
   <div class="legend" style="margin-top:26px;">
@@ -549,8 +552,8 @@
 <section id="index">
   <div class="section-head">
     <div class="eyebrow">The citation index · fs2025.nxt only</div>
-    <h2>26,317 documents, and what's still missing</h2>
-    <p>Built by scanning for literal <code>&lt;title&gt;</code> text, then recovering documents whose title didn't survive via their <code>&lt;div class="Section"&gt;</code> content instead. Two clean recovery passes — plus a small, honestly-quantified remainder.</p>
+    <h2>26,428 documents, 0 confirmed gaps</h2>
+    <p>Built by scanning for literal <code>&lt;title&gt;</code> text, then recovering documents whose title didn't survive via their <code>&lt;div class="Section"&gt;</code> content instead. What changed since Phase 6: the title-scan itself turned out to have a swallowing bug that silently merged and mislabeled documents whenever a closing tag was destroyed. A cross-reference against the file's own table-of-contents anchors (independent of the decoder) quantified it at 95 confirmed gaps, then closed it in stages — two patches, then a rewrite of the scan's matching rule itself.</p>
   </div>
 
   <div class="table-scroll">
@@ -558,11 +561,12 @@
       <table>
         <thead><tr><th>Count</th><th>What it is</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td class="off">26,317</td><td>Total indexed documents in <code>fs2025.nxt</code></td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">982</td><td>Recovered via SectionNumber after their own &lt;title&gt; failed to survive</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">862</td><td>Duplicate empty-title "stubs" identified and dropped automatically</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
-          <tr><td class="off">~68 + ~48</td><td>Duplicate titles and garbled titles still unresolved (~0.4% of the index)</td><td><span class="status-chip hypothesis">Hypothesis</span></td></tr>
-          <tr><td class="off">unknown</td><td>"Double failure" sections — like §145.11 — missing from the index with no known way to detect them yet</td><td><span class="status-chip unknown">Unknown</span></td></tr>
+          <tr><td class="off">26,428</td><td>Total indexed documents in <code>fs2025.nxt</code></td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">1,204</td><td>Recovered via SectionNumber after their own &lt;title&gt; didn't survive, or wasn't theirs to claim</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">972</td><td>Duplicate/stub titles identified and dropped automatically</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">0</td><td>Garbled titles remaining (was ~48) — eliminated by the tag-aware rewrite, not just patched</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
+          <tr><td class="off">1</td><td>Unexplained duplicate title remaining (<code>F.S. 559.921</code>) — not investigated</td><td><span class="status-chip unknown">Unknown</span></td></tr>
+          <tr><td class="off">0</td><td>Confirmed gaps against the file's own table-of-contents anchors (was 95) — see "Resolved" below</td><td><span class="status-chip confirmed">Confirmed</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -571,9 +575,9 @@
 
 <section id="validation">
   <div class="section-head">
-    <div class="eyebrow">Phase 4 · validated against leg.state.fl.us</div>
+    <div class="eyebrow">Phase 4 &amp; Phase 2c · validated against leg.state.fl.us</div>
     <h2>How close is decoded text to the live statute?</h2>
-    <p>Five sections, chosen for distinct edge cases, decoded and diffed against the live page word-for-word (after folding away two confirmed cosmetic quirks: doubled em-dashes and the live site's smart-quote typography). Gold line marks the 0.99 pass threshold.</p>
+    <p>The original five sections, chosen for distinct edge cases, decoded and diffed against the live page word-for-word (after folding away two confirmed cosmetic quirks: doubled em-dashes and the live site's smart-quote typography) — plus a handful of citations spot-checked during the index-gap investigation. Gold line marks the 0.99 pass threshold. Note the last two: both now index correctly, but decode far enough into their real body to hit the same mid-token content loss the paging section above describes — a decoder-level gap, not an index one, newly visible only because the index entry is finally the right length.</p>
   </div>
 
   <div id="valchart"></div>
@@ -600,17 +604,20 @@
   <div class="qgrid">
     <div class="qcard"><h3>What does <code>\x15</code> encode?</h3><p>Seen near special characters (an EM SPACE once followed it) but never decoded field-by-field.</p></div>
     <div class="qcard"><h3>What triggers a mid-token interruption?</h3><p>No model exists for when a page marker splices into a literal run versus sitting cleanly between documents.</p></div>
-    <div class="qcard"><h3>How many "double failure" sections exist?</h3><p>§145.11 proves the pattern exists. Nothing yet can scan the full index and count how often it happens.</p></div>
+    <div class="qcard"><h3>What's the purpose of the short page-number field?</h3><p>Confirmed it decodes to a real LPDD page number when a title's closer is destroyed (see the content-layer table above) — but following it doesn't lead anywhere useful; linear reading reaches that same page on its own regardless. Why it's there at all is still unexplained.</p></div>
     <div class="qcard"><h3>What are the two checksum-shaped fields?</h3><p>Bytes 0x11E–0x11F and 0x1AE–0x1AF vary per file with no obvious correlation to anything else we've checked.</p></div>
     <div class="qcard"><h3>What's the 8-byte ID at 0x100?</h3><p>Unique per file, doesn't match any other observable property. Hash? GUID? Timestamp? Unclear.</p></div>
     <div class="qcard"><h3>What's inside data1.cab / data2.cab?</h3><p>Unextracted InstallShield cabinets. Likely contain the real Folio/NXT rendering engine (<code>nfoenu6.dll</code> is referenced by name inside <code>fs2025.nxt</code> but isn't present as a file in this download).</p></div>
-    <div class="qcard"><h3>What do the other 11 files hold?</h3><p>Only <code>fs2025.nxt</code> is decoded and indexed. <code>xrt2025.nxt</code> is confirmed as a catchline keyword index; the rest (constitution, connection index, name index, tables) are filename-based guesses only.</p></div>
+    <div class="qcard"><h3>What do the other 12 files hold?</h3><p>Only <code>fs2025.nxt</code> is decoded and indexed. <code>xrt2025.nxt</code> is confirmed as a catchline keyword index; the rest (constitution, connection index, name index, tables) are filename-based guesses only.</p></div>
     <div class="qcard"><h3>Is there a real offset index anywhere?</h3><p>Linear scanning is fast enough (0.7s for the whole 240MB file) that no one has needed to look for a binary lookup table — so it's untested, not ruled out.</p></div>
+    <div class="qcard"><h3>Why is <code>F.S. 559.921</code> indexed twice?</h3><p>Both copies have real, distinct content. The only duplicate title left in the index (down from ~68) — not yet investigated.</p></div>
   </div>
 
   <div class="closed">
     <h3>Resolved, for the record</h3>
     <p>The bundled installer executables (<code>Work-Set.exe</code>, <code>Serv-Go.exe</code>, <code>Serv-Out.exe</code>, and their DLLs) are confirmed <strong>WinBatch</strong>-compiled install/service helpers, not the Infobase engine — a dead end, closed.</p>
+    <p><strong>"Double failure" sections, like §145.11, missing from the index with no way to detect them:</strong> traced to a real bug (the old title-scan swallowed forward past a destroyed closing tag and stole a neighbor's, silently merging and mislabeling two documents — "closing-tag theft"), quantified at 95 confirmed cases via a decoder-independent cross-reference, and closed completely by rewriting the title-scan to require an intact closing tag. §145.11 itself turned out to have been a misdiagnosis from an earlier, incomplete check — it was never actually broken.</p>
+    <p><strong>Document body order follows statutory section-number order:</strong> false. Only the file's own table-of-contents (CatchlineIndex) preserves canonical numeric order — the document bodies themselves are laid out in some other order (plausibly build/insertion order), confirmed by a run of locally out-of-order section pairs in chapter 15.</p>
   </div>
 </section>
 
@@ -618,7 +625,7 @@
 
 <footer>
   <div class="wrap">
-    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 6 (download automation). Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against.
+    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 2c's v4 index rewrite closed the last confirmed citation gap. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against.
   </div>
 </footer>
 
@@ -675,6 +682,8 @@
     ["F.S. 215.22", "59 History citations", 0.9387],
     ["F.S. 775.082", "32 cross-reference anchors", 0.9804],
     ["F.S. 6.081", "non-ASCII coordinates", 0.8264],
+    ["F.S. 105.08 / 39.0142 / 39.0143", "formerly-missing citations, now recovered", 1.0000],
+    ["F.S. 15.16 / 44.404", "recovered, but now hits mid-token loss", 0.8907],
   ];
   const valChart = document.getElementById("valchart");
   const threshold = 0.99;
@@ -694,9 +703,9 @@
     [1, "Corpus survey", "done"],
     [2, "Decode opcodes", "done"],
     ["2b", "Close merge gap", "done"],
-    ["2c", "Double-failure gaps", "new"],
     [3, "Citation index", "done"],
     [4, "Validation harness", "done"],
+    ["2c", "Close all index gaps (v4)", "done"],
     [5, "Pipeline decision", "done"],
     [6, "Download automation", "done"],
     [7, "Package promotion", "open"],
