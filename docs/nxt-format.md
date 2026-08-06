@@ -639,17 +639,55 @@ citations like F.S. 105.08, F.S. 15.16, and F.S. 44.404, the container's
 citation that also has its own separate, correctly-indexed entry
 elsewhere in the file (F.S. 15.182 and F.S. 44.406 both do) -- so
 relabeling the container was a clean win with no regression. But for
-citations like F.S. 39.0143, the container's original title was a real
-citation *without* a separate copy anywhere else -- relabeling the
-container to recover its stolen twin (F.S. 39.0142) makes F.S. 39.0143
-disappear instead. Net it's still a large improvement (54 gaps closed,
-zero silently reintroduced -- `nxt_find_gaps.py` still catches and reports
-all 41 remainders, so nothing is lost from visibility even when it can't
-be automatically recovered). Closing the rest needs the harder fix: making
-the Phase 3 title-scan itself tag-aware (matching each `<title>` to its
-own nearest `</title>` instead of any following one), so both twins in a
-theft pair get their own entry instead of only whichever one's
-`SectionNumber` happens to be recoverable.
+citations like F.S. 39.0143 -- see the next section, this specific example
+turned out to have its own additional wrinkle -- the container's original
+title *looked* like a real citation without a separate copy anywhere else,
+which would make relabeling a wash rather than a win. 41 gaps remained at
+this point.
+
+### Fixed further: CHAPTER/Part-Index entries can swallow a section too
+
+Asked to spot-check a recovered section (F.S. 39.0142) against the live
+site -- it matched (only the already-documented doubled-em-dash quirk).
+But the live site also shows F.S. 39.0143 as chapter 39's actual *last*
+section, and it was one of the 41 still-missing citations. Checking where
+its content really was turned up something `fix_mismatched_titles`
+couldn't see: it was the sole `<div class="Section">` inside a
+`CHAPTER 39`-titled entry.
+
+That looked like corruption at first -- why would a chapter heading
+contain a section? It isn't. Chapter 39 alone has **13 separate entries
+all literally titled `CHAPTER 39`**, and 12 of them are genuine, complete,
+independent documents: Part Index (table-of-contents) pages, one per Part
+of the chapter, each using its own `FSPartIndex.css` stylesheet -- they
+just all share the same generic title text in this format, which is a
+property of the source, not a bug. `drop_stub_duplicates` already knew to
+leave `CHAPTER`-titled duplicates alone for exactly this reason. But the
+*13th* one is 16,382 bytes long, several times any of the other 12 --
+because its own closing tag was destroyed by the same page-interruption
+mechanism as everywhere else in this phase, so the title-scan regex
+swallowed forward into unrelated content and picked up F.S. 39.0143's
+real, complete section along the way. Same closing-tag-theft mechanism as
+before, just landing on a Part Index page's lost closing tag instead of
+another section's.
+
+Checked how widespread this is: **63 more sections** across the corpus
+turn out to be hiding inside `CHAPTER`-titled entries this way (out of
+1,435 total `CHAPTER`-titled entries) -- most of the still-missing 41
+citations were exactly this. Extended `find_orphaned_sections` to handle
+it: `CHAPTER`/`Preface` documents never legitimately contain a Section div
+of their own, so for those entries specifically, treat *any* div found in
+their span -- including the first -- as an orphan to recover, instead of
+only extras beyond the first (the rule used for ordinary entries, which
+stays as-is since a real section document legitimately owns its own first
+div).
+
+**Result:** confirmed gaps **41 → 28**; 1,045 sections now recovered via
+SectionNumber (up from 982); total documents 26,286 → 26,299. F.S. 39.0142
+and F.S. 39.0143 both spot-checked against the live site and both match
+cleanly. The remaining 28 are the genuinely harder cases -- theft pairs
+where neither twin has a rescuable second copy anywhere in the file --
+left for the tag-aware Phase 3 rewrite described above.
 
 ## Not yet investigated
 
@@ -661,8 +699,8 @@ theft pair get their own entry instead of only whichever one's
   everything structurally. This is also what's behind the small residual
   gap in the Phase 3/2b index (~68 duplicate + ~48 garbled titles out of
   the original 26,317 — down from the original ~4%, see "Phase 2b" above)
-  and the 41 confirmed gaps remaining after the Phase 2c fix (down from
-  95; 26,286 documents total — see "Phase 2c" above).
+  and the 28 confirmed gaps remaining after the Phase 2c fixes (down from
+  95; 26,299 documents total — see "Phase 2c" above).
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
   unextracted; likely contain the real Folio/NXT rendering engine
   (`nfoenu6.dll`, referenced by name inside `fs2025.nxt` itself, isn't present

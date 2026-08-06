@@ -131,7 +131,19 @@ def fix_mismatched_titles(data: bytes, title_entries: list[dict]) -> int:
 def find_orphaned_sections(data: bytes, title_entries: list[dict]) -> list[dict]:
     """Any `<div class="Section">` that isn't the first one inside a
     title-scan entry's span was silently swallowed by v2. Split those out,
-    synthesizing a title from their own SectionNumber text."""
+    synthesizing a title from their own SectionNumber text.
+
+    CHAPTER/Preface entries are a special case: those documents (chapter
+    headings, Part Index pages -- e.g. chapter 39 alone has 13 of them,
+    real, distinct documents that just happen to share the literal title
+    text "CHAPTER 39") never legitimately contain a Section div of their
+    own, so treat *any* div found in their span -- including the first --
+    as an orphan too. Confirmed cause: same closing-tag-theft mechanism as
+    `fix_mismatched_titles`, just landing on a CHAPTER/Preface entry's own
+    lost closing tag instead of another section's -- e.g. F.S. 39.0143,
+    Chapter 39's real last section, otherwise invisible because it's
+    swallowed as the "first" div inside an oversized Part Index entry (see
+    docs/nxt-format.md "Phase 2c")."""
     spans = []
     for i, e in enumerate(title_entries):
         end = title_entries[i + 1]["offset"] if i + 1 < len(title_entries) else len(data)
@@ -142,15 +154,17 @@ def find_orphaned_sections(data: bytes, title_entries: list[dict]) -> list[dict]
     orphans = []
     di = 0
     n_divs = len(div_positions)
-    for start, end in spans:
+    for e, (start, end) in zip(title_entries, spans):
         while di < n_divs and div_positions[di] < start:
             di += 1
+        skip_first = not e["title"].startswith(SPECIAL_TITLE_PREFIXES)
         first = True
         while di < n_divs and div_positions[di] < end:
             pos = div_positions[di]
-            if first:
+            if first and skip_first:
                 first = False
             else:
+                first = False
                 m = SECNUM_RE.search(data[pos : pos + 120])
                 title = f"F.S. {m.group(1).decode()}" if m else f"[unrecovered section @ {pos}]"
                 orphans.append({"title": title, "offset": pos, "source": "section-number"})

@@ -11,10 +11,11 @@ Phase 2b paging-interruption mechanism is more widespread than previously
 quantified — see docs/nxt-format.md "Phase 4" — which motivated Phase 2c.
 Phase 2c (`scripts/nxt_find_gaps.py`) added a third, decoder-independent
 detection signal, found 95 gaps caused by "closing-tag theft" (not true
-data loss), and partially fixed it by cross-validating titles against
-their own SectionNumber — 41 gaps remain (down from 95), documented as a
-residual pending a tag-aware Phase 3 rewrite — see docs/nxt-format.md
-"Phase 2c". Phase 6
+data loss), and fixed most of it in two passes — cross-validating titles
+against their own SectionNumber, then recognizing that CHAPTER/Part-Index
+entries can swallow a section the same way — 28 gaps remain (down from
+95), documented as a residual pending a tag-aware Phase 3 rewrite — see
+docs/nxt-format.md "Phase 2c". Phase 6
 (`scripts/download.py`) established the `download/`/`output/`
 working-folder convention alongside the frozen `FLLawDL2025/` reference
 copy — see CLAUDE.md "Working conventions". Phases 7-9 (package promotion,
@@ -155,17 +156,26 @@ for the standard per-token opcode always embedded before `</title>`. The
 95-gap count and its cause are otherwise unaffected (145.11 isn't among
 them).
 
-**Partially fixed.** Checked all 95 gaps for recoverability first: every
-one had its own `SectionNumber` findable inside an existing (mislabeled)
-entry -- 100%, no genuine destruction cases among them. Implemented the
-cross-validation fix in `nxt_build_index.py`
-(`fix_mismatched_titles`): compare each entry's title against its own
-first Section div's `SectionNumber`, relabel on mismatch. Result: 149
-entries retitled, confirmed gaps **95 → 41**. The 41 remaining are cases
-where the fix can't win either way -- the container's original title was
-*itself* a real citation with no separate copy elsewhere in the file, so
-recovering its stolen twin makes the original disappear instead (still
-visible to `nxt_find_gaps.py`, not silently lost). Closing those needs the
+**Fixed, in two passes.** Checked all 95 gaps for recoverability first:
+every one had its own `SectionNumber` findable inside an existing
+(mislabeled) entry -- 100%, no genuine destruction cases among them.
+First pass, `fix_mismatched_titles`: compare each entry's title against
+its own first Section div's `SectionNumber`, relabel on mismatch (149
+entries retitled, 95 → 41 gaps). Spot-checking one recovery (F.S. 39.0142)
+against the live site surfaced a second pattern: chapter 39 alone has 13
+entries all literally titled `CHAPTER 39` (real, distinct Part Index
+documents that happen to share generic title text -- not a bug), and one
+of them had swallowed F.S. 39.0143 the same way, invisible to the first
+fix because CHAPTER/Preface entries are deliberately excluded from
+relabeling. Second pass, extended `find_orphaned_sections`: for
+CHAPTER/Preface entries specifically (which never legitimately contain a
+Section div of their own), treat the *first* div in their span as an
+orphan too, not just extras beyond it. Found 63 more sections hiding this
+way across the corpus. Combined result: confirmed gaps **95 → 28**;
+1,045 sections recovered via SectionNumber (up from 982); 26,299 total
+documents. Both F.S. 39.0142 and F.S. 39.0143 spot-checked clean against
+the live site. The remaining 28 are theft pairs where neither twin has a
+rescuable second copy anywhere in the file -- closing those needs the
 harder fix: a tag-aware Phase 3 title-scan that matches each `<title>` to
 its own `</title>` instead of any following one. See `docs/nxt-format.md`
 "Phase 2c" for the full writeup.

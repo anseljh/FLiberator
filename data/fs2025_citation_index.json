@@ -1,5 +1,5 @@
 {
- "total_documents": 26286,
+ "total_documents": 26299,
  "entries": [
   {
    "title": "Preface, Florida Statutes 2025",
@@ -635,19 +635,19 @@
    "title": "F.S. 8.063",
    "offset": 910191,
    "source": "title",
-   "length": 3267
-  },
-  {
-   "title": "F.S. 10.001",
-   "offset": 913458,
-   "source": "title",
-   "length": 345
+   "length": 3612
   },
   {
    "title": "CHAPTER 10",
    "offset": 913803,
    "source": "title",
-   "length": 7843
+   "length": 6540
+  },
+  {
+   "title": "F.S. 10.001",
+   "offset": 920343,
+   "source": "section-number",
+   "length": 1303
   },
   {
    "title": "F.S. 10.201",
@@ -4805,7 +4805,13 @@
    "title": "CHAPTER 39",
    "offset": 6156336,
    "source": "title",
-   "length": 16382
+   "length": 1468
+  },
+  {
+   "title": "F.S. 39.0143",
+   "offset": 6157804,
+   "source": "section-number",
+   "length": 14914
   },
   {
    "title": "F.S. 39.101",
@@ -6413,13 +6419,7 @@
    "title": "F.S. 49.10",
    "offset": 8134704,
    "source": "title",
-   "length": 4098
-  },
-  {
-   "title": "F.S. 49.12",
-   "offset": 8138802,
-   "source": "title",
-   "length": 543
+   "length": 4641
   },
   {
    "title": "F.S. 49.11",
@@ -6431,7 +6431,13 @@
    "title": "CHAPTER 50",
    "offset": 8142898,
    "source": "title",
-   "length": 4092
+   "length": 2608
+  },
+  {
+   "title": "F.S. 49.12",
+   "offset": 8145506,
+   "source": "section-number",
+   "length": 1484
   },
   {
    "title": "F.S. 49.31",
@@ -7715,13 +7721,7 @@
    "title": "F.S. 61.538",
    "offset": 9565475,
    "source": "title",
-   "length": 2833
-  },
-  {
-   "title": "F.S. 61.542",
-   "offset": 9568308,
-   "source": "title",
-   "length": 304
+   "length": 3137
   },
   {
    "title": "F.S. 61.541",
@@ -7745,7 +7745,13 @@
    "title": "CHAPTER 61",
    "offset": 9573732,
    "source": "title",
-   "length": 15050
+   "length": 1725
+  },
+  {
+   "title": "F.S. 61.542",
+   "offset": 9575457,
+   "source": "section-number",
+   "length": 13325
   },
   {
    "title": "F.S. 61.56",
@@ -8813,13 +8819,7 @@
    "title": "F.S. 70.80",
    "offset": 10544719,
    "source": "title",
-   "length": 2533
-  },
-  {
-   "title": "F.S. 71.031",
-   "offset": 10547252,
-   "source": "title",
-   "length": 562
+   "length": 3095
   },
   {
    "title": "F.S. 71.021",
@@ -8837,7 +8837,13 @@
    "title": "CHAPTER 72",
    "offset": 10556150,
    "source": "title",
-   "length": 3384
+   "length": 1879
+  },
+  {
+   "title": "F.S. 71.031",
+   "offset": 10558029,
+   "source": "section-number",
+   "length": 1505
   },
   {
    "title": "F.S. 71.041",
@@ -10337,13 +10343,7 @@
    "title": "F.S. 85.021",
    "offset": 11487232,
    "source": "section-number",
-   "length": 2098
-  },
-  {
-   "title": "F.S. 85.051",
-   "offset": 11489330,
-   "source": "title",
-   "length": 476
+   "length": 2574
   },
   {
    "title": "F.S. 85.041",
@@ -10355,7 +10355,13 @@
    "title": "CHAPTER 86",
    "offset": 11493424,
    "source": "title",
-   "length": 4098
+   "length": 2703
+  },
+  {
+   "title": "F.S. 85.051",
+   "offset": 11496127,
+   "source": "section-number",
+   "length": 1395
   },
   {
    "title": "F.S. 86.021",
@@ -10409,13 +10415,7 @@
    "title": "F.S. 86.081",
    "offset": 11520109,
    "source": "title",
-   "length": 1991
-  },
-  {
-   "title": "F.S. 86.121",
-   "offset": 11522100,
-   "source": "title",
-   "length": 333
+   "length": 2324
   },
   {
    "title": "F.S. 86.111",
@@ -10433,7 +10433,13 @@
    "title": "CHAPTER 88",
    "offset": 11526192,
    "source": "title",
-   "length": 8194
+   "length": 1532
+  },
+  {
+   "title": "F.S. 86.121",
+   "offset": 11527724,
+   "source": "section-number",
+   "length": 6662
   },
   {
    "title": "F.S. 88.0011",
@@ -10943,13 +10949,7 @@
    "title": "F.S. 88.7121",
    "offset": 11823065,
    "source": "title",
-   "length": 2137
-  },
-  {
-   "title": "F.S. 88.8021",
-   "offset": 11825202,
-   "source": "title",
-   "length": 517
+   "length": 2654
   },
   {
    "title": "F.S. 88.8011",
@@ -10961,7 +10961,13 @@
    "title": "CHAPTER 88",
    "offset": 11837577,
    "source": "title",
-   "length": 8105
+   "length": 1332
+  },
+  {
+   "title": "F.S. 88.8021",
+   "offset": 11838909,
+   "source": "section-number",
+   "length": 6773
   },
   {
    "title": "F.S. 88.9031",
@@ -14681,13 +14687,7 @@
    "title": "F.S. 110.401",
    "offset": 15246508,
    "source": "title",
-   "length": 7046
-  },
-  {
-   "title": "F.S. 110.405",
-   "offset": 15253554,
-   "source": "title",
-   "length": 4092
+   "length": 11138
   },
   {
    "title": "F.S. 110.403",
@@ -14699,7 +14699,13 @@
    "title": "CHAPTER 110",
    "offset": 15265842,
    "source": "title",
-   "length": 4092
+   "length": 2044
+  },
+  {
+   "title": "F.S. 110.405",
+   "offset": 15267886,
+   "source": "section-number",
+   "length": 2048
   },
   {
    "title": "F.S. 110.406",
@@ -15911,13 +15917,7 @@
    "title": "F.S. 113.04",
    "offset": 16775582,
    "source": "title",
-   "length": 1684
-  },
-  {
-   "title": "F.S. 113.071",
-   "offset": 16777266,
-   "source": "title",
-   "length": 339
+   "length": 2023
   },
   {
    "title": "F.S. 113.07",
@@ -15929,7 +15929,13 @@
    "title": "CHAPTER 114",
    "offset": 16781786,
    "source": "title",
-   "length": 3668
+   "length": 2028
+  },
+  {
+   "title": "F.S. 113.071",
+   "offset": 16783814,
+   "source": "section-number",
+   "length": 1640
   },
   {
    "title": "F.S. 114.01",
@@ -19319,13 +19325,7 @@
    "title": "F.S. 153.951",
    "offset": 20732038,
    "source": "title",
-   "length": 1964
-  },
-  {
-   "title": "F.S. 153.955",
-   "offset": 20734002,
-   "source": "title",
-   "length": 559
+   "length": 2523
   },
   {
    "title": "F.S. 153.954",
@@ -19343,7 +19343,13 @@
    "title": "CHAPTER 154",
    "offset": 20739068,
    "source": "title",
-   "length": 3525
+   "length": 1979
+  },
+  {
+   "title": "F.S. 153.955",
+   "offset": 20741047,
+   "source": "section-number",
+   "length": 1546
   },
   {
    "title": "F.S. 154.001",
@@ -20645,13 +20651,7 @@
    "title": "F.S. 159.619",
    "offset": 21653663,
    "source": "title",
-   "length": 1939
-  },
-  {
-   "title": "F.S. 159.623",
-   "offset": 21655602,
-   "source": "title",
-   "length": 345
+   "length": 2284
   },
   {
    "title": "F.S. 159.622",
@@ -20663,7 +20663,13 @@
    "title": "CHAPTER 159",
    "offset": 21660121,
    "source": "title",
-   "length": 5837
+   "length": 2829
+  },
+  {
+   "title": "F.S. 159.623",
+   "offset": 21662950,
+   "source": "section-number",
+   "length": 3008
   },
   {
    "title": "F.S. 159.701",
@@ -23861,13 +23867,7 @@
    "title": "F.S. 177.29",
    "offset": 25067566,
    "source": "title",
-   "length": 4104
-  },
-  {
-   "title": "F.S. 177.40",
-   "offset": 25071670,
-   "source": "title",
-   "length": 379
+   "length": 4483
   },
   {
    "title": "F.S. 177.39",
@@ -23891,7 +23891,13 @@
    "title": "CHAPTER 177",
    "offset": 25084477,
    "source": "title",
-   "length": 4505
+   "length": 2388
+  },
+  {
+   "title": "F.S. 177.40",
+   "offset": 25086865,
+   "source": "section-number",
+   "length": 2117
   },
   {
    "title": "F.S. 177.502",
@@ -24371,7 +24377,13 @@
    "title": "CHAPTER 186",
    "offset": 25468974,
    "source": "title",
-   "length": 16384
+   "length": 10910
+  },
+  {
+   "title": "F.S. 186.001",
+   "offset": 25479884,
+   "source": "section-number",
+   "length": 5474
   },
   {
    "title": "F.S. 186.002",
@@ -33101,13 +33113,7 @@
    "title": "F.S. 243.38",
    "offset": 36308624,
    "source": "title",
-   "length": 6564
-  },
-  {
-   "title": "F.S. 243.51",
-   "offset": 36315188,
-   "source": "title",
-   "length": 348
+   "length": 6912
   },
   {
    "title": "F.S. 243.50",
@@ -33125,7 +33131,13 @@
    "title": "CHAPTER 243",
    "offset": 36319278,
    "source": "title",
-   "length": 8192
+   "length": 6763
+  },
+  {
+   "title": "F.S. 243.51",
+   "offset": 36326041,
+   "source": "section-number",
+   "length": 1429
   },
   {
    "title": "F.S. 243.52",
@@ -34379,19 +34391,19 @@
    "title": "F.S. 252.944",
    "offset": 37365175,
    "source": "title",
-   "length": 2683
-  },
-  {
-   "title": "F.S. 253.001",
-   "offset": 37367858,
-   "source": "title",
-   "length": 4092
+   "length": 6775
   },
   {
    "title": "CHAPTER 253",
    "offset": 37371950,
    "source": "title",
-   "length": 24576
+   "length": 19387
+  },
+  {
+   "title": "F.S. 253.001",
+   "offset": 37391337,
+   "source": "section-number",
+   "length": 5189
   },
   {
    "title": "F.S. 253.002",
@@ -45833,7 +45845,13 @@
    "title": "CHAPTER 326",
    "offset": 49618992,
    "source": "title",
-   "length": 4098
+   "length": 2194
+  },
+  {
+   "title": "F.S. 324.252",
+   "offset": 49621186,
+   "source": "section-number",
+   "length": 1904
   },
   {
    "title": "F.S. 326.002",
@@ -49331,7 +49349,13 @@
    "title": "CHAPTER 348",
    "offset": 53223476,
    "source": "title",
-   "length": 1952
+   "length": 843
+  },
+  {
+   "title": "F.S. 347.25",
+   "offset": 53224319,
+   "source": "section-number",
+   "length": 1109
   },
   {
    "title": "F.S. 347.24",
@@ -49601,7 +49625,13 @@
    "title": "CHAPTER 348",
    "offset": 53461038,
    "source": "title",
-   "length": 16384
+   "length": 15286
+  },
+  {
+   "title": "F.S. 348.751",
+   "offset": 53476324,
+   "source": "section-number",
+   "length": 1098
   },
   {
    "title": "F.S. 348.752",
@@ -54053,13 +54083,7 @@
    "title": "F.S. 378.212",
    "offset": 59002926,
    "source": "title",
-   "length": 4102
-  },
-  {
-   "title": "F.S. 378.402",
-   "offset": 59007028,
-   "source": "title",
-   "length": 391
+   "length": 4493
   },
   {
    "title": "F.S. 378.401",
@@ -54071,7 +54095,13 @@
    "title": "CHAPTER 378",
    "offset": 59011118,
    "source": "title",
-   "length": 8192
+   "length": 4868
+  },
+  {
+   "title": "F.S. 378.402",
+   "offset": 59015986,
+   "source": "section-number",
+   "length": 3324
   },
   {
    "title": "F.S. 378.403",
@@ -60131,13 +60161,7 @@
    "title": "F.S. 397.6975",
    "offset": 66724824,
    "source": "section-number",
-   "length": 3162
-  },
-  {
-   "title": "F.S. 397.701",
-   "offset": 66727986,
-   "source": "title",
-   "length": 356
+   "length": 3518
   },
   {
    "title": "CHAPTER 397",
@@ -60149,7 +60173,13 @@
    "title": "CHAPTER 397",
    "offset": 66737192,
    "source": "title",
-   "length": 3078
+   "length": 1640
+  },
+  {
+   "title": "F.S. 397.701",
+   "offset": 66738832,
+   "source": "section-number",
+   "length": 1438
   },
   {
    "title": "F.S. 397.702",
@@ -64679,19 +64709,19 @@
    "title": "F.S. 406.16",
    "offset": 72078780,
    "source": "title",
-   "length": 2678
-  },
-  {
-   "title": "F.S. 406.49",
-   "offset": 72081458,
-   "source": "title",
-   "length": 471
+   "length": 3149
   },
   {
    "title": "CHAPTER 406",
    "offset": 72081929,
    "source": "title",
-   "length": 11813
+   "length": 8297
+  },
+  {
+   "title": "F.S. 406.49",
+   "offset": 72090226,
+   "source": "section-number",
+   "length": 3516
   },
   {
    "title": "F.S. 406.50",
@@ -66647,13 +66677,7 @@
    "title": "F.S. 411.202",
    "offset": 75300910,
    "source": "title",
-   "length": 12292
-  },
-  {
-   "title": "F.S. 411.2035",
-   "offset": 75313202,
-   "source": "title",
-   "length": 8188
+   "length": 20480
   },
   {
    "title": "F.S. 411.203",
@@ -66665,7 +66689,13 @@
    "title": "CHAPTER 411",
    "offset": 75337776,
    "source": "title",
-   "length": 4432
+   "length": 1281
+  },
+  {
+   "title": "F.S. 411.2035",
+   "offset": 75339057,
+   "source": "section-number",
+   "length": 3151
   },
   {
    "title": "F.S. 411.22",
@@ -71651,13 +71681,7 @@
    "title": "F.S. 450.165",
    "offset": 81309744,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 450.181",
-   "offset": 81313844,
-   "source": "title",
-   "length": 403
+   "length": 4503
   },
   {
    "title": "F.S. 450.175",
@@ -71669,7 +71693,13 @@
    "title": "CHAPTER 450",
    "offset": 81315595,
    "source": "title",
-   "length": 6435
+   "length": 4576
+  },
+  {
+   "title": "F.S. 450.181",
+   "offset": 81320171,
+   "source": "section-number",
+   "length": 1859
   },
   {
    "title": "F.S. 450.191",
@@ -71765,13 +71795,7 @@
    "title": "F.S. 450.36",
    "offset": 81409377,
    "source": "title",
-   "length": 6865
-  },
-  {
-   "title": "F.S. 450.39",
-   "offset": 81416242,
-   "source": "title",
-   "length": 4092
+   "length": 10957
   },
   {
    "title": "F.S. 450.38",
@@ -71783,7 +71807,13 @@
    "title": "CHAPTER 451",
    "offset": 81425549,
    "source": "title",
-   "length": 2977
+   "length": 1341
+  },
+  {
+   "title": "F.S. 450.39",
+   "offset": 81426890,
+   "source": "section-number",
+   "length": 1636
   },
   {
    "title": "F.S. 451.01",
@@ -71819,13 +71849,7 @@
    "title": "F.S. 452.02",
    "offset": 81441603,
    "source": "title",
-   "length": 3311
-  },
-  {
-   "title": "F.S. 452.05",
-   "offset": 81444914,
-   "source": "title",
-   "length": 330
+   "length": 3641
   },
   {
    "title": "F.S. 452.04",
@@ -71837,7 +71861,13 @@
    "title": "CHAPTER 454",
    "offset": 81453104,
    "source": "title",
-   "length": 4412
+   "length": 3004
+  },
+  {
+   "title": "F.S. 452.05",
+   "offset": 81456108,
+   "source": "section-number",
+   "length": 1408
   },
   {
    "title": "F.S. 454.021",
@@ -74957,13 +74987,7 @@
    "title": "F.S. 467.205",
    "offset": 85245998,
    "source": "title",
-   "length": 4102
-  },
-  {
-   "title": "F.S. 468.1105",
-   "offset": 85250100,
-   "source": "title",
-   "length": 2021
+   "length": 6123
   },
   {
    "title": "F.S. 467.207",
@@ -74981,7 +75005,13 @@
    "title": "CHAPTER 468",
    "offset": 85258286,
    "source": "title",
-   "length": 8192
+   "length": 6767
+  },
+  {
+   "title": "F.S. 468.1105",
+   "offset": 85265053,
+   "source": "section-number",
+   "length": 1425
   },
   {
    "title": "F.S. 468.1115",
@@ -75635,13 +75665,7 @@
    "title": "F.S. 468.396",
    "offset": 85885079,
    "source": "title",
-   "length": 3995
-  },
-  {
-   "title": "F.S. 468.399",
-   "offset": 85889074,
-   "source": "title",
-   "length": 552
+   "length": 4547
   },
   {
    "title": "F.S. 468.398",
@@ -75659,7 +75683,13 @@
    "title": "CHAPTER 468",
    "offset": 85893168,
    "source": "title",
-   "length": 8190
+   "length": 2588
+  },
+  {
+   "title": "F.S. 468.399",
+   "offset": 85895756,
+   "source": "section-number",
+   "length": 5602
   },
   {
    "title": "F.S. 468.401",
@@ -77909,19 +77939,19 @@
    "title": "F.S. 475.630",
    "offset": 87904302,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 475.700",
-   "offset": 87908402,
-   "source": "title",
-   "length": 541
+   "length": 4641
   },
   {
    "title": "CHAPTER 475",
    "offset": 87908943,
    "source": "title",
-   "length": 7647
+   "length": 6662
+  },
+  {
+   "title": "F.S. 475.700",
+   "offset": 87915605,
+   "source": "section-number",
+   "length": 985
   },
   {
    "title": "F.S. 475.701",
@@ -86891,19 +86921,19 @@
    "title": "F.S. 520.92",
    "offset": 97428635,
    "source": "title",
-   "length": 2967
-  },
-  {
-   "title": "F.S. 520.993",
-   "offset": 97431602,
-   "source": "title",
-   "length": 414
+   "length": 3381
   },
   {
    "title": "CHAPTER 520",
    "offset": 97432016,
    "source": "title",
-   "length": 11870
+   "length": 10779
+  },
+  {
+   "title": "F.S. 520.993",
+   "offset": 97442795,
+   "source": "section-number",
+   "length": 1091
   },
   {
    "title": "F.S. 520.994",
@@ -88115,13 +88145,7 @@
    "title": "F.S. 538.11",
    "offset": 98308144,
    "source": "title",
-   "length": 4098
-  },
-  {
-   "title": "F.S. 538.17",
-   "offset": 98312242,
-   "source": "title",
-   "length": 565
+   "length": 4663
   },
   {
    "title": "F.S. 538.15",
@@ -88133,7 +88157,13 @@
    "title": "CHAPTER 538",
    "offset": 98320907,
    "source": "title",
-   "length": 3619
+   "length": 2521
+  },
+  {
+   "title": "F.S. 538.17",
+   "offset": 98323428,
+   "source": "section-number",
+   "length": 1098
   },
   {
    "title": "F.S. 538.18",
@@ -90059,19 +90089,19 @@
    "title": "F.S. 553.64",
    "offset": 100036656,
    "source": "title",
-   "length": 4098
-  },
-  {
-   "title": "F.S. 553.70",
-   "offset": 100040754,
-   "source": "title",
-   "length": 4092
+   "length": 8190
   },
   {
    "title": "CHAPTER 553",
    "offset": 100044846,
    "source": "title",
-   "length": 8192
+   "length": 7376
+  },
+  {
+   "title": "F.S. 553.70",
+   "offset": 100052222,
+   "source": "section-number",
+   "length": 816
   },
   {
    "title": "F.S. 553.71",
@@ -90629,13 +90659,7 @@
    "title": "F.S. 554.111",
    "offset": 100786222,
    "source": "title",
-   "length": 4102
-  },
-  {
-   "title": "F.S. 554.1151",
-   "offset": 100790324,
-   "source": "title",
-   "length": 4090
+   "length": 8192
   },
   {
    "title": "F.S. 554.114",
@@ -90653,7 +90677,13 @@
    "title": "CHAPTER 556",
    "offset": 100802608,
    "source": "title",
-   "length": 8190
+   "length": 1898
+  },
+  {
+   "title": "F.S. 554.1151",
+   "offset": 100804506,
+   "source": "section-number",
+   "length": 6292
   },
   {
    "title": "F.S. 556.101",
@@ -92831,13 +92861,7 @@
    "title": "F.S. 564.06",
    "offset": 102785070,
    "source": "title",
-   "length": 4102
-  },
-  {
-   "title": "F.S. 564.09",
-   "offset": 102789172,
-   "source": "title",
-   "length": 502
+   "length": 4604
   },
   {
    "title": "F.S. 564.08",
@@ -92855,7 +92879,13 @@
    "title": "CHAPTER 565",
    "offset": 102797360,
    "source": "title",
-   "length": 4688
+   "length": 2192
+  },
+  {
+   "title": "F.S. 564.09",
+   "offset": 102799552,
+   "source": "section-number",
+   "length": 2496
   },
   {
    "title": "F.S. 565.01",
@@ -99959,7 +99989,13 @@
    "title": "CHAPTER 607",
    "offset": 108814384,
    "source": "title",
-   "length": 4096
+   "length": 1106
+  },
+  {
+   "title": "F.S. 607.513",
+   "offset": 108815490,
+   "source": "section-number",
+   "length": 2990
   },
   {
    "title": "F.S. 607.601",
@@ -107111,13 +107147,7 @@
    "title": "F.S. 626.9935",
    "offset": 115220963,
    "source": "title",
-   "length": 3663
-  },
-  {
-   "title": "F.S. 626.9938",
-   "offset": 115224626,
-   "source": "title",
-   "length": 371
+   "length": 4034
   },
   {
    "title": "F.S. 626.9937",
@@ -107135,7 +107165,13 @@
    "title": "CHAPTER 626",
    "offset": 115229191,
    "source": "title",
-   "length": 4177
+   "length": 2497
+  },
+  {
+   "title": "F.S. 626.9938",
+   "offset": 115231688,
+   "source": "section-number",
+   "length": 1680
   },
   {
    "title": "F.S. 626.9951",
@@ -110999,13 +111035,7 @@
    "title": "F.S. 627.984",
    "offset": 119451696,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 627.987",
-   "offset": 119455796,
-   "source": "title",
-   "length": 375
+   "length": 4475
   },
   {
    "title": "F.S. 627.986",
@@ -111023,7 +111053,13 @@
    "title": "CHAPTER 627",
    "offset": 119463992,
    "source": "title",
-   "length": 4088
+   "length": 2857
+  },
+  {
+   "title": "F.S. 627.987",
+   "offset": 119466849,
+   "source": "section-number",
+   "length": 1231
   },
   {
    "title": "F.S. 627.9902",
@@ -121025,7 +121061,13 @@
    "title": "CHAPTER 673",
    "offset": 128278578,
    "source": "title",
-   "length": 4094
+   "length": 841
+  },
+  {
+   "title": "F.S. 673.2071",
+   "offset": 128279419,
+   "source": "section-number",
+   "length": 3253
   },
   {
    "title": "F.S. 673.3011",
@@ -122129,7 +122171,13 @@
    "title": "CHAPTER 678",
    "offset": 129044530,
    "source": "title",
-   "length": 8190
+   "length": 838
+  },
+  {
+   "title": "F.S. 678.1171",
+   "offset": 129045368,
+   "source": "section-number",
+   "length": 7352
   },
   {
    "title": "F.S. 678.2011",
@@ -125459,7 +125507,13 @@
    "title": "CHAPTER 692",
    "offset": 131534898,
    "source": "title",
-   "length": 4096
+   "length": 841
+  },
+  {
+   "title": "F.S. 689.302",
+   "offset": 131535739,
+   "source": "section-number",
+   "length": 3255
   },
   {
    "title": "F.S. 692.01",
@@ -126269,13 +126323,7 @@
    "title": "F.S. 704.06",
    "offset": 132071470,
    "source": "title",
-   "length": 12294
-  },
-  {
-   "title": "F.S. 704.09",
-   "offset": 132083764,
-   "source": "title",
-   "length": 521
+   "length": 12815
   },
   {
    "title": "F.S. 704.08",
@@ -126293,7 +126341,13 @@
    "title": "CHAPTER 705",
    "offset": 132091952,
    "source": "title",
-   "length": 4098
+   "length": 2612
+  },
+  {
+   "title": "F.S. 704.09",
+   "offset": 132094564,
+   "source": "section-number",
+   "length": 1486
   },
   {
    "title": "F.S. 705.1015",
@@ -126977,13 +127031,7 @@
    "title": "F.S. 712.08",
    "offset": 132580714,
    "source": "title",
-   "length": 6858
-  },
-  {
-   "title": "F.S. 712.11",
-   "offset": 132587572,
-   "source": "title",
-   "length": 477
+   "length": 7335
   },
   {
    "title": "F.S. 712.10",
@@ -127001,7 +127049,13 @@
    "title": "CHAPTER 713",
    "offset": 132591666,
    "source": "title",
-   "length": 4092
+   "length": 2932
+  },
+  {
+   "title": "F.S. 712.11",
+   "offset": 132594598,
+   "source": "section-number",
+   "length": 1160
   },
   {
    "title": "F.S. 712.12",
@@ -127547,13 +127601,7 @@
    "title": "F.S. 713.815",
    "offset": 133253698,
    "source": "title",
-   "length": 1522
-  },
-  {
-   "title": "F.S. 713.825",
-   "offset": 133255220,
-   "source": "title",
-   "length": 442
+   "length": 1964
   },
   {
    "title": "F.S. 713.823",
@@ -127571,7 +127619,13 @@
    "title": "CHAPTER 713",
    "offset": 133261317,
    "source": "title",
-   "length": 2089
+   "length": 1144
+  },
+  {
+   "title": "F.S. 713.825",
+   "offset": 133262461,
+   "source": "section-number",
+   "length": 945
   },
   {
    "title": "F.S. 713.901",
@@ -127871,19 +127925,19 @@
    "title": "F.S. 715.12",
    "offset": 133500974,
    "source": "title",
-   "length": 12292
-  },
-  {
-   "title": "F.S. 716.01",
-   "offset": 133513266,
-   "source": "title",
-   "length": 343
+   "length": 12635
   },
   {
    "title": "CHAPTER 716",
    "offset": 133513609,
    "source": "title",
-   "length": 7845
+   "length": 6832
+  },
+  {
+   "title": "F.S. 716.01",
+   "offset": 133520441,
+   "source": "section-number",
+   "length": 1013
   },
   {
    "title": "F.S. 716.02",
@@ -131795,7 +131849,13 @@
    "title": "CHAPTER 733",
    "offset": 138281008,
    "source": "title",
-   "length": 5138
+   "length": 1515
+  },
+  {
+   "title": "F.S. 733.620",
+   "offset": 138282523,
+   "source": "section-number",
+   "length": 3623
   },
   {
    "title": "F.S. 733.701",
@@ -134099,13 +134159,7 @@
    "title": "F.S. 742.17",
    "offset": 140161072,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 743.01",
-   "offset": 140165172,
-   "source": "title",
-   "length": 4090
+   "length": 8190
   },
   {
    "title": "F.S. 742.18",
@@ -134117,7 +134171,13 @@
    "title": "CHAPTER 743",
    "offset": 140181550,
    "source": "title",
-   "length": 8192
+   "length": 6887
+  },
+  {
+   "title": "F.S. 743.01",
+   "offset": 140188437,
+   "source": "section-number",
+   "length": 1305
   },
   {
    "title": "F.S. 743.015",
@@ -135287,31 +135347,25 @@
    "title": "F.S. 751.05",
    "offset": 141156398,
    "source": "title",
-   "length": 8196
-  },
-  {
-   "title": "F.S. 752.001",
-   "offset": 141164594,
-   "source": "title",
-   "length": 338
+   "length": 8534
   },
   {
    "title": "CHAPTER 752",
    "offset": 141164932,
    "source": "title",
-   "length": 7850
+   "length": 5538
+  },
+  {
+   "title": "F.S. 752.001",
+   "offset": 141170470,
+   "source": "section-number",
+   "length": 2312
   },
   {
    "title": "F.S. 752.011",
    "offset": 141172782,
    "source": "title",
-   "length": 12292
-  },
-  {
-   "title": "F.S. 752.071",
-   "offset": 141185074,
-   "source": "title",
-   "length": 509
+   "length": 12801
   },
   {
    "title": "F.S. 752.02",
@@ -135335,7 +135389,13 @@
    "title": "CHAPTER 753",
    "offset": 141190164,
    "source": "title",
-   "length": 7196
+   "length": 1835
+  },
+  {
+   "title": "F.S. 752.071",
+   "offset": 141191999,
+   "source": "section-number",
+   "length": 5361
   },
   {
    "title": "F.S. 753.02",
@@ -140417,7 +140477,13 @@
    "title": "CHAPTER 826",
    "offset": 146351253,
    "source": "title",
-   "length": 7149
+   "length": 1785
+  },
+  {
+   "title": "F.S. 825.106",
+   "offset": 146353038,
+   "source": "section-number",
+   "length": 5364
   },
   {
    "title": "F.S. 826.02",
@@ -142217,13 +142283,7 @@
    "title": "F.S. 860.147",
    "offset": 147746862,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 860.17",
-   "offset": 147750962,
-   "source": "title",
-   "length": 330
+   "length": 4430
   },
   {
    "title": "F.S. 860.16",
@@ -142235,7 +142295,13 @@
    "title": "CHAPTER 861",
    "offset": 147759154,
    "source": "title",
-   "length": 4092
+   "length": 2450
+  },
+  {
+   "title": "F.S. 860.17",
+   "offset": 147761604,
+   "source": "section-number",
+   "length": 1642
   },
   {
    "title": "F.S. 860.20",
@@ -143459,13 +143525,7 @@
    "title": "F.S. 896.105",
    "offset": 149128022,
    "source": "title",
-   "length": 3292
-  },
-  {
-   "title": "F.S. 896.108",
-   "offset": 149131314,
-   "source": "title",
-   "length": 407
+   "length": 3699
   },
   {
    "title": "F.S. 896.107",
@@ -143477,7 +143537,13 @@
    "title": "CHAPTER 900",
    "offset": 149135408,
    "source": "title",
-   "length": 4098
+   "length": 978
+  },
+  {
+   "title": "F.S. 896.108",
+   "offset": 149136386,
+   "source": "section-number",
+   "length": 3120
   },
   {
    "title": "F.S. 900.02",
@@ -144263,13 +144329,7 @@
    "title": "F.S. 907.041",
    "offset": 149655598,
    "source": "title",
-   "length": 28678
-  },
-  {
-   "title": "F.S. 907.045",
-   "offset": 149684276,
-   "source": "title",
-   "length": 525
+   "length": 29203
   },
   {
    "title": "F.S. 907.044",
@@ -144287,7 +144347,13 @@
    "title": "CHAPTER 908",
    "offset": 149708848,
    "source": "title",
-   "length": 9603
+   "length": 2529
+  },
+  {
+   "title": "F.S. 907.045",
+   "offset": 149711377,
+   "source": "section-number",
+   "length": 7074
   },
   {
    "title": "F.S. 908.101",
@@ -144659,19 +144725,19 @@
    "title": "F.S. 914.28",
    "offset": 149975086,
    "source": "title",
-   "length": 12292
-  },
-  {
-   "title": "F.S. 916.10",
-   "offset": 149987378,
-   "source": "title",
-   "length": 488
+   "length": 12780
   },
   {
    "title": "CHAPTER 916",
    "offset": 149987866,
    "source": "title",
-   "length": 7700
+   "length": 6915
+  },
+  {
+   "title": "F.S. 916.10",
+   "offset": 149994781,
+   "source": "section-number",
+   "length": 785
   },
   {
    "title": "F.S. 916.105",
@@ -148373,19 +148439,19 @@
    "title": "F.S. 944.804",
    "offset": 153837614,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 945.01",
-   "offset": 153841714,
-   "source": "title",
-   "length": 4092
+   "length": 8192
   },
   {
    "title": "CHAPTER 945",
    "offset": 153845806,
    "source": "title",
-   "length": 12288
+   "length": 10275
+  },
+  {
+   "title": "F.S. 945.01",
+   "offset": 153856081,
+   "source": "section-number",
+   "length": 2013
   },
   {
    "title": "F.S. 945.025",
@@ -150179,13 +150245,7 @@
    "title": "F.S. 960.297",
    "offset": 155670152,
    "source": "title",
-   "length": 2474
-  },
-  {
-   "title": "F.S. 961.02",
-   "offset": 155672626,
-   "source": "title",
-   "length": 449
+   "length": 2923
   },
   {
    "title": "F.S. 961.01",
@@ -150197,7 +150257,13 @@
    "title": "CHAPTER 961",
    "offset": 155674717,
    "source": "title",
-   "length": 10193
+   "length": 6901
+  },
+  {
+   "title": "F.S. 961.02",
+   "offset": 155681618,
+   "source": "section-number",
+   "length": 3292
   },
   {
    "title": "F.S. 961.03",
@@ -150827,13 +150893,7 @@
    "title": "F.S. 985.48",
    "offset": 156561454,
    "source": "title",
-   "length": 8198
-  },
-  {
-   "title": "F.S. 985.494",
-   "offset": 156569652,
-   "source": "title",
-   "length": 4090
+   "length": 12288
   },
   {
    "title": "F.S. 985.481",
@@ -150851,7 +150911,13 @@
    "title": "CHAPTER 985",
    "offset": 156610676,
    "source": "title",
-   "length": 4425
+   "length": 1593
+  },
+  {
+   "title": "F.S. 985.494",
+   "offset": 156612269,
+   "source": "section-number",
+   "length": 2832
   },
   {
    "title": "F.S. 985.512",
@@ -151205,7 +151271,13 @@
    "title": "CHAPTER 1000",
    "offset": 157107580,
    "source": "title",
-   "length": 2738
+   "length": 1077
+  },
+  {
+   "title": "F.S. 1000.08",
+   "offset": 157108657,
+   "source": "section-number",
+   "length": 1661
   },
   {
    "title": "F.S. 1000.21",
@@ -151277,13 +151349,7 @@
    "title": "F.S. 1000.40",
    "offset": 157258764,
    "source": "title",
-   "length": 3112
-  },
-  {
-   "title": "F.S. 1001.01",
-   "offset": 157261876,
-   "source": "title",
-   "length": 563
+   "length": 3675
   },
   {
    "title": "CHAPTER 1001",
@@ -151295,7 +151361,13 @@
    "title": "CHAPTER 1001",
    "offset": 157263740,
    "source": "title",
-   "length": 6322
+   "length": 4229
+  },
+  {
+   "title": "F.S. 1001.01",
+   "offset": 157267969,
+   "source": "section-number",
+   "length": 2093
   },
   {
    "title": "F.S. 1001.02",
@@ -151763,19 +151835,19 @@
    "title": "F.S. 1001.67",
    "offset": 157888558,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 1001.70",
-   "offset": 157892658,
-   "source": "title",
-   "length": 374
+   "length": 4474
   },
   {
    "title": "CHAPTER 1001",
    "offset": 157893032,
    "source": "title",
-   "length": 7814
+   "length": 5230
+  },
+  {
+   "title": "F.S. 1001.70",
+   "offset": 157898262,
+   "source": "section-number",
+   "length": 2584
   },
   {
    "title": "F.S. 1001.705",
@@ -155225,13 +155297,7 @@
    "title": "F.S. 1009.8962",
    "offset": 163663918,
    "source": "title",
-   "length": 8194
-  },
-  {
-   "title": "F.S. 1009.898",
-   "offset": 163672112,
-   "source": "title",
-   "length": 525
+   "length": 8719
   },
   {
    "title": "F.S. 1009.897",
@@ -155243,7 +155309,13 @@
    "title": "CHAPTER 1009",
    "offset": 163676208,
    "source": "title",
-   "length": 8194
+   "length": 1668
+  },
+  {
+   "title": "F.S. 1009.898",
+   "offset": 163677876,
+   "source": "section-number",
+   "length": 6526
   },
   {
    "title": "F.S. 1009.91",
@@ -155447,13 +155519,7 @@
    "title": "F.S. 1010.07",
    "offset": 163930646,
    "source": "title",
-   "length": 3612
-  },
-  {
-   "title": "F.S. 1010.11",
-   "offset": 163934258,
-   "source": "title",
-   "length": 368
+   "length": 3980
   },
   {
    "title": "F.S. 1010.09",
@@ -155471,7 +155537,13 @@
    "title": "CHAPTER 1010",
    "offset": 163942641,
    "source": "title",
-   "length": 3901
+   "length": 2202
+  },
+  {
+   "title": "F.S. 1010.11",
+   "offset": 163944843,
+   "source": "section-number",
+   "length": 1699
   },
   {
    "title": "F.S. 1010.20",
@@ -156383,13 +156455,7 @@
    "title": "F.S. 1012.05",
    "offset": 164806702,
    "source": "title",
-   "length": 8196
-  },
-  {
-   "title": "F.S. 1012.07",
-   "offset": 164814898,
-   "source": "title",
-   "length": 303
+   "length": 8499
   },
   {
    "title": "F.S. 1012.06",
@@ -156401,7 +156467,13 @@
    "title": "CHAPTER 1012",
    "offset": 164818992,
    "source": "title",
-   "length": 4096
+   "length": 1187
+  },
+  {
+   "title": "F.S. 1012.07",
+   "offset": 164820179,
+   "source": "section-number",
+   "length": 2909
   },
   {
    "title": "CHAPTER 1012",
@@ -157349,7 +157421,13 @@
    "title": "CHAPTER 1013",
    "offset": 166055986,
    "source": "title",
-   "length": 16380
+   "length": 4643
+  },
+  {
+   "title": "F.S. 1013.365",
+   "offset": 166060629,
+   "source": "section-number",
+   "length": 11737
   },
   {
    "title": "F.S. 1013.37",
@@ -157718,7 +157796,7 @@
    "length": 73705417
   }
  ],
- "recovered_sections": 982,
- "dropped_stub_duplicates": 893,
+ "recovered_sections": 1045,
+ "dropped_stub_duplicates": 943,
  "retitled_via_sectionnumber": 149
 }
