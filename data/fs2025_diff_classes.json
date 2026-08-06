@@ -1,0 +1,31 @@
+{
+  "sections_classified": 3068,
+  "byte_exact": 2990,
+  "below_threshold": 4,
+  "below_threshold_but_only_known_classes": 4,
+  "difference_shapes": {
+    "footnote-marker": 204
+  },
+  "sections_affected_by_shape": {
+    "footnote-marker": 78
+  },
+  "unclassified_examples": [],
+  "threshold_artifacts": [
+    [
+      "F.S. 125.571",
+      0.9876160990712074
+    ],
+    [
+      "F.S. 125.0102",
+      0.9882352941176471
+    ],
+    [
+      "F.S. 122.18",
+      0.9882869692532943
+    ],
+    [
+      "F.S. 106.32",
+      0.9892280071813285
+    ]
+  ]
+}
