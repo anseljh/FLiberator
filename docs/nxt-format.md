@@ -555,13 +555,9 @@ inside that span reads **`15.16`**, not `15.182`. In other words: this is
 not a case of lost content. F.S. 15.16's real, complete, undamaged section
 body is sitting right there in the index, just filed under the wrong
 citation string. (The genuine F.S. 15.182 document exists separately,
-further down the file, correctly titled and indexed on its own.) Checking
-whether this generalizes to the other confirmed gaps -- i.e. whether most
-of the 95 are "mislabeled, recoverable" rather than "destroyed" -- is a
-good next step for whoever picks this up (cross-referencing each merged
-entry's own `SectionNumber` against its title, the way Phase 2b's orphan
-recovery already does for *extra* Section divs, would need to be extended
-to also catch a *mismatched* first Section div like this one).
+further down the file, correctly titled and indexed on its own.) This
+generalizes: checked all 95 confirmed gaps and found every one recoverable
+the same way -- see "Fixed: SectionNumber-vs-title cross-check" below.
 
 ### The "garbage" is a real field, not noise
 
@@ -614,17 +610,46 @@ independently-confirmed index gaps -- is still real and still 95-strong;
 it just isn't evidenced by the specific example that prompted the
 investigation.
 
-**Not fixed.** Same posture as Phase 4: this measures and characterizes
-the gap rather than closing it, though the "closing-tag theft" root cause
-and the demonstrated recoverability of at least one case (15.16) suggest a
-real fix is closer at hand than originally thought. Two candidate
-directions: make the Phase 3 title-scan tag-aware (matching each `<title>`
-to its own nearest `</title>` rather than any following one), or
-cross-validate each entry's title against its own `SectionNumber` and
-prefer the latter on mismatch -- which would recover cases like F.S. 15.16
-without needing to solve the tag-matching problem at all. Left as a
-documented, quantified residual for whichever future phase tackles index completeness
-directly.
+### Fixed: SectionNumber-vs-title cross-check
+
+Before building anything, checked how many of the 95 confirmed gaps were
+actually recoverable this way: searched the raw file for each gap
+citation's own `SectionNumber` text and confirmed it falls inside an
+*existing* (mislabeled) index entry's span. Result: **all 95 -- 100%**.
+None were genuinely destroyed; every one was sitting inside a
+closing-tag-theft merge, exactly like F.S. 15.16.
+
+Implemented the fix in `scripts/nxt_build_index.py`
+(`fix_mismatched_titles`): for every title-scan entry that isn't a
+CHAPTER/Preface heading, compare its title against the first
+`<div class="Section">`'s own `SectionNumber` in its span; on mismatch
+(including a garbled, unparseable title, like the `LPDD`-corrupted ones),
+trust the `SectionNumber` and relabel the entry. Runs before the existing
+Phase 2b orphan-recovery step, which is unaffected (it only looks at
+*extra* Section divs beyond the first, so the two checks compose cleanly).
+
+**Result:** 149 entries retitled; total documents 26,317 → 26,286 (net
+-31, from newly-collapsed duplicates now getting caught by the existing
+stub-duplicate dropper -- 862 → 893 dropped); confirmed gaps via
+`scripts/nxt_find_gaps.py` **95 → 41**.
+
+**Why not 0.** The fix can only give one merged entry one label. For
+citations like F.S. 105.08, F.S. 15.16, and F.S. 44.404, the container's
+*original* (pre-fix) title was either unparseable garbage or a real
+citation that also has its own separate, correctly-indexed entry
+elsewhere in the file (F.S. 15.182 and F.S. 44.406 both do) -- so
+relabeling the container was a clean win with no regression. But for
+citations like F.S. 39.0143, the container's original title was a real
+citation *without* a separate copy anywhere else -- relabeling the
+container to recover its stolen twin (F.S. 39.0142) makes F.S. 39.0143
+disappear instead. Net it's still a large improvement (54 gaps closed,
+zero silently reintroduced -- `nxt_find_gaps.py` still catches and reports
+all 41 remainders, so nothing is lost from visibility even when it can't
+be automatically recovered). Closing the rest needs the harder fix: making
+the Phase 3 title-scan itself tag-aware (matching each `<title>` to its
+own nearest `</title>` instead of any following one), so both twins in a
+theft pair get their own entry instead of only whichever one's
+`SectionNumber` happens to be recoverable.
 
 ## Not yet investigated
 
@@ -635,8 +660,9 @@ directly.
   is good enough for reliable text extraction, but doesn't explain
   everything structurally. This is also what's behind the small residual
   gap in the Phase 3/2b index (~68 duplicate + ~48 garbled titles out of
-  26,317 — down from the original ~4%, see "Phase 2b" above) and the 95
-  confirmed double-failure gaps quantified in "Phase 2c" above.
+  the original 26,317 — down from the original ~4%, see "Phase 2b" above)
+  and the 41 confirmed gaps remaining after the Phase 2c fix (down from
+  95; 26,286 documents total — see "Phase 2c" above).
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
   unextracted; likely contain the real Folio/NXT rendering engine
   (`nfoenu6.dll`, referenced by name inside `fs2025.nxt` itself, isn't present

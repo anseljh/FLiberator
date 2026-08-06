@@ -10,8 +10,11 @@ README.md and CLAUDE.md. Phase 4 (validation harness,
 Phase 2b paging-interruption mechanism is more widespread than previously
 quantified — see docs/nxt-format.md "Phase 4" — which motivated Phase 2c.
 Phase 2c (`scripts/nxt_find_gaps.py`) added a third, decoder-independent
-detection signal and confirmed 95 "double failure" gaps (0.38% of indexed
-citations) — see docs/nxt-format.md "Phase 2c". Phase 6
+detection signal, found 95 gaps caused by "closing-tag theft" (not true
+data loss), and partially fixed it by cross-validating titles against
+their own SectionNumber — 41 gaps remain (down from 95), documented as a
+residual pending a tag-aware Phase 3 rewrite — see docs/nxt-format.md
+"Phase 2c". Phase 6
 (`scripts/download.py`) established the `download/`/`output/`
 working-folder convention alongside the frozen `FLLawDL2025/` reference
 copy — see CLAUDE.md "Working conventions". Phases 7-9 (package promotion,
@@ -150,12 +153,22 @@ turned out to be a misdiagnosis -- it's cleanly indexed with no corruption;
 the original claim came from a raw substring search that didn't account
 for the standard per-token opcode always embedded before `</title>`. The
 95-gap count and its cause are otherwise unaffected (145.11 isn't among
-them). Full list in `data/fs2025_gap_report.json`. Not fixed -- measured
-and characterized, per the same posture as Phase 4; see
-`docs/nxt-format.md` "Phase 2c" for the full writeup, including the two
-candidate fix directions identified (tag-aware title matching, or
-cross-validating title against SectionNumber and preferring the latter on
-mismatch).
+them).
+
+**Partially fixed.** Checked all 95 gaps for recoverability first: every
+one had its own `SectionNumber` findable inside an existing (mislabeled)
+entry -- 100%, no genuine destruction cases among them. Implemented the
+cross-validation fix in `nxt_build_index.py`
+(`fix_mismatched_titles`): compare each entry's title against its own
+first Section div's `SectionNumber`, relabel on mismatch. Result: 149
+entries retitled, confirmed gaps **95 → 41**. The 41 remaining are cases
+where the fix can't win either way -- the container's original title was
+*itself* a real citation with no separate copy elsewhere in the file, so
+recovering its stolen twin makes the original disappear instead (still
+visible to `nxt_find_gaps.py`, not silently lost). Closing those needs the
+harder fix: a tag-aware Phase 3 title-scan that matches each `<title>` to
+its own `</title>` instead of any following one. See `docs/nxt-format.md`
+"Phase 2c" for the full writeup.
 
 ### Phase 5 — Pipeline decision & write-up ✅ done
 **Decision confirmed:** FLiberator decodes `.nxt` directly to HTML + a

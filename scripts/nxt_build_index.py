@@ -83,6 +83,51 @@ def find_doc_start(data: bytes, title_pos: int) -> int:
     return best if best != -1 else title_pos
 
 
+SPECIAL_TITLE_PREFIXES = ("CHAPTER", "Preface")
+
+
+def fix_mismatched_titles(data: bytes, title_entries: list[dict]) -> int:
+    """Phase 2c found that "closing-tag theft" -- a neighboring document's
+    own closing tag destroyed by page-boundary interruption, causing the
+    title-scan regex's non-greedy match to swallow forward and steal the
+    *next* title's closer instead -- merges two documents into one entry
+    that's correctly positioned but mislabeled with the wrong citation
+    (confirmed on F.S. 105.08, F.S. 15.16, F.S. 44.404; see
+    docs/nxt-format.md "Phase 2c"). Unlike true content loss, the stolen
+    document's real content -- including its own SectionNumber -- is still
+    sitting right there in the entry's span. Fix: for every title-scan
+    entry that isn't a CHAPTER/Preface heading, compare its title against
+    the first `<div class="Section">`'s own SectionNumber in its span; on
+    mismatch (including a garbled, unparseable title), trust the
+    SectionNumber and relabel. Confirmed against the full corpus: all 95
+    citations Phase 2c found missing this way are recoverable by this
+    check (see `scripts/nxt_find_gaps.py`)."""
+    spans = []
+    for i, e in enumerate(title_entries):
+        end = title_entries[i + 1]["offset"] if i + 1 < len(title_entries) else len(data)
+        spans.append((e["offset"], end))
+
+    div_positions = [m.start() for m in SECTION_DIV_RE.finditer(data)]
+    di = 0
+    n_divs = len(div_positions)
+    fixed = 0
+    for e, (start, end) in zip(title_entries, spans):
+        if e["title"].startswith(SPECIAL_TITLE_PREFIXES):
+            continue
+        while di < n_divs and div_positions[di] < start:
+            di += 1
+        if di >= n_divs or div_positions[di] >= end:
+            continue
+        m = SECNUM_RE.search(data[div_positions[di] : div_positions[di] + 120])
+        if not m:
+            continue
+        real_title = f"F.S. {m.group(1).decode()}"
+        if e["title"] != real_title:
+            e["title"] = real_title
+            fixed += 1
+    return fixed
+
+
 def find_orphaned_sections(data: bytes, title_entries: list[dict]) -> list[dict]:
     """Any `<div class="Section">` that isn't the first one inside a
     title-scan entry's span was silently swallowed by v2. Split those out,
@@ -158,6 +203,8 @@ def build_index(data: bytes) -> dict:
         title_entries.append({"title": title, "offset": offset, "source": "title"})
     title_entries.sort(key=lambda e: e["offset"])
 
+    retitled = fix_mismatched_titles(data, title_entries)
+
     orphans = find_orphaned_sections(data, title_entries)
 
     entries = sorted(title_entries + orphans, key=lambda e: e["offset"])
@@ -172,6 +219,7 @@ def build_index(data: bytes) -> dict:
         "entries": entries,
         "recovered_sections": len(orphans),
         "dropped_stub_duplicates": dropped,
+        "retitled_via_sectionnumber": retitled,
     }
 
 
@@ -185,6 +233,8 @@ def main() -> None:
 
     print(f"{filename}: {index['total_documents']} documents "
           f"({index['recovered_sections']} recovered via SectionNumber, "
+          f"{index['retitled_via_sectionnumber']} retitled via SectionNumber "
+          f"mismatch (closing-tag theft fix), "
           f"{index['dropped_stub_duplicates']} empty-stub duplicates dropped)")
 
     by_title = {e["title"]: e for e in index["entries"]}

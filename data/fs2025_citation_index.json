@@ -1,5 +1,5 @@
 {
- "total_documents": 26317,
+ "total_documents": 26286,
  "entries": [
   {
    "title": "Preface, Florida Statutes 2025",
@@ -602,7 +602,7 @@
    "length": 1264
   },
   {
-   "title": "F.S. 8.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 8.051",
    "offset": 897074,
    "source": "title",
    "length": 4096
@@ -1610,7 +1610,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 15.182",
+   "title": "F.S. 15.16",
    "offset": 3117108,
    "source": "title",
    "length": 12282
@@ -4796,7 +4796,7 @@
    "length": 12292
   },
   {
-   "title": "F.S. 39.0143",
+   "title": "F.S. 39.0142",
    "offset": 6152242,
    "source": "title",
    "length": 4094
@@ -5840,7 +5840,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 44.406",
+   "title": "F.S. 44.404",
    "offset": 7618612,
    "source": "title",
    "length": 8186
@@ -5870,13 +5870,13 @@
    "length": 4098
   },
   {
-   "title": "F.S. 45.021",
+   "title": "F.S. 45.011",
    "offset": 7680050,
    "source": "title",
    "length": 4096
   },
   {
-   "title": "F.S. 45.0315",
+   "title": "F.S. 45.021",
    "offset": 7684146,
    "source": "title",
    "length": 4092
@@ -7967,13 +7967,7 @@
    "title": "F.S. 63.0423",
    "offset": 9756718,
    "source": "title",
-   "length": 8198
-  },
-  {
-   "title": "F.S. 63.043",
-   "offset": 9764916,
-   "source": "title",
-   "length": 1274
+   "length": 9472
   },
   {
    "title": "F.S. 63.0425",
@@ -7988,7 +7982,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 63.053",
+   "title": "F.S. 63.043",
    "offset": 9773106,
    "source": "title",
    "length": 4092
@@ -9446,7 +9440,7 @@
    "length": 4100
   },
   {
-   "title": "F.S\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 77.081",
    "offset": 10936370,
    "source": "title",
    "length": 2923
@@ -10868,7 +10862,7 @@
    "length": 2110
   },
   {
-   "title": "F.S. 88.7031",
+   "title": "F.S. 88.703",
    "offset": 11776052,
    "source": "title",
    "length": 624
@@ -11648,7 +11642,7 @@
    "length": 16211
   },
   {
-   "title": "F\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 92.24",
    "offset": 12251186,
    "source": "title",
    "length": 2399
@@ -12266,7 +12260,7 @@
    "length": 12292
   },
   {
-   "title": "F.S. 98.255",
+   "title": "F.S. 98.212",
    "offset": 12890162,
    "source": "title",
    "length": 12286
@@ -13718,7 +13712,7 @@
    "length": 4102
   },
   {
-   "title": "F.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 105.08",
    "offset": 14172212,
    "source": "title",
    "length": 4090
@@ -14720,7 +14714,7 @@
    "length": 3879
   },
   {
-   "title": "F\ufffd\u000e\u0000\u0000\u0002\u0000ype\" content=\"text/html; charset=utf-8\" />\b\u0010\u0000\u0003\ufffd:\u0001",
+   "title": "F.S. 110.502",
    "offset": 15282224,
    "source": "title",
    "length": 4838
@@ -15083,13 +15077,7 @@
    "title": "F.S. 112.1911",
    "offset": 15749166,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 112.1913",
-   "offset": 15753266,
-   "source": "title",
-   "length": 4092
+   "length": 8192
   },
   {
    "title": "F.S. 112.1912",
@@ -15098,7 +15086,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 112.1921",
+   "title": "F.S. 112.1913",
    "offset": 15761458,
    "source": "title",
    "length": 8188
@@ -16217,13 +16205,7 @@
    "title": "F.S. 117.021",
    "offset": 16928814,
    "source": "title",
-   "length": 4102
-  },
-  {
-   "title": "F.S. 117.045",
-   "offset": 16932916,
-   "source": "title",
-   "length": 300
+   "length": 4402
   },
   {
    "title": "F.S. 117.04",
@@ -16238,7 +16220,7 @@
    "length": 6215
   },
   {
-   "title": "F.S. 117.051",
+   "title": "F.S. 117.045",
    "offset": 16941106,
    "source": "title",
    "length": 4092
@@ -17348,7 +17330,7 @@
    "length": 1448
   },
   {
-   "title": "F.S. 122.32",
+   "title": "F.S. 122.31",
    "offset": 19173430,
    "source": "title",
    "length": 1719
@@ -18638,7 +18620,7 @@
    "length": 2045
   },
   {
-   "title": "F.S. 137.04",
+   "title": "F.S. 137.03",
    "offset": 20226100,
    "source": "title",
    "length": 2010
@@ -19970,7 +19952,7 @@
    "length": 3892
   },
   {
-   "title": "\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 157.05",
    "offset": 21213234,
    "source": "title",
    "length": 2648
@@ -20648,7 +20630,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 159.621",
+   "title": "F.S. 1",
    "offset": 21651508,
    "source": "title",
    "length": 619
@@ -21512,7 +21494,7 @@
    "length": 2853
   },
   {
-   "title": "F.S. 162.125",
+   "title": "F.S. 162.12",
    "offset": 22343730,
    "source": "title",
    "length": 8192
@@ -22472,7 +22454,7 @@
    "length": 8196
   },
   {
-   "title": "F.S. 164.101",
+   "title": "F.S. 164.",
    "offset": 23892018,
    "source": "title",
    "length": 622
@@ -23576,7 +23558,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 175.181",
+   "title": "F.S. 175.",
    "offset": 24805426,
    "source": "title",
    "length": 4092
@@ -23639,13 +23621,7 @@
    "title": "F.S. 175.301",
    "offset": 24858672,
    "source": "title",
-   "length": 4098
-  },
-  {
-   "title": "F.S. 175.333",
-   "offset": 24862770,
-   "source": "title",
-   "length": 343
+   "length": 4441
   },
   {
    "title": "F.S. 175.311",
@@ -23654,7 +23630,7 @@
    "length": 3751
   },
   {
-   "title": "F.S. 175.341",
+   "title": "F.S. 175.333",
    "offset": 24866864,
    "source": "title",
    "length": 5759
@@ -24251,13 +24227,7 @@
    "title": "F.S. 185.10",
    "offset": 25337902,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 185.13",
-   "offset": 25342002,
-   "source": "title",
-   "length": 481
+   "length": 4581
   },
   {
    "title": "F.S. 185.12",
@@ -24266,7 +24236,7 @@
    "length": 3617
   },
   {
-   "title": "F.S. 185.162",
+   "title": "F.S. 185.13",
    "offset": 25346100,
    "source": "title",
    "length": 4090
@@ -24284,7 +24254,7 @@
    "length": 12292
   },
   {
-   "title": "F.S. 185.185",
+   "title": "F.S. 185.162",
    "offset": 25370674,
    "source": "title",
    "length": 4092
@@ -24377,13 +24347,7 @@
    "title": "F.S. 185.38",
    "offset": 25440304,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 185.60",
-   "offset": 25444404,
-   "source": "title",
-   "length": 1704
+   "length": 5804
   },
   {
    "title": "F.S. 185.39",
@@ -24398,7 +24362,7 @@
    "length": 16388
   },
   {
-   "title": "F.S. 186.001",
+   "title": "F.S. 185.60",
    "offset": 25464882,
    "source": "title",
    "length": 4092
@@ -26150,7 +26114,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 196.1>\u001a\u0000\u0000\u0000\u0000preserve\" class=\"Text Intro Justify\">\bOnly those portions of the property used predominantly for the purposes specified in paragraph (1)(a) shall be exempt. In no event shall an incidental use of property qualify such property for an exemption or impair the exemption of an otherwise exempt property.",
+   "title": "F.S. 196.196",
    "offset": 27504692,
    "source": "title",
    "length": 12282
@@ -29009,13 +28973,7 @@
    "title": "F.S. 210.25",
    "offset": 31162414,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 210.30",
-   "offset": 31166514,
-   "source": "title",
-   "length": 4092
+   "length": 8192
   },
   {
    "title": "F.S. 210.276",
@@ -29024,7 +28982,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 210.31",
+   "title": "F.S. 210.30",
    "offset": 31174704,
    "source": "title",
    "length": 12799
@@ -30242,7 +30200,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 215.40\ufffd\u001f\u0000\u0000\u0000\u0000eptions.",
+   "title": "F.S. 215.36",
    "offset": 33247282,
    "source": "title",
    "length": 4092
@@ -30995,13 +30953,7 @@
    "title": "F.S. 216.043",
    "offset": 34340910,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 216.052",
-   "offset": 34345010,
-   "source": "title",
-   "length": 4090
+   "length": 8190
   },
   {
    "title": "F.S. 216.044",
@@ -31016,7 +30968,7 @@
    "length": 8194
   },
   {
-   "title": "F.S. 216.053",
+   "title": "F.S. 216.052",
    "offset": 34361392,
    "source": "title",
    "length": 4096
@@ -31664,13 +31616,13 @@
    "length": 3945
   },
   {
-   "title": "F.S. 218.33K!\u0000\u0000\u0002\u0000s=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\b\u0010\u0000\u0003\ufffd:\u0001",
+   "title": "F.S. 218.33",
    "offset": 34914352,
    "source": "title",
    "length": 4098
   },
   {
-   "title": "F.S. 218.36",
+   "title": "F.S. 218.335",
    "offset": 34918450,
    "source": "title",
    "length": 4092
@@ -31682,7 +31634,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 218.369",
+   "title": "F.S. 218.36",
    "offset": 34926640,
    "source": "title",
    "length": 6378
@@ -33650,7 +33602,7 @@
    "length": 7010
   },
   {
-   "title": "F.S. 250.52",
+   "title": "F.S. 250.51",
    "offset": 36708402,
    "source": "title",
    "length": 4094
@@ -33890,7 +33842,7 @@
    "length": 8200
   },
   {
-   "title": "F.S. 252.33",
+   "title": "F.S. 252.31",
    "offset": 36880438,
    "source": "title",
    "length": 4088
@@ -34226,7 +34178,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 252.88",
+   "title": "F.S. 252.85",
    "offset": 37232694,
    "source": "title",
    "length": 16376
@@ -34298,7 +34250,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 252.926",
+   "title": "F.S. 252.925",
    "offset": 37281842,
    "source": "title",
    "length": 4096
@@ -34700,7 +34652,7 @@
    "length": 6261
   },
   {
-   "title": "F.S. 253.41",
+   "title": "F.S. 2",
    "offset": 37736498,
    "source": "title",
    "length": 618
@@ -38057,13 +38009,7 @@
    "title": "F.S. 284.31",
    "offset": 40755332,
    "source": "title",
-   "length": 4014
-  },
-  {
-   "title": "F.S. 284.33",
-   "offset": 40759346,
-   "source": "title",
-   "length": 373
+   "length": 4387
   },
   {
    "title": "F.S. 284.32",
@@ -38078,7 +38024,7 @@
    "length": 1964
   },
   {
-   "title": "F.S. 284.34",
+   "title": "F.S. 284.33",
    "offset": 40763440,
    "source": "title",
    "length": 4098
@@ -40904,7 +40850,7 @@
    "length": 1605
   },
   {
-   "title": "F.S. 298.61",
+   "title": "F.S. 298.60",
    "offset": 43737138,
    "source": "title",
    "length": 2205
@@ -42035,13 +41981,7 @@
    "title": "F.S. 316.154",
    "offset": 44759770,
    "source": "title",
-   "length": 9560
-  },
-  {
-   "title": "F.S. 316.157",
-   "offset": 44769330,
-   "source": "title",
-   "length": 557
+   "length": 10117
   },
   {
    "title": "F.S. 316.156",
@@ -42050,7 +41990,7 @@
    "length": 3539
   },
   {
-   "title": "F.S. 316.1576",
+   "title": "F.S. 316.157",
    "offset": 44773426,
    "source": "title",
    "length": 4092
@@ -43328,7 +43268,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 317.0010",
+   "title": "F.S. 317.0009",
    "offset": 46137394,
    "source": "title",
    "length": 4094
@@ -45878,7 +45818,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 324\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 324.251",
    "offset": 49610804,
    "source": "title",
    "length": 4090
@@ -46643,13 +46583,7 @@
    "title": "F.S. 328.65",
    "offset": 50466864,
    "source": "title",
-   "length": 8194
-  },
-  {
-   "title": "F.S. 328.68",
-   "offset": 50475058,
-   "source": "title",
-   "length": 520
+   "length": 8714
   },
   {
    "title": "F.S. 328.66",
@@ -46658,7 +46592,7 @@
    "length": 3574
   },
   {
-   "title": "F.S. 328.70",
+   "title": "F.S. 328.68",
    "offset": 50479152,
    "source": "title",
    "length": 5478
@@ -47120,7 +47054,7 @@
    "length": 3783
   },
   {
-   "title": "F.S. 331.341",
+   "title": "F.S. 331.",
    "offset": 50888752,
    "source": "title",
    "length": 867
@@ -47144,7 +47078,7 @@
    "length": 2949
   },
   {
-   "title": "F.S. 331.345",
+   "title": "F.S. 331.344",
    "offset": 50896946,
    "source": "title",
    "length": 4094
@@ -47618,7 +47552,7 @@
    "length": 4098
   },
   {
-   "title": "F.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 334.195",
    "offset": 51314738,
    "source": "title",
    "length": 4094
@@ -47744,7 +47678,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 335.08",
+   "title": "F.S. 335.07",
    "offset": 51421236,
    "source": "title",
    "length": 4090
@@ -49640,7 +49574,7 @@
    "length": 2509
   },
   {
-   "title": "F.S. 348.70",
+   "title": "F.S. 348.681",
    "offset": 53448758,
    "source": "title",
    "length": 2275
@@ -49658,7 +49592,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 348.751",
+   "title": "F.S. 348.70",
    "offset": 53456946,
    "source": "title",
    "length": 4092
@@ -54074,7 +54008,7 @@
    "length": 3067
   },
   {
-   "title": "F.S. 378.204",
+   "title": "F.S. 378.2",
    "offset": 58961970,
    "source": "title",
    "length": 4092
@@ -54533,13 +54467,7 @@
    "title": "F.S. 379.2259",
    "offset": 59363376,
    "source": "title",
-   "length": 4098
-  },
-  {
-   "title": "F.S. 379.2271",
-   "offset": 59367474,
-   "source": "title",
-   "length": 4092
+   "length": 8190
   },
   {
    "title": "F.S. 379.226",
@@ -54548,7 +54476,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 379.2272",
+   "title": "F.S. 379.2271",
    "offset": 59375664,
    "source": "title",
    "length": 4705
@@ -56285,13 +56213,7 @@
    "title": "F.S. 381.0101",
    "offset": 61780014,
    "source": "title",
-   "length": 16388
-  },
-  {
-   "title": "F.S. 381.0202",
-   "offset": 61796402,
-   "source": "title",
-   "length": 554
+   "length": 16942
   },
   {
    "title": "F.S. 381.0201",
@@ -56300,7 +56222,7 @@
    "length": 7636
   },
   {
-   "title": "F.S. 381.0203",
+   "title": "F.S. 381.0202",
    "offset": 61804592,
    "source": "title",
    "length": 8190
@@ -57116,13 +57038,13 @@
    "length": 12292
   },
   {
-   "title": "F.S. 37<\u0000\u0000\u0000\u0000ural, safety, and health system factors that are associated with racial disparities in infant mortality rates. The number of abstracted cases that must be conducted by each participating coalition shall be determined by a standard research methodology developed in conjunction with a public university or college having expertise in public health.",
+   "title": "F.S. 383.2162",
    "offset": 63131698,
    "source": "title",
    "length": 12288
   },
   {
-   "title": "F.S. ><\u0000\u0000\u0000\u0000stify\">\bRULES.",
+   "title": "F.S. 383.21625",
    "offset": 63143986,
    "source": "title",
    "length": 8188
@@ -57788,7 +57710,7 @@
    "length": 8196
   },
   {
-   "title": "F.S. 388.321",
+   "title": "F.S. 388.311",
    "offset": 63660084,
    "source": "title",
    "length": 1849
@@ -58700,7 +58622,7 @@
    "length": 16388
   },
   {
-   "title": "F.S. 394.48\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 394.481",
    "offset": 64905266,
    "source": "title",
    "length": 2321
@@ -58727,13 +58649,7 @@
    "title": "F.S. 394.482",
    "offset": 64912356,
    "source": "section-number",
-   "length": 1102
-  },
-  {
-   "title": "F.S. 394.490",
-   "offset": 64913458,
-   "source": "title",
-   "length": 505
+   "length": 1607
   },
   {
    "title": "CHAPTER 394",
@@ -58742,7 +58658,7 @@
    "length": 3591
   },
   {
-   "title": "F.S. 394\ufffd=\u0000\u0000\u0000\u0000pan></div><div class=\"Subsection\"><span class=\"Number\">\b(9)\u0015\u0001\u0001\u0001",
+   "title": "F.S. 394.490",
    "offset": 64917554,
    "source": "title",
    "length": 4642
@@ -61880,7 +61796,7 @@
    "length": 8196
   },
   {
-   "title": "F.S. 401.421",
+   "title": "F.S. 401.414",
    "offset": 68481074,
    "source": "title",
    "length": 5316
@@ -62741,13 +62657,7 @@
    "title": "F.S. 403.131",
    "offset": 69792470,
    "source": "title",
-   "length": 3420
-  },
-  {
-   "title": "F.S. 403.151",
-   "offset": 69795890,
-   "source": "title",
-   "length": 4092
+   "length": 7512
   },
   {
    "title": "F.S. 403.141",
@@ -62756,7 +62666,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 403.1655",
+   "title": "F.S. 403.151",
    "offset": 69804082,
    "source": "title",
    "length": 4092
@@ -64910,7 +64820,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 408.041",
+   "title": "F.S. 408.039",
    "offset": 72228916,
    "source": "title",
    "length": 20474
@@ -65528,7 +65438,7 @@
    "length": 16388
   },
   {
-   "title": "F.S. 40\ufffdE\u0000\u0000\u0000\u0000all arise against, any member of the board, or its employees or agents, for any action taken by them in performance of their powers and duties under this section.",
+   "title": "F.S. 409.1755",
    "offset": 73244722,
    "source": "title",
    "length": 13768
@@ -65738,7 +65648,7 @@
    "length": 4104
   },
   {
-   "title": "F\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 409.2581",
    "offset": 73625654,
    "source": "title",
    "length": 4088
@@ -66650,7 +66560,7 @@
    "length": 2731
   },
   {
-   "title": "F.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 410.035",
    "offset": 75251762,
    "source": "title",
    "length": 8213
@@ -67190,7 +67100,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 413.74",
+   "title": "F.S. 413.7",
    "offset": 75784244,
    "source": "title",
    "length": 622
@@ -70256,7 +70166,7 @@
    "length": 4098
   },
   {
-   "title": "F.S\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 440.211",
    "offset": 79384626,
    "source": "title",
    "length": 4436
@@ -71699,13 +71609,7 @@
    "title": "F.S. 450.081",
    "offset": 81268782,
    "source": "title",
-   "length": 12294
-  },
-  {
-   "title": "F.S. 450.141",
-   "offset": 81281076,
-   "source": "title",
-   "length": 4090
+   "length": 16384
   },
   {
    "title": "F.S. 450.121",
@@ -71720,7 +71624,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 450.151",
+   "title": "F.S. 450.141",
    "offset": 81293360,
    "source": "title",
    "length": 8243
@@ -72332,7 +72236,7 @@
    "length": 2901
   },
   {
-   "title": "F.S. 455.243",
+   "title": "F.S. 455.242",
    "offset": 81784882,
    "source": "title",
    "length": 4140
@@ -73814,7 +73718,7 @@
    "length": 2703
   },
   {
-   "title": "F.S. 461.01\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 461.0131",
    "offset": 83853366,
    "source": "title",
    "length": 4088
@@ -73883,13 +73787,7 @@
    "title": "F.S. 462.023",
    "offset": 83909038,
    "source": "title",
-   "length": 1670
-  },
-  {
-   "title": "F.S. 462.13",
-   "offset": 83910708,
-   "source": "title",
-   "length": 393
+   "length": 2063
   },
   {
    "title": "F.S. 462.11",
@@ -73904,7 +73802,7 @@
    "length": 1919
   },
   {
-   "title": "F.S. 462.16",
+   "title": "F.S. 462.13",
    "offset": 83914802,
    "source": "title",
    "length": 4092
@@ -74387,13 +74285,7 @@
    "title": "F.S. 465.0125",
    "offset": 84484142,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 465.013",
-   "offset": 84488242,
-   "source": "title",
-   "length": 530
+   "length": 4630
   },
   {
    "title": "F.S. 465.0126",
@@ -74402,7 +74294,7 @@
    "length": 3568
   },
   {
-   "title": "F.S. 465.0155",
+   "title": "F.S. 465.013",
    "offset": 84492340,
    "source": "title",
    "length": 4090
@@ -74468,7 +74360,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 465.0193",
+   "title": "F.S. 465.01",
    "offset": 84578356,
    "source": "title",
    "length": 1297
@@ -74852,7 +74744,7 @@
    "length": 8196
   },
   {
-   "title": "F.S. 466.0281",
+   "title": "F.S. 466.02751",
    "offset": 85069876,
    "source": "title",
    "length": 4090
@@ -75554,7 +75446,7 @@
    "length": 8196
   },
   {
-   "title": "F.S. 468.355",
+   "title": "F.S. 468.354",
    "offset": 85741618,
    "source": "title",
    "length": 8190
@@ -76199,13 +76091,7 @@
    "title": "F.S. 468.526",
    "offset": 86245422,
    "source": "title",
-   "length": 4098
-  },
-  {
-   "title": "F.S. 468.528",
-   "offset": 86249520,
-   "source": "title",
-   "length": 353
+   "length": 4451
   },
   {
    "title": "F.S. 468.5275",
@@ -76214,7 +76100,7 @@
    "length": 3747
   },
   {
-   "title": "F.S. 468.531",
+   "title": "F.S. 468.528",
    "offset": 86253620,
    "source": "title",
    "length": 4090
@@ -77642,7 +77528,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 475.23",
+   "title": "F.S. 475.22",
    "offset": 87539760,
    "source": "title",
    "length": 4096
@@ -80666,7 +80552,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 489.525",
+   "title": "F.S. 489.523",
    "offset": 90513458,
    "source": "title",
    "length": 4094
@@ -80903,13 +80789,7 @@
    "title": "F.S. 490.0143",
    "offset": 90833757,
    "source": "title",
-   "length": 3287
-  },
-  {
-   "title": "F.S. 490.0149",
-   "offset": 90837044,
-   "source": "title",
-   "length": 541
+   "length": 3828
   },
   {
    "title": "F.S. 490.0148",
@@ -80924,7 +80804,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 490.015",
+   "title": "F.S. 490.0149",
    "offset": 90845232,
    "source": "title",
    "length": 4098
@@ -82688,7 +82568,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 497.378",
+   "title": "F.S. 497.377",
    "offset": 92848178,
    "source": "title",
    "length": 8190
@@ -85112,7 +84992,7 @@
    "length": 8198
   },
   {
-   "title": "F.S. 507.06",
+   "title": "F.S. 5071",
    "offset": 95608884,
    "source": "title",
    "length": 4090
@@ -86081,13 +85961,7 @@
    "title": "F.S. 516.22",
    "offset": 96417067,
    "source": "title",
-   "length": 2825
-  },
-  {
-   "title": "F.S. 516.27",
-   "offset": 96419892,
-   "source": "title",
-   "length": 556
+   "length": 3381
   },
   {
    "title": "F.S. 516.26",
@@ -86102,7 +85976,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 516.32",
+   "title": "F.S. 516.27",
    "offset": 96428082,
    "source": "title",
    "length": 4092
@@ -86192,7 +86066,7 @@
    "length": 24580
   },
   {
-   "title": "F.S. 517.0613!\\\u0000\u0000\u0000\u0000 purchaser within 3 days after the first tender of consideration is made by such purchaser to the issuer by notifying the issuer that the purchaser expressly voids the purchase. The purchaser's notice to the issuer must be sent by e-mail to the issuer's e-mail address set forth in the disclosure statement that is provided to a purchaser or the purchaser's representative or by hand delivery, courier service, or other method by which written proof of delivery to the issuer of the purchaser's election to rescind the purchase is evidenced.",
+   "title": "F.S. 517.0612",
    "offset": 96591922,
    "source": "title",
    "length": 18580
@@ -86852,7 +86726,7 @@
    "length": 4104
   },
   {
-   "title": "F.S\ufffd\\\u0000\u0000\u0000\u000029 --#\">91-429",
+   "title": "F.S. 520.60",
    "offset": 97321014,
    "source": "title",
    "length": 4088
@@ -87587,13 +87461,7 @@
    "title": "F.S. 527.08",
    "offset": 97842325,
    "source": "title",
-   "length": 2973
-  },
-  {
-   "title": "F.S. 527.11",
-   "offset": 97845298,
-   "source": "title",
-   "length": 349
+   "length": 3322
   },
   {
    "title": "F.S. 527.10",
@@ -87602,7 +87470,7 @@
    "length": 3745
   },
   {
-   "title": "F.S. 527.12",
+   "title": "F.S. 527.11",
    "offset": 97849392,
    "source": "title",
    "length": 4098
@@ -87971,7 +87839,13 @@
    "title": "F.S. 534.54",
    "offset": 98078766,
    "source": "title",
-   "length": 12795
+   "length": 4100
+  },
+  {
+   "title": "F.S.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "offset": 98082866,
+   "source": "title",
+   "length": 8695
   },
   {
    "title": "F.S. 535.02",
@@ -88496,7 +88370,7 @@
    "length": 1725
   },
   {
-   "title": "F.S. 542.20",
+   "title": "F.S. 542.19",
    "offset": 98590774,
    "source": "title",
    "length": 1763
@@ -88730,7 +88604,7 @@
    "length": 6328
   },
   {
-   "title": "F.S. 54\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 545.09",
    "offset": 98791476,
    "source": "title",
    "length": 2215
@@ -91436,7 +91310,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 559.9215",
+   "title": "F.S. 559.921",
    "offset": 101335090,
    "source": "title",
    "length": 4092
@@ -91457,13 +91331,7 @@
    "title": "F.S. 559.9221",
    "offset": 101351470,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "F.S. 559.9231",
-   "offset": 101355570,
-   "source": "title",
-   "length": 512
+   "length": 4612
   },
   {
    "title": "CHAPTER 559",
@@ -91472,7 +91340,7 @@
    "length": 3586
   },
   {
-   "title": "F.S. 559.9234",
+   "title": "F.S. 559.9231",
    "offset": 101359668,
    "source": "title",
    "length": 8186
@@ -96476,7 +96344,7 @@
    "length": 2249
   },
   {
-   "title": "F.S. 601.08",
+   "title": "F.S. 60",
    "offset": 105533490,
    "source": "title",
    "length": 619
@@ -96620,7 +96488,7 @@
    "length": 2802
   },
   {
-   "title": "F.S. 601.37",
+   "title": "F.S. 6",
    "offset": 105705522,
    "source": "title",
    "length": 618
@@ -99158,7 +99026,7 @@
    "length": 4061
   },
   {
-   "title": "F.S. 607.0\ufffdf\u0000\u0000\u0002\u0000PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\b\u0010\u0000\u0003\ufffd:\u0001",
+   "title": "F.S. 607.0805",
    "offset": 107909168,
    "source": "title",
    "length": 4096
@@ -100052,7 +99920,7 @@
    "length": 2614
   },
   {
-   "title": "F.S. 607.509",
+   "title": "F.S. 607.507",
    "offset": 108777524,
    "source": "title",
    "length": 12282
@@ -100076,7 +99944,7 @@
    "length": 2578
   },
   {
-   "title": "F.\ufffdg\u0000\u0000\u0000\u0000y\">\bIf the articles of incorporation of the social purpose corporation require, or the board of directors determines, that the annual benefit report must be prepared in accordance with a third-party standard, a statement of any connection between the organization that established the third-party standard, or its directors, officers, or any holder of 5 percent or more of the governance interests in the organization, and the social purpose corporation or its directors, officers, or any holder of 5 percent or more of the outstanding shares of the social purpose corporation, including any financial or governance relationship that might materially affect the credibility of the use of the third-party standard.",
+   "title": "F.S. 607.511",
    "offset": 108798004,
    "source": "title",
    "length": 8186
@@ -100100,7 +99968,7 @@
    "length": 4100
   },
   {
-   "title": "\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 607.603",
    "offset": 108822580,
    "source": "title",
    "length": 4090
@@ -100934,7 +100802,7 @@
    "length": 7179
   },
   {
-   "title": "F.S. 617.0823",
+   "title": "F.S. 617.08",
    "offset": 109535282,
    "source": "title",
    "length": 625
@@ -102956,7 +102824,7 @@
    "length": 11985
   },
   {
-   "title": "F.S. 621.06",
+   "title": "F.S. 621.",
    "offset": 111009842,
    "source": "title",
    "length": 621
@@ -103178,7 +103046,7 @@
    "length": 4102
   },
   {
-   "title": "F.S\ufffdi\u0000\u0000\u0000\u000076</span><span xml:space=\"preserve\" class=\"HistoryText\">\b\u0010\u0000\u0003\ufffd2\u0001",
+   "title": "F.S. 624.03",
    "offset": 111124534,
    "source": "title",
    "length": 2296
@@ -103532,7 +103400,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 624.36",
+   "title": "F.S. 624.324",
    "offset": 111464500,
    "source": "title",
    "length": 8186
@@ -105662,7 +105530,7 @@
    "length": 40966
   },
   {
-   "title": "el\u0000\u0000\u0000\u0000 42, ch. \u0015\u0004\u0001\u0005",
+   "title": "F.S. 626.752",
    "offset": 113643572,
    "source": "title",
    "length": 16378
@@ -105944,7 +105812,7 @@
    "length": 2287
   },
   {
-   "title": "F.S. 626.8418",
+   "title": "F.S. 62",
    "offset": 113844274,
    "source": "title",
    "length": 4092
@@ -106052,7 +105920,7 @@
    "length": 1795
   },
   {
-   "title": "F.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 626.846",
    "offset": 113913906,
    "source": "title",
    "length": 4978
@@ -106274,7 +106142,7 @@
    "length": 8196
   },
   {
-   "title": "F.S.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 626.8737",
    "offset": 114106418,
    "source": "title",
    "length": 12286
@@ -106598,7 +106466,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 626.9181",
+   "title": "F.S. 626.917",
    "offset": 114417716,
    "source": "title",
    "length": 4090
@@ -108278,7 +108146,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 627.4553",
+   "title": "F.S. 627.455",
    "offset": 116604980,
    "source": "title",
    "length": 2159
@@ -108914,7 +108782,7 @@
    "length": 2258
   },
   {
-   "title": "F.S. \ufffdo\u0000\u0000\u0000\u0000 Intro Justify\">\bThe person receiving the procedure was not eligible to receive the procedure on the date of service.",
+   "title": "F.S. 627.613",
    "offset": 117096500,
    "source": "title",
    "length": 8186
@@ -109028,7 +108896,7 @@
    "length": 6379
   },
   {
-   "title": "F.S. 627.632",
+   "title": "F.S. 627.631",
    "offset": 117178418,
    "source": "title",
    "length": 2251
@@ -109385,13 +109253,7 @@
    "title": "F.S. 627.6516",
    "offset": 117518382,
    "source": "title",
-   "length": 8198
-  },
-  {
-   "title": "F.S. 627.655",
-   "offset": 117526580,
-   "source": "title",
-   "length": 1404
+   "length": 9602
   },
   {
    "title": "F.S. 627.6525",
@@ -109412,7 +109274,7 @@
    "length": 8194
   },
   {
-   "title": "F.S. 627.6551",
+   "title": "F.S. 627.655",
    "offset": 117542960,
    "source": "title",
    "length": 4504
@@ -110336,7 +110198,7 @@
    "length": 8194
   },
   {
-   "title": "F.S. 627.742",
+   "title": "F.S. 627.7428",
    "offset": 118734896,
    "source": "title",
    "length": 848
@@ -112010,7 +111872,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 629.241",
+   "title": "F.S. 629.231",
    "offset": 120205362,
    "source": "title",
    "length": 8190
@@ -112940,7 +112802,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 631.823",
+   "title": "F.S. 631.822",
    "offset": 121073716,
    "source": "title",
    "length": 4090
@@ -113882,7 +113744,7 @@
    "length": 8198
   },
   {
-   "title": "F.S. \u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 633.532",
    "offset": 122023988,
    "source": "title",
    "length": 4090
@@ -114752,7 +114614,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 63\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 634.427",
    "offset": 122740786,
    "source": "title",
    "length": 4664
@@ -119282,13 +119144,13 @@
    "length": 4100
   },
   {
-   "title": "F.S. 663.53\u0019y\u0000\u0000\u0000\u0000sider factors reasonably related to an offense or related to a violation, fine, or penalty, such as mitigating factors, history of multiple violations, severity of the offense, and showings of rehabilitation.",
+   "title": "F.S. 663.532",
    "offset": 126963762,
    "source": "title",
    "length": 20480
   },
   {
-   "title": "F.S. 663.534",
+   "title": "F.S. 663.5325",
    "offset": 126984242,
    "source": "title",
    "length": 4092
@@ -120122,7 +119984,7 @@
    "length": 1233
   },
   {
-   "title": "F.S. 671.101",
+   "title": "F.S. 671.",
    "offset": 127619122,
    "source": "title",
    "length": 622
@@ -120464,7 +120326,7 @@
    "length": 1986
   },
   {
-   "title": "F.S. 672.306",
+   "title": "F.S. 672.305",
    "offset": 127844402,
    "source": "title",
    "length": 4277
@@ -121172,7 +121034,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. Yz\u0000\u0000\u0000\u0000ment taken:",
+   "title": "F.S. 673.3021",
    "offset": 128286770,
    "source": "title",
    "length": 8190
@@ -122957,13 +122819,7 @@
    "title": "CHAPTER 679",
    "offset": 129623197,
    "source": "title",
-   "length": 15255
-  },
-  {
-   "title": "F.S. 679.4041",
-   "offset": 129638452,
-   "source": "title",
-   "length": 1406
+   "length": 16661
   },
   {
    "title": "F.S. 679.4021",
@@ -122978,7 +122834,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 679.4051",
+   "title": "F.S. 679.4041",
    "offset": 129646640,
    "source": "title",
    "length": 5529
@@ -123032,7 +122888,7 @@
    "length": 4102
   },
   {
-   "title": "F.S. 679.5051",
+   "title": "F.S. 679.50",
    "offset": 129699892,
    "source": "title",
    "length": 625
@@ -124430,7 +124286,7 @@
    "length": 1017
   },
   {
-   "title": "F.S. \u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 683.146",
    "offset": 130703410,
    "source": "title",
    "length": 2274
@@ -124472,7 +124328,7 @@
    "length": 1503
   },
   {
-   "title": "F.S. 683.185",
+   "title": "F.S. 683",
    "offset": 130715698,
    "source": "title",
    "length": 621
@@ -125009,13 +124865,7 @@
    "title": "F.S. 686.413",
    "offset": 131022894,
    "source": "title",
-   "length": 16390
-  },
-  {
-   "title": "F.S. 686.418",
-   "offset": 131039284,
-   "source": "title",
-   "length": 548
+   "length": 16938
   },
   {
    "title": "F.S. 686.415",
@@ -125030,7 +124880,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 686.502",
+   "title": "F.S. 686.418",
    "offset": 131047474,
    "source": "title",
    "length": 4092
@@ -126284,7 +126134,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. \u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 703.03",
    "offset": 131997748,
    "source": "title",
    "length": 1948
@@ -127277,13 +127127,7 @@
    "title": "F.S. 713.135",
    "offset": 132771886,
    "source": "title",
-   "length": 28676
-  },
-  {
-   "title": "F.S. 713.15",
-   "offset": 132800562,
-   "source": "title",
-   "length": 392
+   "length": 29068
   },
   {
    "title": "F.S. 713.14",
@@ -127292,7 +127136,7 @@
    "length": 3704
   },
   {
-   "title": "F.S. 713.165",
+   "title": "F.S. 713.15",
    "offset": 132804658,
    "source": "title",
    "length": 4641
@@ -127400,7 +127244,7 @@
    "length": 2958
   },
   {
-   "title": "F.S. 713.32",
+   "title": "F.S. 713.31",
    "offset": 132935730,
    "source": "title",
    "length": 12286
@@ -128336,7 +128180,7 @@
    "length": 6775
   },
   {
-   "title": "F.S. 717.128",
+   "title": "F.S. 717.127",
    "offset": 133783604,
    "source": "title",
    "length": 2131
@@ -130304,7 +130148,7 @@
    "length": 1368
   },
   {
-   "title": "F.S. 723.0\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 723.046",
    "offset": 137007154,
    "source": "title",
    "length": 4094
@@ -131942,7 +131786,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 733.620",
+   "title": "F.S. 733.619",
    "offset": 138276914,
    "source": "title",
    "length": 4094
@@ -131984,7 +131828,7 @@
    "length": 12294
   },
   {
-   "title": "F.S. 73\ufffd\u0000\u0000\u0000\u0000ace=\"preserve\" class=\"Text Intro Justify\">\bWithdraw or appoint the principal of the trust to or for the decedent's benefit.",
+   "title": "F.S. 733.706",
    "offset": 138317876,
    "source": "title",
    "length": 4090
@@ -134930,7 +134774,7 @@
    "length": 3554
   },
   {
-   "title": "F.S. 744.373",
+   "title": "F.S. 744.3",
    "offset": 140816432,
    "source": "title",
    "length": 615
@@ -135140,7 +134984,7 @@
    "length": 4073
   },
   {
-   "title": "F.S. 744.531",
+   "title": "F.S. 744",
    "offset": 140984368,
    "source": "title",
    "length": 855
@@ -135194,7 +135038,7 @@
    "length": 1093
   },
   {
-   "title": "F.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 744.617",
    "offset": 141017140,
    "source": "title",
    "length": 4090
@@ -135260,7 +135104,7 @@
    "length": 2307
   },
   {
-   "title": "F.S. 744.637",
+   "title": "F.S. 744.634",
    "offset": 141049906,
    "source": "title",
    "length": 8190
@@ -136007,13 +135851,7 @@
    "title": "F.S. 765.309",
    "offset": 141619888,
    "source": "title",
-   "length": 3458
-  },
-  {
-   "title": "F.S. 765.404",
-   "offset": 141623346,
-   "source": "title",
-   "length": 4092
+   "length": 7550
   },
   {
    "title": "F.S. 765.401",
@@ -136022,7 +135860,7 @@
    "length": 8196
   },
   {
-   "title": "F.S. 765.510",
+   "title": "F.S. 765.404",
    "offset": 141635634,
    "source": "title",
    "length": 4092
@@ -136322,7 +136160,7 @@
    "length": 4104
   },
   {
-   "title": "F.S. 766s\ufffd\u0000\u0000\u0000\u0000=\"Text Intro Justify\">\bDamages for future economic losses shall be awarded to be paid by periodic payments pursuant to s. \u0015\u0004\u0001\u0005",
+   "title": "F.S. 766.207",
    "offset": 142004278,
    "source": "title",
    "length": 16376
@@ -139346,7 +139184,7 @@
    "length": 8200
   },
   {
-   "title": "F.S. 812.1\ufffd\ufffd\u0000\u0000\u0000\u0000\u0001",
+   "title": "F.S. 812.081",
    "offset": 145207350,
    "source": "title",
    "length": 16376
@@ -139418,7 +139256,7 @@
    "length": 8196
   },
   {
-   "title": "F.S. 812.\ufffd\ufffd\u0000\u0000\u0000\u0000but not in lieu thereof.",
+   "title": "F.S. 812.16",
    "offset": 145322034,
    "source": "title",
    "length": 8190
@@ -140348,7 +140186,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 817\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 817.804",
    "offset": 146075698,
    "source": "title",
    "length": 4103
@@ -140411,13 +140249,7 @@
    "title": "CHAPTER 823",
    "offset": 146108462,
    "source": "title",
-   "length": 8196
-  },
-  {
-   "title": "F.S. 823.041",
-   "offset": 146116658,
-   "source": "title",
-   "length": 551
+   "length": 8747
   },
   {
    "title": "F.S. 823.04",
@@ -140432,7 +140264,7 @@
    "length": 1154
   },
   {
-   "title": "F.S. 823.06",
+   "title": "F.S. 823.041",
    "offset": 146120754,
    "source": "title",
    "length": 4092
@@ -140564,7 +140396,7 @@
    "length": 8198
   },
   {
-   "title": "F.S. 825\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
+   "title": "F.S. 825.105",
    "offset": 146346036,
    "source": "title",
    "length": 1940
@@ -140618,7 +140450,7 @@
    "length": 2347
   },
   {
-   "title": "F.S. 827.035",
+   "title": "F.S. 827.03",
    "offset": 146370610,
    "source": "title",
    "length": 14864
@@ -140966,7 +140798,7 @@
    "length": 3603
   },
   {
-   "title": "F.S. 831.11",
+   "title": "F.S. 83",
    "offset": 146686002,
    "source": "title",
    "length": 619
@@ -141635,13 +141467,7 @@
    "title": "F.S. 843.16",
    "offset": 147128366,
    "source": "title",
-   "length": 4104
-  },
-  {
-   "title": "F.S. 843.18",
-   "offset": 147132470,
-   "source": "title",
-   "length": 341
+   "length": 4445
   },
   {
    "title": "F.S. 843.17",
@@ -141662,7 +141488,7 @@
    "length": 8196
   },
   {
-   "title": "V\ufffd\u0000\u0000\u0000\u0000, or attempts to interfere with a police canine, fire canine, SAR canine, or police horse while the animal is in the performance of its duties commits a misdemeanor of the first degree, punishable as provided in s. \u0015\u0004\u0001\u0005",
+   "title": "F.S. 843.18",
    "offset": 147148850,
    "source": "title",
    "length": 4641
@@ -141959,16 +141785,10 @@
    "title": "F.S. 849.094",
    "offset": 147488814,
    "source": "title",
-   "length": 12290
+   "length": 16386
   },
   {
    "title": "F.S. 849.10",
-   "offset": 147501104,
-   "source": "title",
-   "length": 4096
-  },
-  {
-   "title": "F.S. 849.11",
    "offset": 147505200,
    "source": "title",
    "length": 4222
@@ -143258,7 +143078,7 @@
    "length": 4098
   },
   {
-   "title": "F.S. 877.23",
+   "title": "F.S. 877.22",
    "offset": 148262960,
    "source": "title",
    "length": 4096
@@ -144188,7 +144008,7 @@
    "length": 3316
   },
   {
-   "title": "F.S. 905.05",
+   "title": "F.S. 905",
    "offset": 149536818,
    "source": "title",
    "length": 620
@@ -151367,13 +151187,7 @@
    "title": "F.S. 1000.05",
    "offset": 157073454,
    "source": "title",
-   "length": 24580
-  },
-  {
-   "title": "F.S. 1000.071",
-   "offset": 157098034,
-   "source": "title",
-   "length": 319
+   "length": 24899
   },
   {
    "title": "F.S. 1000.06",
@@ -151382,7 +151196,7 @@
    "length": 3775
   },
   {
-   "title": "F.S. 1000.08",
+   "title": "F.S. 1000.071",
    "offset": 157102128,
    "source": "title",
    "length": 5452
@@ -152858,7 +152672,7 @@
    "length": 4100
   },
   {
-   "title": "F.S. 1003.49",
+   "title": "F.S. 1003.485",
    "offset": 160014386,
    "source": "title",
    "length": 38307
@@ -153434,7 +153248,7 @@
    "length": 16390
   },
   {
-   "title": "F.S.q\ufffd\u0000\u0000\u0000\u0000ryTitle\">\bHistory.",
+   "title": "F.S. 1004.4351",
    "offset": 160874548,
    "source": "title",
    "length": 16378
@@ -157905,5 +157719,6 @@
   }
  ],
  "recovered_sections": 982,
- "dropped_stub_duplicates": 862
+ "dropped_stub_duplicates": 893,
+ "retitled_via_sectionnumber": 149
 }
