@@ -440,15 +440,12 @@ entry" quality check has no way to catch:
 - **F.S. 145.10** is the clearest and most significant finding: real
   content loss, not cosmetic. Decoding stops mid-sentence
   (`"...maintain a certified Florida property"`) right at the entry's
-  length boundary, well before the section's live text ends. The live
-  chapter 145 table of contents confirms **§ 145.11 is a real, separate
-  section** sitting between 145.10 and 145.121 in the file -- but its
-  `<title>` *and* its `<div class="Section">`/`SectionNumber` (the Phase 2b
-  recovery path) both failed to survive, so neither recovery mechanism
-  caught it. This is a new residual-gap category: a "double failure" that
-  the existing quality checks (which rely on exactly those two signals)
-  are structurally blind to, distinct from the already-quantified Phase 2b
-  numbers.
+  length boundary, well before the section's live text ends. This
+  originally looked like it pointed at a second problem too -- § 145.11
+  appearing to be entirely absent from the index, a "double failure" where
+  both the `<title>` scan and the Phase 2b `SectionNumber` recovery missed
+  it. **That second claim was wrong** -- see the Phase 2c correction below.
+  The 145.10 content-loss finding itself stands.
 - **F.S. 215.22 / F.S. 775.082** show only isolated 2-4 character
   corruption mid-prose (`person` → `pOgierson`, `exemptions` →
   `exemptioh1ns`, `c.` → `c.vHik`) -- concrete, in-the-wild confirmation of
@@ -469,11 +466,16 @@ follow-up phase this motivates.
 
 ## Phase 2c: quantifying the "double failure" gap
 
-Phase 4 found F.S. 145.11 silently absent from the index because *both*
-existing detection paths -- the Phase 3 `<title>` scan and the Phase 2b
-`SectionNumber` recovery -- failed for it. The index-quality checks in
-`scripts/nxt_build_index.py` rely on exactly those two signals, so this
-category of loss was invisible to them; its true prevalence was unknown.
+Phase 4 originally reported F.S. 145.11 as silently absent from the index
+because *both* existing detection paths -- the Phase 3 `<title>` scan and
+the Phase 2b `SectionNumber` recovery -- supposedly failed for it. **That
+specific claim turned out to be wrong** (see "Correction: F.S. 145.11 is
+fine" below) -- but chasing it down first required building an independent
+way to check, and that check found the category is real, just not
+evidenced by that example. The index-quality checks in
+`scripts/nxt_build_index.py` rely on exactly the title-scan and
+SectionNumber signals, so any failure mode that defeats both is invisible
+to them by construction -- their true prevalence was unknown either way.
 
 **A third, independent signal.** `fs2025.nxt` embeds a "CatchlineIndex"
 table of contents near the front of each chapter, where every section gets
@@ -491,37 +493,137 @@ decoder/index-builder (a plain byte-level check against the raw file) and
 self-correcting for corruption (page-boundary interruption scrambles
 digits, so agreement between the two independent encodings confirms this
 stretch of bytes survived intact). Any citation confirmed present in the
-CatchlineIndex but absent from the built index is a confirmed
-double-failure gap, the same category as F.S. 145.11.
+CatchlineIndex but absent from the built index is a confirmed gap.
 
 **Result:** 24,667 confirmed-clean CatchlineIndex citations survived the
 self-reference check (out of 25,325 raw anchor matches; 42 discarded as
 corrupted or non-self-referencing, the rest deduplicated). Comparing that
 set against the built index's 24,796 F.S. citations found **95 confirmed
 gaps** -- real sections completely absent from
-`data/fs2025_citation_index.json` (0.38%). Spot-checked F.S. 105.08 by
-hand to confirm the mechanism: its `<title>F.S. 105.08</title>` bytes are
-fully intact in the file, but the *preceding* document's own `<title>` had
-its closing tag destroyed by an LPDD splice, so the Phase 3 regex's
-non-greedy match swallowed forward past the corruption and consumed
-105.08's genuine closing tag as its own -- leaving 105.08 with an opening
-tag but no closing tag of its own to match against, so it never becomes a
-title-scan hit. Because 105.08's `<div class="Section">` is the *first*
-one in that merged span (not an extra one), Phase 2b's orphan-recovery
-doesn't catch it either -- both signals fail via the same root cause for a
-structurally different reason than 145.11's total byte destruction, but
-with the same net effect.
+`data/fs2025_citation_index.json` (0.38%). Full list:
+`data/fs2025_gap_report.json`.
 
-Full list of the 95 gap citations: `data/fs2025_gap_report.json` (written
-by `scripts/nxt_find_gaps.py`).
+### Root cause: closing-tag theft, not tag destruction
+
+Spot-checked F.S. 105.08, F.S. 15.16, and F.S. 44.404 by hand. All three
+show the *same* mechanism, and it is not what Phase 4 assumed for 145.11
+(outright byte destruction). In each case the target citation's own
+`<title>...</title>` bytes are **fully intact** in the file. What's
+missing is a *neighboring* document's closing tag: that neighbor's
+`</title>` was overwritten by page-boundary interruption, so the Phase 3
+regex's non-greedy match -- unable to find its own closer -- runs forward
+and consumes the next `</title>` it finds, which belongs to the real
+target. Both documents get merged into one entry, filed under the
+neighbor's (garbled) title. Confirmed three ways:
+
+- **F.S. 105.08**: the neighboring entry's title is garbled to literal
+  `LPDD` marker bytes; the merge swallows 105.08's title as the
+  "closer" for that garbled entry.
+- **F.S. 44.404**: the neighboring title is F.S. 44.406, whose own closing
+  tag is overwritten starting mid-word (`</tit` then corruption); the
+  merged entry (`F.S. 44.406`, length 8,186 -- more than double a normal
+  section) swallows 44.404's content along with it.
+- **F.S. 15.16**: same pattern, with a twist worth its own section below
+  (see "What's actually inside the stolen entries").
+
+**Important correction: the "preceding" document is not the statutory
+predecessor.** Initially assumed (and stated to a reviewer) that F.S.
+15.16's neighbor-in-corruption would be its statutory predecessor,
+F.S. 15.155. It isn't -- it's F.S. 15.182, a section that comes numerically
+*after* both 15.16 and 15.18. Checking the raw byte order for the whole
+chapter 15 neighborhood resolved this: the CatchlineIndex (TOC) order
+matches the live site's canonical numeric order exactly (`15.15 → 15.155 →
+15.16 → 15.18 → 15.182 → 15.21`), but the **document body order does
+not** -- physically, the file stores `15.15 → 15.13 → 15.155 → 15.182 →
+15.16 → 15.18 → 15.21`, with plenty of other locally out-of-order pairs
+nearby (`15.03`/`15.02` swapped, `15.0326`/`15.0325`/`15.032` in
+descending order, etc.). This is a previously undocumented structural
+fact: **only the CatchlineIndex preserves statutory section order; the
+document bodies are stored in some other order** (plausibly insertion/
+build order -- sections get appended wherever there's room as the
+statutes are amended over the years, never physically re-sorted). "The
+preceding title in the file" and "the statutorily preceding section" are
+different things, and only the former is relevant to this corruption
+mechanism.
+
+### What's actually inside the stolen entries
+
+For F.S. 15.16, the merged/stolen entry ends up filed under the title
+`F.S. 15.182` (that neighbor's own title text decoded correctly right up
+until its closing tag) -- but its `<div class="Section">`/`SectionNumber`
+inside that span reads **`15.16`**, not `15.182`. In other words: this is
+not a case of lost content. F.S. 15.16's real, complete, undamaged section
+body is sitting right there in the index, just filed under the wrong
+citation string. (The genuine F.S. 15.182 document exists separately,
+further down the file, correctly titled and indexed on its own.) Checking
+whether this generalizes to the other confirmed gaps -- i.e. whether most
+of the 95 are "mislabeled, recoverable" rather than "destroyed" -- is a
+good next step for whoever picks this up (cross-referencing each merged
+entry's own `SectionNumber` against its title, the way Phase 2b's orphan
+recovery already does for *extra* Section divs, would need to be extended
+to also catch a *mismatched* first Section div like this one).
+
+### The "garbage" is a real field, not noise
+
+Tested a hypothesis: is the interrupting "garbage" actually a page/segment
+pointer rather than corruption? Yes, partially. The bytes immediately
+after F.S. 15.16's stolen `</title>` opcode (`fc 02 00 00`) decode as a
+little-endian `uint32` = **764**. `764 * 4096` (the LPDD page size) lands
+at byte 3,129,344 -- and a genuine `LPDD` marker sits at byte 3,129,377,
+exactly 33 bytes later. Checked a second, independent case (the
+F.S. 44.404/44.406 pair): the equivalent field decodes to **1862**, and
+`1862 * 4096 + 33` lands exactly on another real `LPDD` marker at byte
+7,626,785. Both hit the same page (`page * 4096 + 33`) alignment exactly.
+This is not coincidence -- it's a legitimate embedded field that encodes a
+real page number elsewhere in the file.
+
+That said, it's a *different, smaller* structure than the previously
+documented full LPDD splice (the ~14-byte `...LPDD...` record seen at
+genuine page transitions, immediately followed by a whole new document's
+`<!DOCTYPE...>` -- e.g. the garbled neighbor in the F.S. 105.08 case is
+this *other*, larger pattern). This shorter fragment doesn't cause an
+immediate jump: in both cases checked, the byte stream just continues
+reading linearly afterward and reaches that same page naturally, later,
+on its own. So its exact purpose -- why the page number shows up here at
+all, ahead of actually reaching that page -- is still an open question.
+Worth another look if paging is revisited, but not solved.
+
+### Correction: F.S. 145.11 is fine
+
+Re-checked F.S. 145.11 (the case that originally motivated this phase)
+with proper opcode-aware matching. The current index has a clean entry:
+`<title>F.S. 145.11</title>` matches in a single 29-byte regex hit (no
+corruption), single `<div class="Section">`, `SectionNumber` reading
+`145.11` -- a completely normal, correctly-indexed document. It is **not**
+one of the 95 confirmed gaps.
+
+The original Phase 4 claim ("both title-scan and SectionNumber recovery
+failed for 145.11") came from a naive raw-bytes substring search for the
+literal string `<title>F.S. 145.11</title>` with nothing in between --
+which will always fail to match, because *every* title in this format has
+a `\x13\x37\x08` opcode spliced between the citation text and `</title>`
+(that's the standard length-prefixed literal-token boundary, not
+corruption). Searching for the exact un-tokenized string was the bug, not
+the file. This is worth remembering: a `-1` from a raw substring search
+against this format is not proof of missing content -- it has to be
+checked against the tokenized structure, or cross-referenced with an
+actual regex match, before concluding bytes are gone.
+
+The underlying category this phase set out to quantify -- real,
+independently-confirmed index gaps -- is still real and still 95-strong;
+it just isn't evidenced by the specific example that prompted the
+investigation.
 
 **Not fixed.** Same posture as Phase 4: this measures and characterizes
-the gap rather than closing it. A real fix would need to make the Phase 3
-title-scan tag-aware (matching each `<title>` to its own nearest `</title>`
-rather than any following one) or generate synthetic entries directly from
-the CatchlineIndex scan itself, which Phase 2c shows is a viable
-per-citation ground truth independent of the decoder. Left as a documented,
-quantified residual for whichever future phase tackles index completeness
+the gap rather than closing it, though the "closing-tag theft" root cause
+and the demonstrated recoverability of at least one case (15.16) suggest a
+real fix is closer at hand than originally thought. Two candidate
+directions: make the Phase 3 title-scan tag-aware (matching each `<title>`
+to its own nearest `</title>` rather than any following one), or
+cross-validate each entry's title against its own `SectionNumber` and
+prefer the latter on mismatch -- which would recover cases like F.S. 15.16
+without needing to solve the tag-matching problem at all. Left as a
+documented, quantified residual for whichever future phase tackles index completeness
 directly.
 
 ## Not yet investigated

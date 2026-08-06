@@ -129,16 +129,33 @@ requiring agreement between the two both filters out page-boundary
 corruption and makes the signal a plain byte-level check with no
 dependency on the decoder or index-builder. Result: 24,667 confirmed-clean
 CatchlineIndex citations vs. 24,796 in the built index, with **95
-confirmed double-failure gaps** (0.38%) -- real sections completely absent
-from the index, the same category as § 145.11. Spot-checked § 105.08 and
-found a distinct root cause from § 145.11 (title bytes fully intact but
-"stolen" as the closing tag for a preceding corrupted title, rather than
-destroyed outright) with the same net effect. Full list in
-`data/fs2025_gap_report.json`. Not fixed -- measured and characterized, per
-the same posture as Phase 4; see `docs/nxt-format.md` "Phase 2c" for full
-writeup, including the fix approaches identified (tag-aware title
-matching, or synthesizing index entries directly from the CatchlineIndex
-scan).
+confirmed gaps** (0.38%) -- real sections completely absent from the
+index. Root cause, confirmed by hand on three cases (§ 105.08, § 15.16,
+§ 44.404): "closing-tag theft," where a *neighboring* document's own
+closing tag was destroyed by page-boundary interruption, so the title-scan
+regex's non-greedy match swallows forward and steals the target's closing
+tag instead, merging both into one entry filed under the neighbor's title.
+For § 15.16 specifically, confirmed the merged entry's own `SectionNumber`
+is "15.16," not the neighbor's title -- meaning the real content isn't
+lost, just mislabeled, a more fixable failure mode than assumed. Also
+found (and corrected, see below): document *body* order in the file does
+not follow statutory section-number order -- only the CatchlineIndex does
+-- so "the preceding title in the file" and "the statutorily preceding
+section" are different things. Separately, confirmed the "garbage" bytes
+in at least the theft cases are not random: they decode as a real LPDD
+page number elsewhere in the file (verified exactly, byte-for-byte, in two
+independent cases), though their exact purpose is still unconfirmed.
+**Correction:** § 145.11, the case that originally motivated this phase,
+turned out to be a misdiagnosis -- it's cleanly indexed with no corruption;
+the original claim came from a raw substring search that didn't account
+for the standard per-token opcode always embedded before `</title>`. The
+95-gap count and its cause are otherwise unaffected (145.11 isn't among
+them). Full list in `data/fs2025_gap_report.json`. Not fixed -- measured
+and characterized, per the same posture as Phase 4; see
+`docs/nxt-format.md` "Phase 2c" for the full writeup, including the two
+candidate fix directions identified (tag-aware title matching, or
+cross-validating title against SectionNumber and preferring the latter on
+mismatch).
 
 ### Phase 5 — Pipeline decision & write-up ✅ done
 **Decision confirmed:** FLiberator decodes `.nxt` directly to HTML + a
