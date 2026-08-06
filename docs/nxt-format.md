@@ -687,20 +687,90 @@ SectionNumber (up from 982); total documents 26,286 → 26,299. F.S. 39.0142
 and F.S. 39.0143 both spot-checked against the live site and both match
 cleanly. The remaining 28 are the genuinely harder cases -- theft pairs
 where neither twin has a rescuable second copy anywhere in the file --
-left for the tag-aware Phase 3 rewrite described above.
+left for the tag-aware Phase 3 rewrite described next.
+
+### v4: the tag-aware Phase 3 rewrite -- closing gaps at the root
+
+Both v3 patches above worked by detecting damage *after the fact* and
+correcting the index entries it produced. `scripts/nxt_build_index.py`
+v4 fixes the cause instead: v2's title-scan regex,
+`<title>(.*?)</title>`, is *unbounded* -- when a title's own closing tag
+is destroyed, `.*?` doesn't fail, it keeps searching forward past the
+corruption for the next `</title>` it can find, silently stitching two
+documents together. Every clean title in the corpus was already known to
+have its citation text immediately followed by the exact opcode sequence
+`\x13\x37\x08</title>` (`"</title>"` is always exactly 8 bytes, so a
+well-formed closer's length prefix is always the 1-byte form -- confirmed
+against every clean example in this document). `TITLE_RE` now requires
+that sequence immediately after a *bounded* run of title text (an 80-byte
+cap -- well above the longest real title, "Preface, Florida Statutes
+2025" at 31 bytes, far below the multi-KB gap any real interruption
+leaves). When a closer is destroyed, the regex simply doesn't match at
+that position at all -- no swallowing, no mislabeling, no entry.
+
+`find_orphaned_sections` was rewritten to match: one rule instead of two.
+Within a span, the *first* Section div is "owned" (kept implicit, no
+separate entry) only if its own SectionNumber matches the span's title
+exactly; every other div -- the first one when it doesn't match (which
+subsumes the old CHAPTER/Preface special case, since those titles never
+parse as `F.S. <number>` and so never match), and any div after the
+first regardless -- is an orphan, recovered under its own SectionNumber.
+
+**A second non-contiguity discovery, found while verifying this.** An
+earlier draft of this rule let *any* div in the span claim ownership if
+its number matched, not just the first one. That produced 5 entries
+that still failed the "at most one Section div per entry" check.
+Investigating one (F.S. 175.341) found a case stranger than anything
+else in this document: **a title and its own Section div aren't always
+contiguous.** Physically, the file lays out F.S. 175.341's `<title>` tag,
+then *all of F.S. 175.333's real content*, then finally F.S. 175.341's
+own body. An index entry can only describe one contiguous byte range, so
+granting 175.341 "ownership" of its (distant) real div corrupts the
+length assigned to 175.333 sitting in between. Fixed by restricting
+ownership to the *first* div only, unconditionally -- a mismatched first
+div (like 175.333, which doesn't match 175.341's title) always becomes
+its own orphan entry, and the original title becomes a harmless stub
+that `drop_stub_duplicates` already knows how to clean up when a
+same-titled entry with a real Section div exists elsewhere (which
+175.341's orphan-recovered copy now is).
+
+**Result:** confirmed gaps via `scripts/nxt_find_gaps.py` **28 → 0**.
+1,204 sections recovered via SectionNumber (up from 1,045); 972 stub
+duplicates dropped (up from 943); 26,428 total documents. Runtime: 0.7s
+for the full 240MB file, unchanged from v3 (still a single linear regex
+pass, no token-by-token walk needed). Spot-checked nine citations against
+the live site -- 105.08, 15.16/15.182, 44.404/44.406, 39.0142/39.0143,
+and the newly-found 175.333/175.341 pair -- all decode correctly.
+Re-ran the original Phase 4 validation harness (`nxt_validate.py`) too:
+identical ratios to the original run, confirming the index-boundary fix
+didn't touch (or regress) decoder-level content fidelity.
+
+One thing worth knowing if you re-run the spot checks: F.S. 15.16 and
+F.S. 44.404 now show *lower* fidelity against the live site (~0.89) than
+they did under v3's shorter, artificially-truncated spans. This isn't a
+regression -- both entries now correctly extend far enough into their own
+body to reach the pre-existing, already-documented Phase 2b mid-token
+LPDD interruption (visible directly in the decoded output as literal
+`LPDD` marker bytes). That's real content loss inside a document body, a
+decoder-level limitation that was already known and already scoped as
+out of reach for an index-building fix -- it just wasn't visible on these
+two citations before because their old spans, corrupted by closing-tag
+theft, happened to stop short of the interruption point.
 
 ## Not yet investigated
 
 - The full byte-value vocabulary of remaining short control opcodes (Phase 2
   continued), including `\x15` (above) and the real paging/record model
-  behind the `LPDD` mid-token interruptions (Phase 2b) — current fallback
-  (skip unknown bytes one at a time, but pass through anything printable)
-  is good enough for reliable text extraction, but doesn't explain
-  everything structurally. This is also what's behind the small residual
-  gap in the Phase 3/2b index (~68 duplicate + ~48 garbled titles out of
-  the original 26,317 — down from the original ~4%, see "Phase 2b" above)
-  and the 28 confirmed gaps remaining after the Phase 2c fixes (down from
-  95; 26,299 documents total — see "Phase 2c" above).
+  behind the `LPDD` mid-token interruptions (Phase 2b/Phase 4) — current
+  fallback (skip unknown bytes one at a time, but pass through anything
+  printable) is good enough for reliable text extraction, but doesn't
+  explain everything structurally, and it's still real, if usually small,
+  content loss inside document bodies whenever a document's real length
+  crosses a page boundary (see the v4 write-up above). The index-level
+  side of this (missing/mislabeled/duplicated *entries*) is now fully
+  closed as of the Phase 2c v4 rewrite: 0 confirmed gaps, 0 garbled
+  titles, 1 duplicate title remaining (`F.S. 559.921`, unexplained, not
+  yet investigated) out of 26,428 documents.
 - `data1.cab`/`data2.cab` (InstallShield cabinets bundled in `FLLawDL2025/`) —
   unextracted; likely contain the real Folio/NXT rendering engine
   (`nfoenu6.dll`, referenced by name inside `fs2025.nxt` itself, isn't present

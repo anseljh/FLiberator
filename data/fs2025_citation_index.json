@@ -1,5 +1,5 @@
 {
- "total_documents": 26299,
+ "total_documents": 26428,
  "entries": [
   {
    "title": "Preface, Florida Statutes 2025",
@@ -599,19 +599,25 @@
    "title": "F.S. 8.02",
    "offset": 895810,
    "source": "title",
-   "length": 1264
+   "length": 1545
   },
   {
    "title": "F.S. 8.051",
-   "offset": 897074,
+   "offset": 897355,
    "source": "title",
-   "length": 4096
+   "length": 3815
   },
   {
    "title": "F.S. 8.062",
    "offset": 901170,
    "source": "title",
-   "length": 609
+   "length": 548
+  },
+  {
+   "title": "[unrecovered section @ 901718]",
+   "offset": 901718,
+   "source": "section-number",
+   "length": 61
   },
   {
    "title": "F.S. 8.06111",
@@ -1397,7 +1403,13 @@
    "title": "F.S. 15.037",
    "offset": 3035188,
    "source": "title",
-   "length": 601
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 3035737]",
+   "offset": 3035737,
+   "source": "section-number",
+   "length": 52
   },
   {
    "title": "F.S. 15.036",
@@ -1607,13 +1619,13 @@
    "title": "F.S. 15.155",
    "offset": 3113008,
    "source": "title",
-   "length": 4100
+   "length": 8190
   },
   {
    "title": "F.S. 15.16",
-   "offset": 3117108,
+   "offset": 3121198,
    "source": "title",
-   "length": 12282
+   "length": 8192
   },
   {
    "title": "F.S. 15.18",
@@ -1853,7 +1865,13 @@
    "title": "F.S. 17.011",
    "offset": 3391540,
    "source": "title",
-   "length": 612
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 3392089]",
+   "offset": 3392089,
+   "source": "section-number",
+   "length": 63
   },
   {
    "title": "F.S. 17.002",
@@ -2657,7 +2675,13 @@
    "title": "F.S. 22.10",
    "offset": 4235314,
    "source": "title",
-   "length": 605
+   "length": 548
+  },
+  {
+   "title": "[unrecovered section @ 4235862]",
+   "offset": 4235862,
+   "source": "section-number",
+   "length": 57
   },
   {
    "title": "F.S. 22.09",
@@ -2807,7 +2831,13 @@
    "title": "F.S. 24.107",
    "offset": 4366386,
    "source": "title",
-   "length": 599
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 4366935]",
+   "offset": 4366935,
+   "source": "section-number",
+   "length": 50
   },
   {
    "title": "F.S. 24.1055",
@@ -4793,13 +4823,13 @@
    "title": "F.S. 39.0139",
    "offset": 6139950,
    "source": "title",
-   "length": 12292
+   "length": 12588
   },
   {
    "title": "F.S. 39.0142",
-   "offset": 6152242,
+   "offset": 6152538,
    "source": "title",
-   "length": 4094
+   "length": 3798
   },
   {
    "title": "CHAPTER 39",
@@ -5843,13 +5873,13 @@
    "title": "F.S. 44.403",
    "offset": 7614512,
    "source": "title",
-   "length": 4100
+   "length": 8190
   },
   {
    "title": "F.S. 44.404",
-   "offset": 7618612,
+   "offset": 7622702,
    "source": "title",
-   "length": 8186
+   "length": 4096
   },
   {
    "title": "F.S. 44.405",
@@ -5873,19 +5903,19 @@
    "title": "CHAPTER 45",
    "offset": 7675952,
    "source": "title",
-   "length": 4098
+   "length": 4384
   },
   {
    "title": "F.S. 45.011",
-   "offset": 7680050,
+   "offset": 7680336,
    "source": "title",
-   "length": 4096
+   "length": 7014
   },
   {
    "title": "F.S. 45.021",
-   "offset": 7684146,
-   "source": "title",
-   "length": 4092
+   "offset": 7687350,
+   "source": "section-number",
+   "length": 888
   },
   {
    "title": "F.S. 45.031",
@@ -6041,7 +6071,13 @@
    "title": "F.S. 47.071",
    "offset": 7811122,
    "source": "title",
-   "length": 595
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 7811671]",
+   "offset": 7811671,
+   "source": "section-number",
+   "length": 46
   },
   {
    "title": "F.S. 47.061",
@@ -6179,7 +6215,13 @@
    "title": "F.S. 48.092",
    "offset": 7913526,
    "source": "title",
-   "length": 4088
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 7914075]",
+   "offset": 7914075,
+   "source": "section-number",
+   "length": 3539
   },
   {
    "title": "F.S. 48.071",
@@ -7133,7 +7175,13 @@
    "title": "F.S. 61.001",
    "offset": 8618034,
    "source": "title",
-   "length": 8188
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 8618583]",
+   "offset": 8618583,
+   "source": "section-number",
+   "length": 7639
   },
   {
    "title": "CHAPTER 61",
@@ -7988,10 +8036,16 @@
    "length": 4100
   },
   {
-   "title": "F.S. 63.043",
+   "title": "F.S. 63.053",
    "offset": 9773106,
    "source": "title",
-   "length": 4092
+   "length": 2948
+  },
+  {
+   "title": "F.S. 63.043",
+   "offset": 9776054,
+   "source": "section-number",
+   "length": 1144
   },
   {
    "title": "F.S. 63.052",
@@ -9443,13 +9497,13 @@
    "title": "F.S. 77.07",
    "offset": 10932270,
    "source": "title",
-   "length": 4100
+   "length": 4377
   },
   {
    "title": "F.S. 77.081",
-   "offset": 10936370,
+   "offset": 10936647,
    "source": "title",
-   "length": 2923
+   "length": 2646
   },
   {
    "title": "F.S. 77.08",
@@ -10523,7 +10577,13 @@
    "title": "F.S. 88.2081",
    "offset": 11587634,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 11588184]",
+   "offset": 11588184,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 88.2071",
@@ -10868,10 +10928,16 @@
    "length": 2110
   },
   {
-   "title": "F.S. 88.703",
+   "title": "F.S. 88.7031",
    "offset": 11776052,
    "source": "title",
-   "length": 624
+   "length": 550
+  },
+  {
+   "title": "F.S. 88.703",
+   "offset": 11776602,
+   "source": "section-number",
+   "length": 74
   },
   {
    "title": "F.S. 88.7021",
@@ -11615,7 +11681,13 @@
    "title": "F.S. 92.20",
    "offset": 12226610,
    "source": "title",
-   "length": 605
+   "length": 548
+  },
+  {
+   "title": "[unrecovered section @ 12227158]",
+   "offset": 12227158,
+   "source": "section-number",
+   "length": 57
   },
   {
    "title": "F.S. 92.19",
@@ -11645,13 +11717,13 @@
    "title": "F.S. 92.231",
    "offset": 12234975,
    "source": "title",
-   "length": 16211
+   "length": 16486
   },
   {
    "title": "F.S. 92.24",
-   "offset": 12251186,
+   "offset": 12251461,
    "source": "title",
-   "length": 2399
+   "length": 2124
   },
   {
    "title": "F.S. 92.233",
@@ -12263,13 +12335,13 @@
    "title": "F.S. 98.0981",
    "offset": 12877870,
    "source": "title",
-   "length": 12292
+   "length": 12582
   },
   {
    "title": "F.S. 98.212",
-   "offset": 12890162,
+   "offset": 12890452,
    "source": "title",
-   "length": 12286
+   "length": 11996
   },
   {
    "title": "F.S. 98.461",
@@ -13715,13 +13787,13 @@
    "title": "F.S. 105.051",
    "offset": 14168110,
    "source": "title",
-   "length": 4102
+   "length": 4378
   },
   {
    "title": "F.S. 105.08",
-   "offset": 14172212,
+   "offset": 14172488,
    "source": "title",
-   "length": 4090
+   "length": 3814
   },
   {
    "title": "F.S. 105.071",
@@ -14717,13 +14789,13 @@
    "title": "F.S. 110.501",
    "offset": 15278345,
    "source": "title",
-   "length": 3879
+   "length": 4194
   },
   {
    "title": "F.S. 110.502",
-   "offset": 15282224,
+   "offset": 15282539,
    "source": "title",
-   "length": 4838
+   "length": 4523
   },
   {
    "title": "F.S. 110.503",
@@ -15089,13 +15161,13 @@
    "title": "F.S. 112.1912",
    "offset": 15757358,
    "source": "title",
-   "length": 4100
+   "length": 6957
   },
   {
    "title": "F.S. 112.1913",
-   "offset": 15761458,
-   "source": "title",
-   "length": 8188
+   "offset": 15764315,
+   "source": "section-number",
+   "length": 5331
   },
   {
    "title": "F.S. 112.1915",
@@ -16223,13 +16295,13 @@
    "title": "F.S. 117.03",
    "offset": 16934891,
    "source": "title",
-   "length": 6215
+   "length": 9317
   },
   {
    "title": "F.S. 117.045",
-   "offset": 16941106,
-   "source": "title",
-   "length": 4092
+   "offset": 16944208,
+   "source": "section-number",
+   "length": 990
   },
   {
    "title": "F.S. 117.05",
@@ -17333,13 +17405,13 @@
    "title": "F.S. 122.26",
    "offset": 19171982,
    "source": "title",
-   "length": 1448
+   "length": 1737
   },
   {
    "title": "F.S. 122.31",
-   "offset": 19173430,
+   "offset": 19173719,
    "source": "title",
-   "length": 1719
+   "length": 1430
   },
   {
    "title": "F.S. 122.29",
@@ -17627,7 +17699,13 @@
    "title": "F.S. 125.17",
    "offset": 19574834,
    "source": "title",
-   "length": 610
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 19575383]",
+   "offset": 19575383,
+   "source": "section-number",
+   "length": 61
   },
   {
    "title": "F.S. 125.15",
@@ -18623,13 +18701,13 @@
    "title": "CHAPTER 137",
    "offset": 20224055,
    "source": "title",
-   "length": 2045
+   "length": 2339
   },
   {
    "title": "F.S. 137.03",
-   "offset": 20226100,
+   "offset": 20226394,
    "source": "title",
-   "length": 2010
+   "length": 1716
   },
   {
    "title": "F.S. 137.02",
@@ -19955,13 +20033,13 @@
    "title": "F.S. 157.03",
    "offset": 21209342,
    "source": "title",
-   "length": 3892
+   "length": 4166
   },
   {
    "title": "F.S. 157.05",
-   "offset": 21213234,
+   "offset": 21213508,
    "source": "title",
-   "length": 2648
+   "length": 2374
   },
   {
    "title": "F.S. 157.04",
@@ -20636,10 +20714,16 @@
    "length": 4100
   },
   {
-   "title": "F.S. 1",
+   "title": "F.S. 159.621",
    "offset": 21651508,
    "source": "title",
-   "length": 619
+   "length": 550
+  },
+  {
+   "title": "F.S. 1",
+   "offset": 21652058,
+   "source": "section-number",
+   "length": 69
   },
   {
    "title": "F.S. 159.62",
@@ -20939,7 +21023,13 @@
    "title": "F.S. 159.834",
    "offset": 21860402,
    "source": "title",
-   "length": 592
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 21860952]",
+   "offset": 21860952,
+   "source": "section-number",
+   "length": 42
   },
   {
    "title": "F.S. 159.833",
@@ -21197,7 +21287,13 @@
    "title": "F.S. 161.201",
    "offset": 22126642,
    "source": "title",
-   "length": 610
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 22127192]",
+   "offset": 22127192,
+   "source": "section-number",
+   "length": 60
   },
   {
    "title": "F.S. 161.191",
@@ -21497,13 +21593,13 @@
    "title": "F.S. 162.10",
    "offset": 22340877,
    "source": "title",
-   "length": 2853
+   "length": 6945
   },
   {
    "title": "F.S. 162.12",
-   "offset": 22343730,
+   "offset": 22347822,
    "source": "title",
-   "length": 8192
+   "length": 4100
   },
   {
    "title": "CHAPTER 162",
@@ -22460,10 +22556,16 @@
    "length": 8196
   },
   {
-   "title": "F.S. 164.",
+   "title": "F.S. 164.101",
    "offset": 23892018,
    "source": "title",
-   "length": 622
+   "length": 550
+  },
+  {
+   "title": "F.S. 164.",
+   "offset": 23892568,
+   "source": "section-number",
+   "length": 72
   },
   {
    "title": "CHAPTER 164",
@@ -22631,7 +22733,13 @@
    "title": "F.S. 166.011",
    "offset": 23990320,
    "source": "title",
-   "length": 8190
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 23990870]",
+   "offset": 23990870,
+   "source": "section-number",
+   "length": 7640
   },
   {
    "title": "F.S. 166.021",
@@ -23564,10 +23672,16 @@
    "length": 4100
   },
   {
-   "title": "F.S. 175.",
+   "title": "F.S. 175.181",
    "offset": 24805426,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "F.S. 175.",
+   "offset": 24805976,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 175.171",
@@ -23633,13 +23747,13 @@
    "title": "F.S. 175.311",
    "offset": 24863113,
    "source": "title",
-   "length": 3751
+   "length": 4340
   },
   {
    "title": "F.S. 175.333",
-   "offset": 24866864,
-   "source": "title",
-   "length": 5759
+   "offset": 24867453,
+   "source": "section-number",
+   "length": 5170
   },
   {
    "title": "F.S. 175.341",
@@ -24221,7 +24335,13 @@
    "title": "F.S. 185.11",
    "offset": 25333812,
    "source": "title",
-   "length": 615
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 25334361]",
+   "offset": 25334361,
+   "source": "section-number",
+   "length": 66
   },
   {
    "title": "F.S. 185.105",
@@ -24239,13 +24359,13 @@
    "title": "F.S. 185.12",
    "offset": 25342483,
    "source": "title",
-   "length": 3617
+   "length": 5899
   },
   {
    "title": "F.S. 185.13",
-   "offset": 25346100,
-   "source": "title",
-   "length": 4090
+   "offset": 25348382,
+   "source": "section-number",
+   "length": 1808
   },
   {
    "title": "F.S. 185.16",
@@ -24257,13 +24377,13 @@
    "title": "F.S. 185.161",
    "offset": 25358382,
    "source": "title",
-   "length": 12292
+   "length": 13198
   },
   {
    "title": "F.S. 185.162",
-   "offset": 25370674,
-   "source": "title",
-   "length": 4092
+   "offset": 25371580,
+   "source": "section-number",
+   "length": 3186
   },
   {
    "title": "F.S. 185.18",
@@ -24365,13 +24485,13 @@
    "title": "F.S. 185.50",
    "offset": 25448494,
    "source": "title",
-   "length": 16388
+   "length": 18528
   },
   {
    "title": "F.S. 185.60",
-   "offset": 25464882,
-   "source": "title",
-   "length": 4092
+   "offset": 25467022,
+   "source": "section-number",
+   "length": 1952
   },
   {
    "title": "CHAPTER 186",
@@ -26123,13 +26243,13 @@
    "title": "F.S. 196.195",
    "offset": 27500590,
    "source": "title",
-   "length": 4102
+   "length": 8192
   },
   {
    "title": "F.S. 196.196",
-   "offset": 27504692,
+   "offset": 27508782,
    "source": "title",
-   "length": 12282
+   "length": 8192
   },
   {
    "title": "F.S. 196.1961",
@@ -26345,7 +26465,13 @@
    "title": "F.S. 197.131",
    "offset": 27775026,
    "source": "title",
-   "length": 589
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 27775576]",
+   "offset": 27775576,
+   "source": "section-number",
+   "length": 39
   },
   {
    "title": "F.S. 197.123",
@@ -28991,13 +29117,13 @@
    "title": "F.S. 210.276",
    "offset": 31170606,
    "source": "title",
-   "length": 4098
+   "length": 4789
   },
   {
    "title": "F.S. 210.30",
-   "offset": 31174704,
-   "source": "title",
-   "length": 12799
+   "offset": 31175395,
+   "source": "section-number",
+   "length": 12108
   },
   {
    "title": "F.S. 210.32",
@@ -30209,13 +30335,13 @@
    "title": "F.S. 215.34",
    "offset": 33243182,
    "source": "title",
-   "length": 4100
+   "length": 6098
   },
   {
    "title": "F.S. 215.36",
-   "offset": 33247282,
+   "offset": 33249280,
    "source": "title",
-   "length": 4092
+   "length": 2094
   },
   {
    "title": "F.S. 215.37",
@@ -30980,10 +31106,16 @@
    "length": 8194
   },
   {
-   "title": "F.S. 216.052",
+   "title": "F.S. 216.053",
    "offset": 34361392,
    "source": "title",
-   "length": 4096
+   "length": 756
+  },
+  {
+   "title": "F.S. 216.052",
+   "offset": 34362148,
+   "source": "section-number",
+   "length": 3340
   },
   {
    "title": "F.S. 216.065",
@@ -31625,31 +31757,31 @@
    "title": "F.S. 218.322",
    "offset": 34910407,
    "source": "title",
-   "length": 3945
+   "length": 4336
   },
   {
    "title": "F.S. 218.33",
-   "offset": 34914352,
+   "offset": 34914743,
    "source": "title",
-   "length": 4098
+   "length": 6459
   },
   {
    "title": "F.S. 218.335",
-   "offset": 34918450,
-   "source": "title",
-   "length": 4092
+   "offset": 34921202,
+   "source": "section-number",
+   "length": 1340
   },
   {
    "title": "F.S. 218.35",
    "offset": 34922542,
    "source": "title",
-   "length": 4098
+   "length": 4760
   },
   {
    "title": "F.S. 218.36",
-   "offset": 34926640,
-   "source": "title",
-   "length": 6378
+   "offset": 34927302,
+   "source": "section-number",
+   "length": 5716
   },
   {
    "title": "F.S. 218.369",
@@ -32501,7 +32633,13 @@
    "title": "F.S. 220.735",
    "offset": 35815474,
    "source": "title",
-   "length": 591
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 35816024]",
+   "offset": 35816024,
+   "source": "section-number",
+   "length": 41
   },
   {
    "title": "F.S. 220.733",
@@ -33197,7 +33335,13 @@
    "title": "F.S. 243.63",
    "offset": 36368436,
    "source": "title",
-   "length": 600
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 36368985]",
+   "offset": 36368985,
+   "source": "section-number",
+   "length": 51
   },
   {
    "title": "F.S. 243.62",
@@ -33443,7 +33587,13 @@
    "title": "F.S. 250.26",
    "offset": 36569138,
    "source": "title",
-   "length": 607
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 36569687]",
+   "offset": 36569687,
+   "source": "section-number",
+   "length": 58
   },
   {
    "title": "F.S. 250.25",
@@ -33611,13 +33761,13 @@
    "title": "F.S. 250.483",
    "offset": 36701392,
    "source": "title",
-   "length": 7010
+   "length": 7305
   },
   {
    "title": "F.S. 250.51",
-   "offset": 36708402,
+   "offset": 36708697,
    "source": "title",
-   "length": 4094
+   "length": 3799
   },
   {
    "title": "F.S. 250.5201",
@@ -33851,13 +34001,13 @@
    "title": "CHAPTER 252",
    "offset": 36872238,
    "source": "title",
-   "length": 8200
+   "length": 10085
   },
   {
    "title": "F.S. 252.31",
-   "offset": 36880438,
+   "offset": 36882323,
    "source": "title",
-   "length": 4088
+   "length": 2203
   },
   {
    "title": "F.S. 252.311",
@@ -34187,13 +34337,13 @@
    "title": "F.S. 252.84",
    "offset": 37228592,
    "source": "title",
-   "length": 4102
+   "length": 12286
   },
   {
    "title": "F.S. 252.85",
-   "offset": 37232694,
+   "offset": 37240878,
    "source": "title",
-   "length": 16376
+   "length": 8192
   },
   {
    "title": "F.S. 252.86",
@@ -34259,19 +34409,25 @@
    "title": "F.S. 252.924",
    "offset": 37277742,
    "source": "title",
-   "length": 4100
+   "length": 4396
   },
   {
    "title": "F.S. 252.925",
-   "offset": 37281842,
+   "offset": 37282138,
    "source": "title",
-   "length": 4096
+   "length": 3800
   },
   {
    "title": "F.S. 252.928",
    "offset": 37285938,
    "source": "title",
-   "length": 599
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 37286488]",
+   "offset": 37286488,
+   "source": "section-number",
+   "length": 49
   },
   {
    "title": "F.S. 252.927",
@@ -34664,10 +34820,16 @@
    "length": 6261
   },
   {
-   "title": "F.S. 2",
+   "title": "F.S. 253.41",
    "offset": 37736498,
    "source": "title",
-   "length": 618
+   "length": 549
+  },
+  {
+   "title": "F.S. 2",
+   "offset": 37737047,
+   "source": "section-number",
+   "length": 69
   },
   {
    "title": "F.S. 253.40",
@@ -35717,7 +35879,13 @@
    "title": "F.S. 257.16",
    "offset": 38596660,
    "source": "title",
-   "length": 616
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 38597209]",
+   "offset": 38597209,
+   "source": "section-number",
+   "length": 67
   },
   {
    "title": "F.S. 257.15",
@@ -35795,7 +35963,13 @@
    "title": "F.S. 257.24",
    "offset": 38641714,
    "source": "title",
-   "length": 597
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 38642263]",
+   "offset": 38642263,
+   "source": "section-number",
+   "length": 48
   },
   {
    "title": "F.S. 257.23",
@@ -38033,19 +38207,25 @@
    "title": "F.S. 284.311",
    "offset": 40761476,
    "source": "title",
-   "length": 1964
+   "length": 2528
   },
   {
    "title": "F.S. 284.33",
-   "offset": 40763440,
-   "source": "title",
-   "length": 4098
+   "offset": 40764004,
+   "source": "section-number",
+   "length": 3534
   },
   {
    "title": "F.S. 284.36",
    "offset": 40767538,
    "source": "title",
-   "length": 588
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 40768087]",
+   "offset": 40768087,
+   "source": "section-number",
+   "length": 39
   },
   {
    "title": "F.S. 284.35",
@@ -38609,7 +38789,13 @@
    "title": "F.S. 287.082",
    "offset": 41365554,
    "source": "title",
-   "length": 608
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 41366104]",
+   "offset": 41366104,
+   "source": "section-number",
+   "length": 58
   },
   {
    "title": "F.S. 287.076",
@@ -39965,7 +40151,13 @@
    "title": "F.S. 290.012",
    "offset": 43065394,
    "source": "title",
-   "length": 639
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 43065944]",
+   "offset": 43065944,
+   "source": "section-number",
+   "length": 89
   },
   {
    "title": "F.S. 290.0077",
@@ -40235,7 +40427,13 @@
    "title": "F.S. 295.08",
    "offset": 43278386,
    "source": "title",
-   "length": 4092
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 43278935]",
+   "offset": 43278935,
+   "source": "section-number",
+   "length": 3543
   },
   {
    "title": "F.S. 295.07",
@@ -40859,13 +41057,13 @@
    "title": "F.S. 298.56",
    "offset": 43735533,
    "source": "title",
-   "length": 1605
+   "length": 1894
   },
   {
    "title": "F.S. 298.60",
-   "offset": 43737138,
+   "offset": 43737427,
    "source": "title",
-   "length": 2205
+   "length": 1916
   },
   {
    "title": "F.S. 298.59",
@@ -41999,13 +42197,13 @@
    "title": "F.S. 316.156",
    "offset": 44769887,
    "source": "title",
-   "length": 3539
+   "length": 5277
   },
   {
    "title": "F.S. 316.157",
-   "offset": 44773426,
-   "source": "title",
-   "length": 4092
+   "offset": 44775164,
+   "source": "section-number",
+   "length": 2354
   },
   {
    "title": "F.S. 316.1575",
@@ -42221,7 +42419,13 @@
    "title": "F.S. 316.195",
    "offset": 45121586,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 45122136]",
+   "offset": 45122136,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 316.1945",
@@ -43277,13 +43481,13 @@
    "title": "F.S. 317.0007",
    "offset": 46133294,
    "source": "title",
-   "length": 4100
+   "length": 4390
   },
   {
    "title": "F.S. 317.0009",
-   "offset": 46137394,
+   "offset": 46137684,
    "source": "title",
-   "length": 4094
+   "length": 3804
   },
   {
    "title": "F.S. 317.0011",
@@ -45827,13 +46031,13 @@
    "title": "F.S. 324.211",
    "offset": 49606702,
    "source": "title",
-   "length": 4102
+   "length": 4384
   },
   {
    "title": "F.S. 324.251",
-   "offset": 49610804,
+   "offset": 49611086,
    "source": "title",
-   "length": 4090
+   "length": 3808
   },
   {
    "title": "F.S. 324.242",
@@ -46607,13 +46811,13 @@
    "title": "F.S. 328.66",
    "offset": 50475578,
    "source": "title",
-   "length": 3574
+   "length": 4172
   },
   {
    "title": "F.S. 328.68",
-   "offset": 50479152,
-   "source": "title",
-   "length": 5478
+   "offset": 50479750,
+   "source": "section-number",
+   "length": 4880
   },
   {
    "title": "F.S. 328.70",
@@ -46811,7 +47015,13 @@
    "title": "F.S. 331.10",
    "offset": 50683956,
    "source": "title",
-   "length": 594
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 50684505]",
+   "offset": 50684505,
+   "source": "section-number",
+   "length": 45
   },
   {
    "title": "CHAPTER 331",
@@ -47072,10 +47282,16 @@
    "length": 3783
   },
   {
-   "title": "F.S. 331.",
+   "title": "F.S. 331.341",
    "offset": 50888752,
    "source": "title",
-   "length": 867
+   "length": 550
+  },
+  {
+   "title": "F.S. 331.",
+   "offset": 50889302,
+   "source": "section-number",
+   "length": 317
   },
   {
    "title": "F.S. 331.340",
@@ -47093,13 +47309,13 @@
    "title": "F.S. 331.342",
    "offset": 50893997,
    "source": "title",
-   "length": 2949
+   "length": 3237
   },
   {
    "title": "F.S. 331.344",
-   "offset": 50896946,
+   "offset": 50897234,
    "source": "title",
-   "length": 4094
+   "length": 3806
   },
   {
    "title": "F.S. 331.346",
@@ -47135,7 +47351,13 @@
    "title": "F.S. 331.353",
    "offset": 50913332,
    "source": "title",
-   "length": 602
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 50913882]",
+   "offset": 50913882,
+   "source": "section-number",
+   "length": 52
   },
   {
    "title": "F.S. 331.351",
@@ -47567,13 +47789,13 @@
    "title": "F.S. 334.193",
    "offset": 51310640,
    "source": "title",
-   "length": 4098
+   "length": 4374
   },
   {
    "title": "F.S. 334.195",
-   "offset": 51314738,
+   "offset": 51315014,
    "source": "title",
-   "length": 4094
+   "length": 3818
   },
   {
    "title": "F.S. 334.24",
@@ -47693,13 +47915,13 @@
    "title": "F.S. 335.066",
    "offset": 51417136,
    "source": "title",
-   "length": 4100
+   "length": 5318
   },
   {
    "title": "F.S. 335.07",
-   "offset": 51421236,
+   "offset": 51422454,
    "source": "title",
-   "length": 4090
+   "length": 2872
   },
   {
    "title": "F.S. 335.074",
@@ -47807,7 +48029,13 @@
    "title": "F.S. 335.183",
    "offset": 51494960,
    "source": "title",
-   "length": 640
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 51495510]",
+   "offset": 51495510,
+   "source": "section-number",
+   "length": 90
   },
   {
    "title": "F.S. 335.1825",
@@ -49343,19 +49571,13 @@
    "title": "F.S. 347.22",
    "offset": 53215278,
    "source": "title",
-   "length": 8198
-  },
-  {
-   "title": "CHAPTER 348",
-   "offset": 53223476,
-   "source": "title",
-   "length": 843
+   "length": 8492
   },
   {
    "title": "F.S. 347.25",
-   "offset": 53224319,
-   "source": "section-number",
-   "length": 1109
+   "offset": 53223770,
+   "source": "title",
+   "length": 1658
   },
   {
    "title": "F.S. 347.24",
@@ -49595,13 +49817,13 @@
    "title": "F.S. 348.65",
    "offset": 53446249,
    "source": "title",
-   "length": 2509
+   "length": 2800
   },
   {
    "title": "F.S. 348.681",
-   "offset": 53448758,
+   "offset": 53449049,
    "source": "title",
-   "length": 2275
+   "length": 1984
   },
   {
    "title": "F.S. 348.67",
@@ -49613,13 +49835,13 @@
    "title": "F.S. 348.68",
    "offset": 53452846,
    "source": "title",
-   "length": 4100
+   "length": 5353
   },
   {
    "title": "F.S. 348.70",
-   "offset": 53456946,
-   "source": "title",
-   "length": 4092
+   "offset": 53458199,
+   "source": "section-number",
+   "length": 2839
   },
   {
    "title": "CHAPTER 348",
@@ -50015,7 +50237,13 @@
    "title": "F.S. 350.117",
    "offset": 53805106,
    "source": "title",
-   "length": 615
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 53805656]",
+   "offset": 53805656,
+   "source": "section-number",
+   "length": 65
   },
   {
    "title": "F.S. 350.115",
@@ -52235,7 +52463,13 @@
    "title": "F.S. 373.426",
    "offset": 56401970,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 56402520]",
+   "offset": 56402520,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 373.423",
@@ -52265,7 +52499,13 @@
    "title": "F.S. 373.429",
    "offset": 56438834,
    "source": "title",
-   "length": 599
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 56439384]",
+   "offset": 56439384,
+   "source": "section-number",
+   "length": 49
   },
   {
    "title": "F.S. 373.428",
@@ -54038,10 +54278,16 @@
    "length": 3067
   },
   {
-   "title": "F.S. 378.2",
+   "title": "F.S. 378.204",
    "offset": 58961970,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "F.S. 378.2",
+   "offset": 58962520,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 378.203",
@@ -54503,13 +54749,13 @@
    "title": "F.S. 379.226",
    "offset": 59371566,
    "source": "title",
-   "length": 4098
+   "length": 4920
   },
   {
    "title": "F.S. 379.2271",
-   "offset": 59375664,
-   "source": "title",
-   "length": 4705
+   "offset": 59376486,
+   "source": "section-number",
+   "length": 3883
   },
   {
    "title": "F.S. 379.2272",
@@ -55667,7 +55913,13 @@
    "title": "F.S. 380.27",
    "offset": 60952628,
    "source": "title",
-   "length": 595
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 60953177]",
+   "offset": 60953177,
+   "source": "section-number",
+   "length": 46
   },
   {
    "title": "F.S. 380.26",
@@ -56252,10 +56504,16 @@
    "length": 7636
   },
   {
-   "title": "F.S. 381.0202",
+   "title": "F.S. 381.0203",
    "offset": 61804592,
    "source": "title",
-   "length": 8190
+   "length": 574
+  },
+  {
+   "title": "F.S. 381.0202",
+   "offset": 61805166,
+   "source": "section-number",
+   "length": 7616
   },
   {
    "title": "F.S. 381.02035",
@@ -57023,7 +57281,13 @@
    "title": "F.S. 383.16",
    "offset": 63094836,
    "source": "title",
-   "length": 596
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 63095385]",
+   "offset": 63095385,
+   "source": "section-number",
+   "length": 47
   },
   {
    "title": "F.S. 383.15",
@@ -57065,19 +57329,19 @@
    "title": "F.S. 383.216",
    "offset": 63119406,
    "source": "title",
-   "length": 12292
+   "length": 16384
   },
   {
    "title": "F.S. 383.2162",
-   "offset": 63131698,
+   "offset": 63135790,
    "source": "title",
-   "length": 12288
+   "length": 9309
   },
   {
    "title": "F.S. 383.21625",
-   "offset": 63143986,
-   "source": "title",
-   "length": 8188
+   "offset": 63145099,
+   "source": "section-number",
+   "length": 7075
   },
   {
    "title": "F.S. 383.2163",
@@ -57737,13 +58001,13 @@
    "title": "F.S. 388.291",
    "offset": 63651888,
    "source": "title",
-   "length": 8196
+   "length": 8491
   },
   {
    "title": "F.S. 388.311",
-   "offset": 63660084,
+   "offset": 63660379,
    "source": "title",
-   "length": 1849
+   "length": 1554
   },
   {
    "title": "F.S. 388.301",
@@ -58649,13 +58913,13 @@
    "title": "F.S. 394.479",
    "offset": 64888878,
    "source": "title",
-   "length": 16388
+   "length": 16673
   },
   {
    "title": "F.S. 394.481",
-   "offset": 64905266,
+   "offset": 64905551,
    "source": "title",
-   "length": 2321
+   "length": 2036
   },
   {
    "title": "F.S. 394.480",
@@ -58685,19 +58949,19 @@
    "title": "CHAPTER 394",
    "offset": 64913963,
    "source": "title",
-   "length": 3591
+   "length": 6692
   },
   {
    "title": "F.S. 394.490",
-   "offset": 64917554,
-   "source": "title",
-   "length": 4642
+   "offset": 64920655,
+   "source": "section-number",
+   "length": 991
   },
   {
    "title": "F.S. 394.491",
-   "offset": 64922196,
-   "source": "section-number",
-   "length": 8485
+   "offset": 64921646,
+   "source": "title",
+   "length": 9035
   },
   {
    "title": "F.S. 394.4915",
@@ -61823,13 +62087,13 @@
    "title": "F.S. 401.411",
    "offset": 68472878,
    "source": "title",
-   "length": 8196
+   "length": 8489
   },
   {
    "title": "F.S. 401.414",
-   "offset": 68481074,
+   "offset": 68481367,
    "source": "title",
-   "length": 5316
+   "length": 5023
   },
   {
    "title": "F.S. 401.421",
@@ -61889,7 +62153,13 @@
    "title": "F.S. 402.07",
    "offset": 68546610,
    "source": "title",
-   "length": 615
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 68547159]",
+   "offset": 68547159,
+   "source": "section-number",
+   "length": 66
   },
   {
    "title": "F.S. 402.06",
@@ -62693,13 +62963,13 @@
    "title": "F.S. 403.141",
    "offset": 69799982,
    "source": "title",
-   "length": 4100
+   "length": 7214
   },
   {
    "title": "F.S. 403.151",
-   "offset": 69804082,
-   "source": "title",
-   "length": 4092
+   "offset": 69807196,
+   "source": "section-number",
+   "length": 978
   },
   {
    "title": "F.S. 403.161",
@@ -64001,7 +64271,13 @@
    "title": "F.S. 403.873",
    "offset": 71368754,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 71369304]",
+   "offset": 71369304,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 403.8721",
@@ -64691,7 +64967,13 @@
    "title": "F.S. 406.15",
    "offset": 72073266,
    "source": "title",
-   "length": 612
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 72073815]",
+   "offset": 72073815,
+   "source": "section-number",
+   "length": 63
   },
   {
    "title": "F.S. 406.145",
@@ -64775,7 +65057,13 @@
    "title": "F.S. 406.60",
    "offset": 72122418,
    "source": "title",
-   "length": 598
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 72122967]",
+   "offset": 72122967,
+   "source": "section-number",
+   "length": 49
   },
   {
    "title": "F.S. 406.59",
@@ -64847,13 +65135,13 @@
    "title": "F.S. 408.037",
    "offset": 72224814,
    "source": "title",
-   "length": 4102
+   "length": 12288
   },
   {
    "title": "F.S. 408.039",
-   "offset": 72228916,
+   "offset": 72237102,
    "source": "title",
-   "length": 20474
+   "length": 12288
   },
   {
    "title": "F.S. 408.040",
@@ -65465,13 +65753,13 @@
    "title": "F.S. 409.1754",
    "offset": 73228334,
    "source": "title",
-   "length": 16388
+   "length": 20480
   },
   {
    "title": "F.S. 409.1755",
-   "offset": 73244722,
+   "offset": 73248814,
    "source": "title",
-   "length": 13768
+   "length": 9676
   },
   {
    "title": "F.S. 409.1757",
@@ -65675,13 +65963,13 @@
    "title": "F.S. 409.2577",
    "offset": 73621550,
    "source": "title",
-   "length": 4104
+   "length": 4379
   },
   {
    "title": "F.S. 409.2581",
-   "offset": 73625654,
+   "offset": 73625929,
    "source": "title",
-   "length": 4088
+   "length": 3813
   },
   {
    "title": "F.S. 409.2578",
@@ -66587,13 +66875,13 @@
    "title": "F.S. 410.033",
    "offset": 75249031,
    "source": "title",
-   "length": 2731
+   "length": 3007
   },
   {
    "title": "F.S. 410.035",
-   "offset": 75251762,
+   "offset": 75252038,
    "source": "title",
-   "length": 8213
+   "length": 7937
   },
   {
    "title": "F.S. 410.037",
@@ -67130,10 +67418,16 @@
    "length": 4102
   },
   {
-   "title": "F.S. 413.7",
+   "title": "F.S. 413.74",
    "offset": 75784244,
    "source": "title",
-   "length": 622
+   "length": 549
+  },
+  {
+   "title": "F.S. 413.7",
+   "offset": 75784793,
+   "source": "section-number",
+   "length": 73
   },
   {
    "title": "F.S. 413.731",
@@ -69779,7 +70073,13 @@
    "title": "F.S. 430.606",
    "offset": 78610482,
    "source": "title",
-   "length": 596
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 78611032]",
+   "offset": 78611032,
+   "source": "section-number",
+   "length": 46
   },
   {
    "title": "F.S. 430.605",
@@ -70193,13 +70493,13 @@
    "title": "F.S. 440.21",
    "offset": 79380528,
    "source": "title",
-   "length": 4098
+   "length": 4375
   },
   {
    "title": "F.S. 440.211",
-   "offset": 79384626,
+   "offset": 79384903,
    "source": "title",
-   "length": 4436
+   "length": 4159
   },
   {
    "title": "F.S. 440.23",
@@ -71651,13 +71951,13 @@
    "title": "F.S. 450.132",
    "offset": 81289262,
    "source": "title",
-   "length": 4098
+   "length": 4868
   },
   {
    "title": "F.S. 450.141",
-   "offset": 81293360,
-   "source": "title",
-   "length": 8243
+   "offset": 81294130,
+   "source": "section-number",
+   "length": 7473
   },
   {
    "title": "F.S. 450.155",
@@ -71735,7 +72035,13 @@
    "title": "F.S. 450.29",
    "offset": 81354804,
    "source": "title",
-   "length": 1927
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 81355353]",
+   "offset": 81355353,
+   "source": "section-number",
+   "length": 1378
   },
   {
    "title": "F.S. 450.271",
@@ -72263,13 +72569,13 @@
    "title": "F.S. 455.232",
    "offset": 81781981,
    "source": "title",
-   "length": 2901
+   "length": 3190
   },
   {
    "title": "F.S. 455.242",
-   "offset": 81784882,
+   "offset": 81785171,
    "source": "title",
-   "length": 4140
+   "length": 3851
   },
   {
    "title": "F.S. 455.245",
@@ -72497,7 +72803,13 @@
    "title": "F.S. 456.032",
    "offset": 82067508,
    "source": "title",
-   "length": 2182
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 82068058]",
+   "offset": 82068058,
+   "source": "section-number",
+   "length": 1632
   },
   {
    "title": "F.S. 456.029",
@@ -72809,7 +73121,13 @@
    "title": "F.S. 456.082",
    "offset": 82505780,
    "source": "title",
-   "length": 612
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 82506330]",
+   "offset": 82506330,
+   "source": "section-number",
+   "length": 62
   },
   {
    "title": "F.S. 456.081",
@@ -72953,7 +73271,13 @@
    "title": "F.S. 457.107",
    "offset": 82698290,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 82698840]",
+   "offset": 82698840,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 457.105",
@@ -73745,13 +74069,13 @@
    "title": "F.S. 461.008",
    "offset": 83850663,
    "source": "title",
-   "length": 2703
+   "length": 2988
   },
   {
    "title": "F.S. 461.0131",
-   "offset": 83853366,
+   "offset": 83853651,
    "source": "title",
-   "length": 4088
+   "length": 3803
   },
   {
    "title": "F.S. 461.012",
@@ -73829,13 +74153,13 @@
    "title": "F.S. 462.09",
    "offset": 83912883,
    "source": "title",
-   "length": 1919
+   "length": 4622
   },
   {
    "title": "F.S. 462.13",
-   "offset": 83914802,
-   "source": "title",
-   "length": 4092
+   "offset": 83917505,
+   "source": "section-number",
+   "length": 1389
   },
   {
    "title": "F.S. 462.14",
@@ -74321,13 +74645,13 @@
    "title": "F.S. 465.0126",
    "offset": 84488772,
    "source": "title",
-   "length": 3568
+   "length": 6193
   },
   {
    "title": "F.S. 465.013",
-   "offset": 84492340,
-   "source": "title",
-   "length": 4090
+   "offset": 84494965,
+   "source": "section-number",
+   "length": 1465
   },
   {
    "title": "F.S. 465.014",
@@ -74390,10 +74714,16 @@
    "length": 4102
   },
   {
-   "title": "F.S. 465.01",
+   "title": "F.S. 465.0193",
    "offset": 84578356,
    "source": "title",
-   "length": 1297
+   "length": 551
+  },
+  {
+   "title": "F.S. 465.01",
+   "offset": 84578907,
+   "source": "section-number",
+   "length": 746
   },
   {
    "title": "F.S. 465.0181",
@@ -74771,13 +75101,13 @@
    "title": "F.S. 466.0275",
    "offset": 85061680,
    "source": "title",
-   "length": 8196
+   "length": 9768
   },
   {
    "title": "F.S. 466.02751",
-   "offset": 85069876,
+   "offset": 85071448,
    "source": "title",
-   "length": 4090
+   "length": 2518
   },
   {
    "title": "F.S. 466.028",
@@ -75473,13 +75803,13 @@
    "title": "F.S. 468.352",
    "offset": 85733422,
    "source": "title",
-   "length": 8196
+   "length": 12288
   },
   {
    "title": "F.S. 468.354",
-   "offset": 85741618,
+   "offset": 85745710,
    "source": "title",
-   "length": 8190
+   "length": 4098
   },
   {
    "title": "F.S. 468.358",
@@ -75725,7 +76055,13 @@
    "title": "F.S. 468.407",
    "offset": 85930034,
    "source": "title",
-   "length": 600
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 85930584]",
+   "offset": 85930584,
+   "source": "section-number",
+   "length": 50
   },
   {
    "title": "F.S. 468.406",
@@ -76127,13 +76463,13 @@
    "title": "F.S. 468.5275",
    "offset": 86249873,
    "source": "title",
-   "length": 3747
+   "length": 6423
   },
   {
    "title": "F.S. 468.528",
-   "offset": 86253620,
-   "source": "title",
-   "length": 4090
+   "offset": 86256296,
+   "source": "section-number",
+   "length": 1414
   },
   {
    "title": "F.S. 468.529",
@@ -76913,7 +77249,13 @@
    "title": "F.S. 472.009",
    "offset": 86913078,
    "source": "title",
-   "length": 1758
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 86913628]",
+   "offset": 86913628,
+   "source": "section-number",
+   "length": 1208
   },
   {
    "title": "F.S. 472.0075",
@@ -77387,7 +77729,13 @@
    "title": "F.S. 474.216",
    "offset": 87380018,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 87380568]",
+   "offset": 87380568,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 474.215",
@@ -77507,7 +77855,13 @@
    "title": "F.S. 475.161",
    "offset": 87490610,
    "source": "title",
-   "length": 611
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 87491160]",
+   "offset": 87491160,
+   "source": "section-number",
+   "length": 61
   },
   {
    "title": "F.S. 475.15",
@@ -77555,13 +77909,13 @@
    "title": "F.S. 475.183",
    "offset": 87535662,
    "source": "title",
-   "length": 4098
+   "length": 4556
   },
   {
    "title": "F.S. 475.22",
-   "offset": 87539760,
+   "offset": 87540218,
    "source": "title",
-   "length": 4096
+   "length": 3638
   },
   {
    "title": "F.S. 475.24",
@@ -77681,7 +78035,13 @@
    "title": "F.S. 475.455",
    "offset": 87670836,
    "source": "title",
-   "length": 726
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 87671386]",
+   "offset": 87671386,
+   "source": "section-number",
+   "length": 176
   },
   {
    "title": "F.S. 475.4511",
@@ -78431,7 +78791,13 @@
    "title": "F.S. 478.54",
    "offset": 88305714,
    "source": "title",
-   "length": 601
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 88306263]",
+   "offset": 88306263,
+   "source": "section-number",
+   "length": 52
   },
   {
    "title": "F.S. 478.53",
@@ -79631,7 +79997,13 @@
    "title": "F.S. 485.001",
    "offset": 89399348,
    "source": "title",
-   "length": 606
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 89399898]",
+   "offset": 89399898,
+   "source": "section-number",
+   "length": 56
   },
   {
    "title": "CHAPTER 485",
@@ -79697,7 +80069,13 @@
    "title": "F.S. 486.023",
    "offset": 89436210,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 89436760]",
+   "offset": 89436760,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 486.021",
@@ -80579,13 +80957,13 @@
    "title": "F.S. 489.522",
    "offset": 90509358,
    "source": "title",
-   "length": 4100
+   "length": 4396
   },
   {
    "title": "F.S. 489.523",
-   "offset": 90513458,
+   "offset": 90513754,
    "source": "title",
-   "length": 4094
+   "length": 3798
   },
   {
    "title": "F.S. 489.529",
@@ -80741,7 +81119,13 @@
    "title": "F.S. 490.006",
    "offset": 90681394,
    "source": "title",
-   "length": 601
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 90681944]",
+   "offset": 90681944,
+   "source": "section-number",
+   "length": 51
   },
   {
    "title": "F.S. 490.0051",
@@ -80834,10 +81218,16 @@
    "length": 4098
   },
   {
-   "title": "F.S. 490.0149",
+   "title": "F.S. 490.015",
    "offset": 90845232,
    "source": "title",
-   "length": 4098
+   "length": 585
+  },
+  {
+   "title": "F.S. 490.0149",
+   "offset": 90845817,
+   "source": "section-number",
+   "length": 3513
   },
   {
    "title": "F.S. 491.002",
@@ -82595,19 +82985,25 @@
    "title": "F.S. 497.376",
    "offset": 92844080,
    "source": "title",
-   "length": 4098
+   "length": 8190
   },
   {
    "title": "F.S. 497.377",
-   "offset": 92848178,
+   "offset": 92852270,
    "source": "title",
-   "length": 8190
+   "length": 4098
   },
   {
    "title": "F.S. 497.379",
    "offset": 92856368,
    "source": "title",
-   "length": 872
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 92856918]",
+   "offset": 92856918,
+   "source": "section-number",
+   "length": 322
   },
   {
    "title": "F.S. 497.378",
@@ -82655,7 +83051,13 @@
    "title": "F.S. 497.389",
    "offset": 92905524,
    "source": "title",
-   "length": 608
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 92906074]",
+   "offset": 92906074,
+   "source": "section-number",
+   "length": 58
   },
   {
    "title": "F.S. 497.387",
@@ -83381,7 +83783,13 @@
    "title": "F.S. 499.87",
    "offset": 93990964,
    "source": "title",
-   "length": 615
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 93991513]",
+   "offset": 93991513,
+   "source": "section-number",
+   "length": 66
   },
   {
    "title": "F.S. 499.86",
@@ -85022,10 +85430,16 @@
    "length": 8198
   },
   {
-   "title": "F.S. 5071",
+   "title": "F.S. 507.06",
    "offset": 95608884,
    "source": "title",
-   "length": 4090
+   "length": 549
+  },
+  {
+   "title": "F.S. 5071",
+   "offset": 95609433,
+   "source": "section-number",
+   "length": 3541
   },
   {
    "title": "F.S. 507.05",
@@ -86003,13 +86417,13 @@
    "title": "F.S. 516.23",
    "offset": 96423982,
    "source": "title",
-   "length": 4100
+   "length": 6824
   },
   {
    "title": "F.S. 516.27",
-   "offset": 96428082,
-   "source": "title",
-   "length": 4092
+   "offset": 96430806,
+   "source": "section-number",
+   "length": 1368
   },
   {
    "title": "F.S. 516.31",
@@ -86093,13 +86507,13 @@
    "title": "F.S. 517.0611",
    "offset": 96567342,
    "source": "title",
-   "length": 24580
+   "length": 28672
   },
   {
    "title": "F.S. 517.0612",
-   "offset": 96591922,
+   "offset": 96596014,
    "source": "title",
-   "length": 18580
+   "length": 14488
   },
   {
    "title": "F.S. 517.0613",
@@ -86753,13 +87167,13 @@
    "title": "CHAPTER 520",
    "offset": 97316910,
    "source": "title",
-   "length": 4104
+   "length": 6876
   },
   {
    "title": "F.S. 520.60",
-   "offset": 97321014,
+   "offset": 97323786,
    "source": "title",
-   "length": 4088
+   "length": 1316
   },
   {
    "title": "F.S. 520.61",
@@ -87497,13 +87911,13 @@
    "title": "F.S. 527.10",
    "offset": 97845647,
    "source": "title",
-   "length": 3745
+   "length": 4428
   },
   {
    "title": "F.S. 527.11",
-   "offset": 97849392,
-   "source": "title",
-   "length": 4098
+   "offset": 97850075,
+   "source": "section-number",
+   "length": 3415
   },
   {
    "title": "F.S. 527.14",
@@ -87869,13 +88283,13 @@
    "title": "F.S. 534.54",
    "offset": 98078766,
    "source": "title",
-   "length": 4100
+   "length": 4378
   },
   {
-   "title": "F.S.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
-   "offset": 98082866,
+   "title": "CHAPTER 535",
+   "offset": 98083144,
    "source": "title",
-   "length": 8695
+   "length": 8417
   },
   {
    "title": "F.S. 535.02",
@@ -88397,13 +88811,13 @@
    "title": "F.S. 542.15",
    "offset": 98589049,
    "source": "section-number",
-   "length": 1725
+   "length": 2012
   },
   {
    "title": "F.S. 542.19",
-   "offset": 98590774,
+   "offset": 98591061,
    "source": "title",
-   "length": 1763
+   "length": 1476
   },
   {
    "title": "F.S. 542.18",
@@ -88547,7 +88961,13 @@
    "title": "F.S. 542.41",
    "offset": 98713650,
    "source": "title",
-   "length": 615
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 98714199]",
+   "offset": 98714199,
+   "source": "section-number",
+   "length": 66
   },
   {
    "title": "CHAPTER 542",
@@ -88631,13 +89051,13 @@
    "title": "F.S. 545.06",
    "offset": 98785148,
    "source": "title",
-   "length": 6328
+   "length": 6609
   },
   {
    "title": "F.S. 545.09",
-   "offset": 98791476,
+   "offset": 98791757,
    "source": "title",
-   "length": 2215
+   "length": 1934
   },
   {
    "title": "F.S. 545.08",
@@ -89435,7 +89855,13 @@
    "title": "F.S. 550.70",
    "offset": 99553330,
    "source": "title",
-   "length": 588
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 99553879]",
+   "offset": 99553879,
+   "source": "section-number",
+   "length": 39
   },
   {
    "title": "F.S. 550.6345",
@@ -90389,7 +90815,13 @@
    "title": "F.S. 553.9065",
    "offset": 100597810,
    "source": "title",
-   "length": 607
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 100598361]",
+   "offset": 100598361,
+   "source": "section-number",
+   "length": 56
   },
   {
    "title": "F.S. 553.906",
@@ -91313,7 +91745,13 @@
    "title": "F.S. 559.916",
    "offset": 101314610,
    "source": "title",
-   "length": 590
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 101315160]",
+   "offset": 101315160,
+   "source": "section-number",
+   "length": 40
   },
   {
    "title": "F.S. 559.915",
@@ -91340,10 +91778,16 @@
    "length": 4100
   },
   {
-   "title": "F.S. 559.921",
+   "title": "F.S. 559.9215",
    "offset": 101335090,
    "source": "title",
-   "length": 4092
+   "length": 551
+  },
+  {
+   "title": "F.S. 559.921",
+   "offset": 101335641,
+   "source": "section-number",
+   "length": 3541
   },
   {
    "title": "F.S. 559.921",
@@ -91367,13 +91811,13 @@
    "title": "CHAPTER 559",
    "offset": 101356082,
    "source": "title",
-   "length": 3586
+   "length": 6894
   },
   {
    "title": "F.S. 559.9231",
-   "offset": 101359668,
-   "source": "title",
-   "length": 8186
+   "offset": 101362976,
+   "source": "section-number",
+   "length": 4878
   },
   {
    "title": "F.S. 559.9232",
@@ -91463,7 +91907,13 @@
    "title": "F.S. 559.9281",
    "offset": 101441584,
    "source": "title",
-   "length": 8190
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 101442135]",
+   "offset": 101442135,
+   "source": "section-number",
+   "length": 7639
   },
   {
    "title": "F.S. 559.9285",
@@ -91649,7 +92099,13 @@
    "title": "F.S. 560.105",
    "offset": 101687346,
    "source": "title",
-   "length": 604
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 101687896]",
+   "offset": 101687896,
+   "source": "section-number",
+   "length": 54
   },
   {
    "title": "F.S. 560.104",
@@ -91925,7 +92381,13 @@
    "title": "F.S. 560.312",
    "offset": 101961778,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 101962328]",
+   "offset": 101962328,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 560.310",
@@ -92537,7 +92999,13 @@
    "title": "F.S. 562.25",
    "offset": 102543410,
    "source": "title",
-   "length": 593
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 102543959]",
+   "offset": 102543959,
+   "source": "section-number",
+   "length": 44
   },
   {
    "title": "F.S. 562.24",
@@ -93587,7 +94055,13 @@
    "title": "F.S. 570.209",
    "offset": 103354418,
    "source": "title",
-   "length": 607
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 103354968]",
+   "offset": 103354968,
+   "source": "section-number",
+   "length": 57
   },
   {
    "title": "F.S. 570.205",
@@ -93719,7 +94193,13 @@
    "title": "F.S. 570.54",
    "offset": 103444530,
    "source": "title",
-   "length": 4092
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 103445079]",
+   "offset": 103445079,
+   "source": "section-number",
+   "length": 3543
   },
   {
    "title": "F.S. 570.53",
@@ -94013,13 +94493,13 @@
    "title": "F.S. 570.93",
    "offset": 103682094,
    "source": "title",
-   "length": 8200
+   "length": 8491
   },
   {
    "title": "CHAPTER 571",
-   "offset": 103690294,
+   "offset": 103690585,
    "source": "title",
-   "length": 2168
+   "length": 1877
   },
   {
    "title": "CHAPTER 570",
@@ -94253,7 +94733,13 @@
    "title": "F.S. 573.115",
    "offset": 103821362,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 103821912]",
+   "offset": 103821912,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 573.114",
@@ -94463,7 +94949,13 @@
    "title": "F.S. 576.122",
    "offset": 104009776,
    "source": "title",
-   "length": 804
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 104010326]",
+   "offset": 104010326,
+   "source": "section-number",
+   "length": 254
   },
   {
    "title": "F.S. 576.111",
@@ -95213,7 +95705,13 @@
    "title": "F.S. 585.006",
    "offset": 104706098,
    "source": "title",
-   "length": 607
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 104706648]",
+   "offset": 104706648,
+   "source": "section-number",
+   "length": 57
   },
   {
    "title": "F.S. 585.005",
@@ -95585,7 +96083,13 @@
    "title": "F.S. 588.22",
    "offset": 104923186,
    "source": "title",
-   "length": 610
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 104923735]",
+   "offset": 104923735,
+   "source": "section-number",
+   "length": 61
   },
   {
    "title": "F.S. 588.21",
@@ -96374,10 +96878,16 @@
    "length": 2249
   },
   {
-   "title": "F.S. 60",
+   "title": "F.S. 601.08",
    "offset": 105533490,
    "source": "title",
-   "length": 619
+   "length": 549
+  },
+  {
+   "title": "F.S. 60",
+   "offset": 105534039,
+   "source": "section-number",
+   "length": 70
   },
   {
    "title": "F.S. 601.07",
@@ -96518,10 +97028,16 @@
    "length": 2802
   },
   {
-   "title": "F.S. 6",
+   "title": "F.S. 601.37",
    "offset": 105705522,
    "source": "title",
-   "length": 618
+   "length": 549
+  },
+  {
+   "title": "F.S. 6",
+   "offset": 105706071,
+   "source": "section-number",
+   "length": 69
   },
   {
    "title": "F.S. 601.36",
@@ -96647,7 +97163,13 @@
    "title": "F.S. 601.55",
    "offset": 105766962,
    "source": "title",
-   "length": 588
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 105767511]",
+   "offset": 105767511,
+   "source": "section-number",
+   "length": 39
   },
   {
    "title": "F.S. 601.54",
@@ -97205,7 +97727,13 @@
    "title": "F.S. 604.28",
    "offset": 106143796,
    "source": "title",
-   "length": 605
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 106144345]",
+   "offset": 106144345,
+   "source": "section-number",
+   "length": 56
   },
   {
    "title": "F.S. 604.27",
@@ -98285,7 +98813,13 @@
    "title": "F.S. 605.2303",
    "offset": 107155506,
    "source": "title",
-   "length": 590
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 107156057]",
+   "offset": 107156057,
+   "source": "section-number",
+   "length": 39
   },
   {
    "title": "F.S. 605.2302",
@@ -99053,13 +99587,13 @@
    "title": "F.S. 607.0804",
    "offset": 107905107,
    "source": "title",
-   "length": 4061
+   "length": 4567
   },
   {
    "title": "F.S. 607.0805",
-   "offset": 107909168,
+   "offset": 107909674,
    "source": "title",
-   "length": 4096
+   "length": 3590
   },
   {
    "title": "F.S. 607.0807",
@@ -99131,7 +99665,13 @@
    "title": "F.S. 607.0826",
    "offset": 107946034,
    "source": "title",
-   "length": 4092
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 107946585]",
+   "offset": 107946585,
+   "source": "section-number",
+   "length": 3541
   },
   {
    "title": "F.S. 607.0825",
@@ -99947,13 +100487,13 @@
    "title": "F.S. 607.505",
    "offset": 108774910,
    "source": "section-number",
-   "length": 2614
+   "length": 6704
   },
   {
    "title": "F.S. 607.507",
-   "offset": 108777524,
+   "offset": 108781614,
    "source": "title",
-   "length": 12282
+   "length": 8192
   },
   {
    "title": "F.S. 607.508",
@@ -99971,13 +100511,13 @@
    "title": "F.S. 607.509",
    "offset": 108795426,
    "source": "section-number",
-   "length": 2578
+   "length": 6668
   },
   {
    "title": "F.S. 607.511",
-   "offset": 108798004,
+   "offset": 108802094,
    "source": "title",
-   "length": 8186
+   "length": 4096
   },
   {
    "title": "F.S. 607.512",
@@ -100001,13 +100541,13 @@
    "title": "F.S. 607.601",
    "offset": 108818480,
    "source": "title",
-   "length": 4100
+   "length": 4374
   },
   {
    "title": "F.S. 607.603",
-   "offset": 108822580,
+   "offset": 108822854,
    "source": "title",
-   "length": 4090
+   "length": 3816
   },
   {
    "title": "F.S. 607.602",
@@ -100838,10 +101378,16 @@
    "length": 7179
   },
   {
-   "title": "F.S. 617.08",
+   "title": "F.S. 617.0823",
    "offset": 109535282,
    "source": "title",
-   "length": 625
+   "length": 551
+  },
+  {
+   "title": "F.S. 617.08",
+   "offset": 109535833,
+   "source": "section-number",
+   "length": 74
   },
   {
    "title": "F.S. 617.0822",
@@ -102395,7 +102941,13 @@
    "title": "F.S. 620.81002",
    "offset": 110661684,
    "source": "title",
-   "length": 603
+   "length": 552
+  },
+  {
+   "title": "[unrecovered section @ 110662236]",
+   "offset": 110662236,
+   "source": "section-number",
+   "length": 51
   },
   {
    "title": "F.S. 620.81001",
@@ -102860,10 +103412,16 @@
    "length": 11985
   },
   {
-   "title": "F.S. 621.",
+   "title": "F.S. 621.06",
    "offset": 111009842,
    "source": "title",
-   "length": 621
+   "length": 549
+  },
+  {
+   "title": "F.S. 621.",
+   "offset": 111010391,
+   "source": "section-number",
+   "length": 72
   },
   {
    "title": "F.S. 621.051",
@@ -103079,13 +103637,13 @@
    "title": "F.S. 624.01",
    "offset": 111120432,
    "source": "title",
-   "length": 4102
+   "length": 4766
   },
   {
    "title": "F.S. 624.03",
-   "offset": 111124534,
+   "offset": 111125198,
    "source": "title",
-   "length": 2296
+   "length": 1632
   },
   {
    "title": "F.S. 624.02",
@@ -103433,13 +103991,13 @@
    "title": "F.S. 624.322",
    "offset": 111460400,
    "source": "title",
-   "length": 4100
+   "length": 6688
   },
   {
    "title": "F.S. 624.324",
-   "offset": 111464500,
+   "offset": 111467088,
    "source": "title",
-   "length": 8186
+   "length": 5598
   },
   {
    "title": "F.S. 624.33",
@@ -103877,7 +104435,13 @@
    "title": "F.S. 624.461",
    "offset": 111935538,
    "source": "title",
-   "length": 615
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 111936088]",
+   "offset": 111936088,
+   "source": "section-number",
+   "length": 65
   },
   {
    "title": "F.S. 624.460",
@@ -105563,13 +106127,13 @@
    "title": "F.S. 626.7492",
    "offset": 113602606,
    "source": "title",
-   "length": 40966
+   "length": 45056
   },
   {
    "title": "F.S. 626.752",
-   "offset": 113643572,
+   "offset": 113647662,
    "source": "title",
-   "length": 16378
+   "length": 12288
   },
   {
    "title": "F.S. 626.753",
@@ -105659,7 +106223,13 @@
    "title": "F.S. 626.789",
    "offset": 113705012,
    "source": "title",
-   "length": 593
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 113705562]",
+   "offset": 113705562,
+   "source": "section-number",
+   "length": 43
   },
   {
    "title": "F.S. 626.788",
@@ -105848,10 +106418,16 @@
    "length": 2287
   },
   {
-   "title": "F.S. 62",
+   "title": "F.S. 626.8418",
    "offset": 113844274,
    "source": "title",
-   "length": 4092
+   "length": 551
+  },
+  {
+   "title": "F.S. 62",
+   "offset": 113844825,
+   "source": "section-number",
+   "length": 3541
   },
   {
    "title": "F.S. 626.8417",
@@ -105953,13 +106529,13 @@
    "title": "F.S. 626.8453",
    "offset": 113912111,
    "source": "section-number",
-   "length": 1795
+   "length": 2071
   },
   {
    "title": "F.S. 626.846",
-   "offset": 113913906,
+   "offset": 113914182,
    "source": "title",
-   "length": 4978
+   "length": 4702
   },
   {
    "title": "F.S. 626.8463",
@@ -106175,13 +106751,13 @@
    "title": "F.S. 626.8734",
    "offset": 114098222,
    "source": "title",
-   "length": 8196
+   "length": 8474
   },
   {
    "title": "F.S. 626.8737",
-   "offset": 114106418,
+   "offset": 114106696,
    "source": "title",
-   "length": 12286
+   "length": 12008
   },
   {
    "title": "F.S. 626.874",
@@ -106499,13 +107075,13 @@
    "title": "F.S. 626.916",
    "offset": 114413614,
    "source": "title",
-   "length": 4102
+   "length": 5199
   },
   {
    "title": "F.S. 626.917",
-   "offset": 114417716,
+   "offset": 114418813,
    "source": "title",
-   "length": 4090
+   "length": 2993
   },
   {
    "title": "F.S. 626.918",
@@ -107987,7 +108563,13 @@
    "title": "F.S. 627.4234",
    "offset": 116416560,
    "source": "title",
-   "length": 767
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 116417111]",
+   "offset": 116417111,
+   "source": "section-number",
+   "length": 216
   },
   {
    "title": "F.S. 627.4233",
@@ -108179,13 +108761,13 @@
    "title": "F.S. 627.453",
    "offset": 116600880,
    "source": "title",
-   "length": 4100
+   "length": 4392
   },
   {
    "title": "F.S. 627.455",
-   "offset": 116604980,
+   "offset": 116605272,
    "source": "title",
-   "length": 2159
+   "length": 1867
   },
   {
    "title": "F.S. 627.454",
@@ -108815,13 +109397,13 @@
    "title": "F.S. 627.611",
    "offset": 117094242,
    "source": "title",
-   "length": 2258
+   "length": 6348
   },
   {
    "title": "F.S. 627.613",
-   "offset": 117096500,
+   "offset": 117100590,
    "source": "title",
-   "length": 8186
+   "length": 4096
   },
   {
    "title": "F.S. 627.6131",
@@ -108893,7 +109475,13 @@
    "title": "F.S. 627.625",
    "offset": 117157938,
    "source": "title",
-   "length": 869
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 117158488]",
+   "offset": 117158488,
+   "source": "section-number",
+   "length": 319
   },
   {
    "title": "F.S. 627.623",
@@ -108929,13 +109517,13 @@
    "title": "F.S. 627.628",
    "offset": 117172039,
    "source": "title",
-   "length": 6379
+   "length": 6671
   },
   {
    "title": "F.S. 627.631",
-   "offset": 117178418,
+   "offset": 117178710,
    "source": "title",
-   "length": 2251
+   "length": 1959
   },
   {
    "title": "F.S. 627.630",
@@ -109307,13 +109895,13 @@
    "title": "F.S. 627.654",
    "offset": 117534766,
    "source": "title",
-   "length": 8194
+   "length": 9006
   },
   {
    "title": "F.S. 627.655",
-   "offset": 117542960,
-   "source": "title",
-   "length": 4504
+   "offset": 117543772,
+   "source": "section-number",
+   "length": 3692
   },
   {
    "title": "F.S. 627.656",
@@ -110234,10 +110822,16 @@
    "length": 8194
   },
   {
-   "title": "F.S. 627.7428",
+   "title": "F.S. 627.742",
    "offset": 118734896,
    "source": "title",
-   "length": 848
+   "length": 550
+  },
+  {
+   "title": "F.S. 627.7428",
+   "offset": 118735446,
+   "source": "section-number",
+   "length": 298
   },
   {
    "title": "F.S. 627.7415",
@@ -111905,13 +112499,13 @@
    "title": "F.S. 629.229",
    "offset": 120201264,
    "source": "title",
-   "length": 4098
+   "length": 4393
   },
   {
    "title": "F.S. 629.231",
-   "offset": 120205362,
+   "offset": 120205657,
    "source": "title",
-   "length": 8190
+   "length": 7895
   },
   {
    "title": "F.S. 629.251",
@@ -112721,7 +113315,13 @@
    "title": "F.S. 631.7295",
    "offset": 120991794,
    "source": "title",
-   "length": 601
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 120992345]",
+   "offset": 120992345,
+   "source": "section-number",
+   "length": 50
   },
   {
    "title": "F.S. 631.729",
@@ -112787,7 +113387,13 @@
    "title": "F.S. 631.815",
    "offset": 121020468,
    "source": "title",
-   "length": 880
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 121021018]",
+   "offset": 121021018,
+   "source": "section-number",
+   "length": 330
   },
   {
    "title": "F.S. 631.813",
@@ -112835,13 +113441,13 @@
    "title": "F.S. 631.820",
    "offset": 121069614,
    "source": "title",
-   "length": 4102
+   "length": 4392
   },
   {
    "title": "F.S. 631.822",
-   "offset": 121073716,
+   "offset": 121074006,
    "source": "title",
-   "length": 4090
+   "length": 3800
   },
   {
    "title": "F.S. 631.821",
@@ -113255,7 +113861,13 @@
    "title": "F.S. 633.108",
    "offset": 121372726,
    "source": "title",
-   "length": 4088
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 121373276]",
+   "offset": 121373276,
+   "source": "section-number",
+   "length": 3538
   },
   {
    "title": "F.S. 633.104",
@@ -113777,13 +114389,13 @@
    "title": "F.S. 633.522",
    "offset": 122015790,
    "source": "title",
-   "length": 8198
+   "length": 8477
   },
   {
    "title": "F.S. 633.532",
-   "offset": 122023988,
+   "offset": 122024267,
    "source": "title",
-   "length": 4090
+   "length": 3811
   },
   {
    "title": "F.S. 633.528",
@@ -113825,7 +114437,13 @@
    "title": "F.S. 634.023",
    "offset": 122069042,
    "source": "title",
-   "length": 605
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 122069592]",
+   "offset": 122069592,
+   "source": "section-number",
+   "length": 55
   },
   {
    "title": "F.S. 634.021",
@@ -114293,7 +114911,13 @@
    "title": "F.S. 634.3205",
    "offset": 122458160,
    "source": "title",
-   "length": 8190
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 122458711]",
+   "offset": 122458711,
+   "source": "section-number",
+   "length": 7639
   },
   {
    "title": "F.S. 634.321",
@@ -114419,7 +115043,13 @@
    "title": "F.S. 634.344",
    "offset": 122535986,
    "source": "title",
-   "length": 610
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 122536536]",
+   "offset": 122536536,
+   "source": "section-number",
+   "length": 60
   },
   {
    "title": "F.S. 634.343",
@@ -114647,13 +115277,13 @@
    "title": "F.S. 634.426",
    "offset": 122736688,
    "source": "title",
-   "length": 4098
+   "length": 4379
   },
   {
    "title": "F.S. 634.427",
-   "offset": 122740786,
+   "offset": 122741067,
    "source": "title",
-   "length": 4664
+   "length": 4383
   },
   {
    "title": "F.S. 634.429",
@@ -117515,7 +118145,13 @@
    "title": "F.S. 655.51",
    "offset": 125403188,
    "source": "title",
-   "length": 994
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 125403737]",
+   "offset": 125403737,
+   "source": "section-number",
+   "length": 445
   },
   {
    "title": "F.S. 655.419",
@@ -119177,19 +119813,19 @@
    "title": "F.S. 663.531",
    "offset": 126959662,
    "source": "title",
-   "length": 4100
+   "length": 8192
   },
   {
    "title": "F.S. 663.532",
-   "offset": 126963762,
+   "offset": 126967854,
    "source": "title",
-   "length": 20480
+   "length": 18313
   },
   {
    "title": "F.S. 663.5325",
-   "offset": 126984242,
-   "source": "title",
-   "length": 4092
+   "offset": 126986167,
+   "source": "section-number",
+   "length": 2167
   },
   {
    "title": "F.S. 663.533",
@@ -119333,7 +119969,13 @@
    "title": "F.S. 667.001",
    "offset": 127119410,
    "source": "title",
-   "length": 617
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 127119960]",
+   "offset": 127119960,
+   "source": "section-number",
+   "length": 67
   },
   {
    "title": "CHAPTER 667",
@@ -119363,7 +120005,13 @@
    "title": "F.S. 667.007",
    "offset": 127148082,
    "source": "title",
-   "length": 4086
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 127148632]",
+   "offset": 127148632,
+   "source": "section-number",
+   "length": 3536
   },
   {
    "title": "F.S. 667.005",
@@ -119459,13 +120107,13 @@
    "title": "F.S. 668.004",
    "offset": 127224423,
    "source": "title",
-   "length": 1485
+   "length": 1768
   },
   {
-   "title": "F.S. 668.\u0011\u0006\u000b\u0004\u0000LPDD\u0000\u0000\u0000\u0000\u0000",
-   "offset": 127225908,
+   "title": "CHAPTER 668",
+   "offset": 127226191,
    "source": "title",
-   "length": 4090
+   "length": 3807
   },
   {
    "title": "F.S. 668.50",
@@ -120020,10 +120668,16 @@
    "length": 1233
   },
   {
-   "title": "F.S. 671.",
+   "title": "F.S. 671.101",
    "offset": 127619122,
    "source": "title",
-   "length": 622
+   "length": 550
+  },
+  {
+   "title": "F.S. 671.",
+   "offset": 127619672,
+   "source": "section-number",
+   "length": 72
   },
   {
    "title": "CHAPTER 671",
@@ -120359,13 +121013,13 @@
    "title": "F.S. 672.303",
    "offset": 127842416,
    "source": "title",
-   "length": 1986
+   "length": 2275
   },
   {
    "title": "F.S. 672.305",
-   "offset": 127844402,
+   "offset": 127844691,
    "source": "title",
-   "length": 4277
+   "length": 3988
   },
   {
    "title": "F.S. 672.307",
@@ -120647,7 +121301,13 @@
    "title": "F.S. 672.604",
    "offset": 128032818,
    "source": "title",
-   "length": 598
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 128033368]",
+   "offset": 128033368,
+   "source": "section-number",
+   "length": 48
   },
   {
    "title": "F.S. 672.603",
@@ -121055,31 +121715,25 @@
    "title": "F.S. 673.2061",
    "offset": 128274478,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "CHAPTER 673",
-   "offset": 128278578,
-   "source": "title",
-   "length": 841
+   "length": 4390
   },
   {
    "title": "F.S. 673.2071",
-   "offset": 128279419,
-   "source": "section-number",
-   "length": 3253
+   "offset": 128278868,
+   "source": "title",
+   "length": 3804
   },
   {
    "title": "F.S. 673.3011",
    "offset": 128282672,
    "source": "title",
-   "length": 4098
+   "length": 8190
   },
   {
    "title": "F.S. 673.3021",
-   "offset": 128286770,
+   "offset": 128290862,
    "source": "title",
-   "length": 8190
+   "length": 4098
   },
   {
    "title": "F.S. 673.3041",
@@ -122165,19 +122819,13 @@
    "title": "F.S. 678.1151",
    "offset": 129041101,
    "source": "title",
-   "length": 3429
-  },
-  {
-   "title": "CHAPTER 678",
-   "offset": 129044530,
-   "source": "title",
-   "length": 838
+   "length": 3716
   },
   {
    "title": "F.S. 678.1171",
-   "offset": 129045368,
-   "source": "section-number",
-   "length": 7352
+   "offset": 129044817,
+   "source": "title",
+   "length": 7903
   },
   {
    "title": "F.S. 678.2011",
@@ -122813,7 +123461,13 @@
    "title": "F.S. 679.336",
    "offset": 129597488,
    "source": "title",
-   "length": 675
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 129598038]",
+   "offset": 129598038,
+   "source": "section-number",
+   "length": 125
   },
   {
    "title": "F.S. 679.335",
@@ -122879,13 +123533,13 @@
    "title": "F.S. 679.4031",
    "offset": 129642542,
    "source": "title",
-   "length": 4098
+   "length": 4691
   },
   {
    "title": "F.S. 679.4041",
-   "offset": 129646640,
-   "source": "title",
-   "length": 5529
+   "offset": 129647233,
+   "source": "section-number",
+   "length": 4936
   },
   {
    "title": "F.S. 679.4051",
@@ -122936,10 +123590,16 @@
    "length": 4102
   },
   {
-   "title": "F.S. 679.50",
+   "title": "F.S. 679.5051",
    "offset": 129699892,
    "source": "title",
-   "length": 625
+   "length": 551
+  },
+  {
+   "title": "F.S. 679.50",
+   "offset": 129700443,
+   "source": "section-number",
+   "length": 74
   },
   {
    "title": "F.S. 679.5041",
@@ -123629,7 +124289,13 @@
    "title": "F.S. 680.306",
    "offset": 130220080,
    "source": "title",
-   "length": 819
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 130220630]",
+   "offset": 130220630,
+   "source": "section-number",
+   "length": 269
   },
   {
    "title": "F.S. 680.305",
@@ -124331,13 +124997,13 @@
    "title": "F.S. 683.13",
    "offset": 130702393,
    "source": "section-number",
-   "length": 1017
+   "length": 1296
   },
   {
    "title": "F.S. 683.146",
-   "offset": 130703410,
+   "offset": 130703689,
    "source": "title",
-   "length": 2274
+   "length": 1995
   },
   {
    "title": "F.S. 683.1455",
@@ -124376,10 +125042,16 @@
    "length": 1503
   },
   {
-   "title": "F.S. 683",
+   "title": "F.S. 683.185",
    "offset": 130715698,
    "source": "title",
-   "length": 621
+   "length": 550
+  },
+  {
+   "title": "F.S. 683",
+   "offset": 130716248,
+   "source": "section-number",
+   "length": 71
   },
   {
    "title": "F.S. 683.18",
@@ -124928,10 +125600,16 @@
    "length": 4100
   },
   {
-   "title": "F.S. 686.418",
+   "title": "F.S. 686.502",
    "offset": 131047474,
    "source": "title",
-   "length": 4092
+   "length": 2903
+  },
+  {
+   "title": "F.S. 686.418",
+   "offset": 131050377,
+   "source": "section-number",
+   "length": 1189
   },
   {
    "title": "F.S. 686.501",
@@ -125501,19 +126179,13 @@
    "title": "F.S. 689.29",
    "offset": 131530798,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "CHAPTER 692",
-   "offset": 131534898,
-   "source": "title",
-   "length": 841
+   "length": 4391
   },
   {
    "title": "F.S. 689.302",
-   "offset": 131535739,
-   "source": "section-number",
-   "length": 3255
+   "offset": 131535189,
+   "source": "title",
+   "length": 3805
   },
   {
    "title": "F.S. 692.01",
@@ -126185,13 +126857,13 @@
    "title": "F.S. 703.01",
    "offset": 131993648,
    "source": "title",
-   "length": 4100
+   "length": 4379
   },
   {
    "title": "F.S. 703.03",
-   "offset": 131997748,
+   "offset": 131998027,
    "source": "title",
-   "length": 1948
+   "length": 1669
   },
   {
    "title": "F.S. 703.02",
@@ -126749,7 +127421,13 @@
    "title": "F.S. 710.104",
    "offset": 132419634,
    "source": "title",
-   "length": 618
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 132420184]",
+   "offset": 132420184,
+   "source": "section-number",
+   "length": 68
   },
   {
    "title": "F.S. 710.103",
@@ -127187,19 +127865,19 @@
    "title": "F.S. 713.14",
    "offset": 132800954,
    "source": "title",
-   "length": 3704
+   "length": 5274
   },
   {
    "title": "F.S. 713.15",
-   "offset": 132804658,
-   "source": "title",
-   "length": 4641
+   "offset": 132806228,
+   "source": "section-number",
+   "length": 2522
   },
   {
    "title": "F.S. 713.16",
-   "offset": 132809299,
-   "source": "section-number",
-   "length": 11741
+   "offset": 132808750,
+   "source": "title",
+   "length": 12290
   },
   {
    "title": "F.S. 713.17",
@@ -127295,13 +127973,13 @@
    "title": "F.S. 713.29",
    "offset": 132932772,
    "source": "title",
-   "length": 2958
+   "length": 7050
   },
   {
    "title": "F.S. 713.31",
-   "offset": 132935730,
+   "offset": 132939822,
    "source": "title",
-   "length": 12286
+   "length": 8194
   },
   {
    "title": "F.S. 713.33",
@@ -128231,13 +128909,13 @@
    "title": "F.S. 717.126",
    "offset": 133776829,
    "source": "title",
-   "length": 6775
+   "length": 7070
   },
   {
    "title": "F.S. 717.127",
-   "offset": 133783604,
+   "offset": 133783899,
    "source": "title",
-   "length": 2131
+   "length": 1836
   },
   {
    "title": "F.S. 717.1262",
@@ -130199,13 +130877,13 @@
    "title": "F.S. 723.043",
    "offset": 137005786,
    "source": "section-number",
-   "length": 1368
+   "length": 1652
   },
   {
    "title": "F.S. 723.046",
-   "offset": 137007154,
+   "offset": 137007438,
    "source": "title",
-   "length": 4094
+   "length": 3810
   },
   {
    "title": "F.S. 723.054",
@@ -131837,13 +132515,13 @@
    "title": "F.S. 733.6175",
    "offset": 138272816,
    "source": "title",
-   "length": 4098
+   "length": 4393
   },
   {
    "title": "F.S. 733.619",
-   "offset": 138276914,
+   "offset": 138277209,
    "source": "title",
-   "length": 4094
+   "length": 3799
   },
   {
    "title": "CHAPTER 733",
@@ -131885,13 +132563,13 @@
    "title": "F.S. 733.705",
    "offset": 138305582,
    "source": "title",
-   "length": 12294
+   "length": 13902
   },
   {
    "title": "F.S. 733.706",
-   "offset": 138317876,
+   "offset": 138319484,
    "source": "title",
-   "length": 4090
+   "length": 2482
   },
   {
    "title": "F.S. 733.707",
@@ -132995,7 +133673,13 @@
    "title": "F.S. 736.1207",
    "offset": 139194418,
    "source": "title",
-   "length": 618
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 139194969]",
+   "offset": 139194969,
+   "source": "section-number",
+   "length": 67
   },
   {
    "title": "F.S. 736.1206",
@@ -134834,10 +135518,16 @@
    "length": 3554
   },
   {
-   "title": "F.S. 744.3",
+   "title": "F.S. 744.373",
    "offset": 140816432,
    "source": "title",
-   "length": 615
+   "length": 550
+  },
+  {
+   "title": "F.S. 744.3",
+   "offset": 140816982,
+   "source": "section-number",
+   "length": 65
   },
   {
    "title": "F.S. 744.3725",
@@ -135044,10 +135734,16 @@
    "length": 4073
   },
   {
-   "title": "F.S. 744",
+   "title": "F.S. 744.531",
    "offset": 140984368,
    "source": "title",
-   "length": 855
+   "length": 550
+  },
+  {
+   "title": "F.S. 744",
+   "offset": 140984918,
+   "source": "section-number",
+   "length": 305
   },
   {
    "title": "F.S. 744.528",
@@ -135095,13 +135791,13 @@
    "title": "F.S. 744.609",
    "offset": 141016047,
    "source": "section-number",
-   "length": 1093
+   "length": 1369
   },
   {
    "title": "F.S. 744.617",
-   "offset": 141017140,
+   "offset": 141017416,
    "source": "title",
-   "length": 4090
+   "length": 3814
   },
   {
    "title": "F.S. 744.616",
@@ -135161,13 +135857,13 @@
    "title": "F.S. 744.627",
    "offset": 141047599,
    "source": "title",
-   "length": 2307
+   "length": 6399
   },
   {
    "title": "F.S. 744.634",
-   "offset": 141049906,
+   "offset": 141053998,
    "source": "title",
-   "length": 8190
+   "length": 4098
   },
   {
    "title": "F.S. 744.638",
@@ -135275,7 +135971,13 @@
    "title": "F.S. 747.036",
    "offset": 141107250,
    "source": "title",
-   "length": 607
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 141107800]",
+   "offset": 141107800,
+   "source": "section-number",
+   "length": 57
   },
   {
    "title": "F.S. 747.035",
@@ -135917,13 +136619,13 @@
    "title": "F.S. 765.401",
    "offset": 141627438,
    "source": "title",
-   "length": 8196
+   "length": 9456
   },
   {
    "title": "F.S. 765.404",
-   "offset": 141635634,
-   "source": "title",
-   "length": 4092
+   "offset": 141636894,
+   "source": "section-number",
+   "length": 2832
   },
   {
    "title": "CHAPTER 765",
@@ -135935,7 +136637,13 @@
    "title": "F.S. 765.513",
    "offset": 141643828,
    "source": "title",
-   "length": 2389
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 141644378]",
+   "offset": 141644378,
+   "source": "section-number",
+   "length": 1839
   },
   {
    "title": "F.S. 765.510",
@@ -136217,13 +136925,13 @@
    "title": "F.S. 766.206",
    "offset": 142000174,
    "source": "title",
-   "length": 4104
+   "length": 8192
   },
   {
    "title": "F.S. 766.207",
-   "offset": 142004278,
+   "offset": 142008366,
    "source": "title",
-   "length": 16376
+   "length": 12288
   },
   {
    "title": "F.S. 766.208",
@@ -139241,13 +139949,13 @@
    "title": "F.S. 812.061",
    "offset": 145199150,
    "source": "title",
-   "length": 8200
+   "length": 16384
   },
   {
    "title": "F.S. 812.081",
-   "offset": 145207350,
+   "offset": 145215534,
    "source": "title",
-   "length": 16376
+   "length": 8192
   },
   {
    "title": "F.S. 812.13",
@@ -139313,13 +140021,13 @@
    "title": "F.S. 812.155",
    "offset": 145313838,
    "source": "title",
-   "length": 8196
+   "length": 12288
   },
   {
    "title": "F.S. 812.16",
-   "offset": 145322034,
+   "offset": 145326126,
    "source": "title",
-   "length": 8190
+   "length": 4098
   },
   {
    "title": "F.S. 812.171",
@@ -140243,13 +140951,13 @@
    "title": "F.S. 817.803",
    "offset": 146071598,
    "source": "title",
-   "length": 4100
+   "length": 4382
   },
   {
    "title": "F.S. 817.804",
-   "offset": 146075698,
+   "offset": 146075980,
    "source": "title",
-   "length": 4103
+   "length": 3821
   },
   {
    "title": "F.S. 817.806",
@@ -140321,13 +141029,13 @@
    "title": "F.S. 823.02",
    "offset": 146119600,
    "source": "section-number",
-   "length": 1154
+   "length": 2851
   },
   {
    "title": "F.S. 823.041",
-   "offset": 146120754,
-   "source": "title",
-   "length": 4092
+   "offset": 146122451,
+   "source": "section-number",
+   "length": 2395
   },
   {
    "title": "F.S. 823.05",
@@ -140453,13 +141161,13 @@
    "title": "F.S. 825.1036",
    "offset": 146337838,
    "source": "title",
-   "length": 8198
+   "length": 8480
   },
   {
    "title": "F.S. 825.105",
-   "offset": 146346036,
+   "offset": 146346318,
    "source": "title",
-   "length": 1940
+   "length": 1658
   },
   {
    "title": "F.S. 825.104",
@@ -140513,13 +141221,13 @@
    "title": "CHAPTER 827",
    "offset": 146368263,
    "source": "title",
-   "length": 2347
+   "length": 6439
   },
   {
    "title": "F.S. 827.03",
-   "offset": 146370610,
+   "offset": 146374702,
    "source": "title",
-   "length": 14864
+   "length": 10772
   },
   {
    "title": "F.S. 827.035",
@@ -140864,10 +141572,16 @@
    "length": 3603
   },
   {
-   "title": "F.S. 83",
+   "title": "F.S. 831.11",
    "offset": 146686002,
    "source": "title",
-   "length": 619
+   "length": 549
+  },
+  {
+   "title": "F.S. 83",
+   "offset": 146686551,
+   "source": "section-number",
+   "length": 70
   },
   {
    "title": "F.S. 831.10",
@@ -141233,7 +141947,13 @@
    "title": "F.S. 838.015",
    "offset": 146956338,
    "source": "title",
-   "length": 4092
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 146956888]",
+   "offset": 146956888,
+   "source": "section-number",
+   "length": 3542
   },
   {
    "title": "F.S. 838.014",
@@ -141551,19 +142271,19 @@
    "title": "F.S. 843.167",
    "offset": 147140654,
    "source": "title",
-   "length": 8196
+   "length": 10138
   },
   {
    "title": "F.S. 843.18",
-   "offset": 147148850,
-   "source": "title",
-   "length": 4641
+   "offset": 147150792,
+   "source": "section-number",
+   "length": 2150
   },
   {
    "title": "F.S. 843.19",
-   "offset": 147153491,
-   "source": "section-number",
-   "length": 3549
+   "offset": 147152942,
+   "source": "title",
+   "length": 4098
   },
   {
    "title": "F.S. 843.21",
@@ -141854,10 +142574,16 @@
    "length": 16386
   },
   {
-   "title": "F.S. 849.10",
+   "title": "F.S. 849.11",
    "offset": 147505200,
    "source": "title",
-   "length": 4222
+   "length": 592
+  },
+  {
+   "title": "F.S. 849.10",
+   "offset": 147505792,
+   "source": "section-number",
+   "length": 3630
   },
   {
    "title": "F.S. 849.12",
@@ -143195,7 +143921,13 @@
    "title": "F.S. 893.0301",
    "offset": 148303924,
    "source": "title",
-   "length": 2853
+   "length": 551
+  },
+  {
+   "title": "[unrecovered section @ 148304475]",
+   "offset": 148304475,
+   "source": "section-number",
+   "length": 2302
   },
   {
    "title": "F.S. 893.015",
@@ -144074,10 +144806,16 @@
    "length": 3316
   },
   {
-   "title": "F.S. 905",
+   "title": "F.S. 905.05",
    "offset": 149536818,
    "source": "title",
-   "length": 620
+   "length": 549
+  },
+  {
+   "title": "F.S. 905",
+   "offset": 149537367,
+   "source": "section-number",
+   "length": 71
   },
   {
    "title": "F.S. 905.04",
@@ -145379,7 +146117,13 @@
    "title": "F.S. 924.04",
    "offset": 151044148,
    "source": "title",
-   "length": 614
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 151044697]",
+   "offset": 151044697,
+   "source": "section-number",
+   "length": 65
   },
   {
    "title": "F.S. 924.02",
@@ -145829,7 +146573,13 @@
    "title": "F.S. 933.16",
    "offset": 151351346,
    "source": "title",
-   "length": 613
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 151351895]",
+   "offset": 151351895,
+   "source": "section-number",
+   "length": 64
   },
   {
    "title": "F.S. 933.15",
@@ -146693,7 +147443,13 @@
    "title": "F.S. 941.34",
    "offset": 152051762,
    "source": "title",
-   "length": 604
+   "length": 549
+  },
+  {
+   "title": "[unrecovered section @ 152052311]",
+   "offset": 152052311,
+   "source": "section-number",
+   "length": 55
   },
   {
    "title": "F.S. 941.33",
@@ -151259,13 +152015,13 @@
    "title": "F.S. 1000.06",
    "offset": 157098353,
    "source": "title",
-   "length": 3775
+   "length": 4467
   },
   {
    "title": "F.S. 1000.071",
-   "offset": 157102128,
-   "source": "title",
-   "length": 5452
+   "offset": 157102820,
+   "source": "section-number",
+   "length": 4760
   },
   {
    "title": "CHAPTER 1000",
@@ -151631,7 +152387,13 @@
    "title": "F.S. 1001.4205",
    "offset": 157573174,
    "source": "title",
-   "length": 959
+   "length": 552
+  },
+  {
+   "title": "[unrecovered section @ 157573726]",
+   "offset": 157573726,
+   "source": "section-number",
+   "length": 407
   },
   {
    "title": "F.S. 1001.40",
@@ -152741,13 +153503,13 @@
    "title": "F.S. 1003.482",
    "offset": 160010286,
    "source": "title",
-   "length": 4100
+   "length": 8192
   },
   {
    "title": "F.S. 1003.485",
-   "offset": 160014386,
+   "offset": 160018478,
    "source": "title",
-   "length": 38307
+   "length": 34215
   },
   {
    "title": "F.S. 1003.49",
@@ -153071,7 +153833,13 @@
    "title": "F.S. 1004.0961",
    "offset": 160526386,
    "source": "title",
-   "length": 1471
+   "length": 552
+  },
+  {
+   "title": "[unrecovered section @ 160526938]",
+   "offset": 160526938,
+   "source": "section-number",
+   "length": 919
   },
   {
    "title": "F.S. 1004.095",
@@ -153317,13 +154085,13 @@
    "title": "F.S. 1004.435",
    "offset": 160858158,
    "source": "title",
-   "length": 16390
+   "length": 20480
   },
   {
    "title": "F.S. 1004.4351",
-   "offset": 160874548,
+   "offset": 160878638,
    "source": "title",
-   "length": 16378
+   "length": 12288
   },
   {
    "title": "F.S. 1004.4352",
@@ -153359,7 +154127,13 @@
    "title": "F.S. 1004.4471",
    "offset": 160923700,
    "source": "title",
-   "length": 4090
+   "length": 552
+  },
+  {
+   "title": "[unrecovered section @ 160924252]",
+   "offset": 160924252,
+   "source": "section-number",
+   "length": 3538
   },
   {
    "title": "F.S. 1004.445",
@@ -157415,19 +158189,13 @@
    "title": "F.S. 1013.36",
    "offset": 166051886,
    "source": "title",
-   "length": 4100
-  },
-  {
-   "title": "CHAPTER 1013",
-   "offset": 166055986,
-   "source": "title",
-   "length": 4643
+   "length": 8192
   },
   {
    "title": "F.S. 1013.365",
-   "offset": 166060629,
-   "source": "section-number",
-   "length": 11737
+   "offset": 166060078,
+   "source": "title",
+   "length": 12288
   },
   {
    "title": "F.S. 1013.37",
@@ -157691,7 +158459,13 @@
    "title": "F.S. 1013.82",
    "offset": 166350896,
    "source": "title",
-   "length": 738
+   "length": 550
+  },
+  {
+   "title": "[unrecovered section @ 166351446]",
+   "offset": 166351446,
+   "source": "section-number",
+   "length": 188
   },
   {
    "title": "F.S. 1013.81",
@@ -157796,7 +158570,6 @@
    "length": 73705417
   }
  ],
- "recovered_sections": 1045,
- "dropped_stub_duplicates": 943,
- "retitled_via_sectionnumber": 149
+ "recovered_sections": 1204,
+ "dropped_stub_duplicates": 972
 }

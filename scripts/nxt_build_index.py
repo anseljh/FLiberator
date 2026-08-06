@@ -31,18 +31,52 @@ Approach history (see docs/nxt-format.md for the full story):
    different document's body text). That's a real paging model, not a
    single missing opcode rule -- not worth solving in general for an
    index-building pass.
-4. This version (v3): sidesteps the paging question entirely for the
-   documents it breaks. `<div class="Section">` and the
-   `<span class="SectionNumber">` text immediately inside it survive intact
-   in 100% of the 971 checked cases (verified against every merged entry in
-   the v2 index), even when the `<title>` tag itself is destroyed. So: keep
-   the v2 title scan as the primary source of documents, then separately
-   scan for every `<div class="Section">` occurrence; any such div that
-   isn't the first one inside a title-scan entry's span is an orphaned
-   document that v2 silently swallowed. Split it out as its own entry with
-   a synthetic title (`F.S. <number>`, read from `SectionNumber`) and flag
-   it `"source": "section-number"` so it's distinguishable from a real
-   decoded <title>.
+4. v3 sidestepped the paging question entirely for the documents it breaks:
+   `<div class="Section">` and the `<span class="SectionNumber">` text
+   immediately inside it survive intact even when the `<title>` tag itself
+   is destroyed, so keep the v2 title scan as-is and separately recover any
+   `<div class="Section">` that isn't the first one inside a title-scan
+   entry's span. That closed most of the gap, but v2's non-greedy
+   `<title>(.*?)</title>` regex has a sharper problem than "some titles are
+   destroyed": when a title's own closing tag is the thing destroyed, the
+   regex doesn't fail to match -- it keeps searching *forward*, past the
+   corruption, until it finds some *later* document's closing tag, and
+   silently merges both documents into one entry mislabeled with the first
+   document's title ("closing-tag theft" -- see docs/nxt-format.md
+   "Phase 2c"). v3 patched around this twice: retitling entries whose first
+   Section div's SectionNumber didn't match their own title (recovers the
+   *stolen* document but only by discarding the *thief*'s real identity),
+   then extending orphan-recovery to CHAPTER/Preface entries specifically
+   (which can never legitimately own a Section div). Both patches were
+   real improvements (95 confirmed gaps -> 41 -> 28) but couldn't recover
+   both sides of a theft pair when neither had a separate copy elsewhere.
+5. This version (v4) fixes the root cause instead of patching around it.
+   Every clean, undamaged title in the corpus has its citation text
+   immediately followed by the *exact* 3-byte opcode + 8 literal bytes
+   `\x13\x37\x08</title>` (confirmed: "</title>" is always exactly 8
+   bytes, so a well-formed closer's length prefix is always the 1-byte
+   form). `TITLE_RE` now requires that exact sequence immediately after a
+   bounded run of title text (an 80-byte cap, well above the longest real
+   title seen -- "Preface, Florida Statutes 2025" at 31 bytes -- but far
+   below the multi-KB gap any real interruption leaves), instead of
+   `.*?</title>` with no bound. When a title's closer is destroyed, this
+   simply fails to match *at that position* -- no swallowing, no
+   mislabeling, no entry at all for the broken title. The corresponding
+   real content (if any is recoverable) falls to `find_orphaned_sections`
+   exactly like content behind a fully destroyed title always has.
+   `find_orphaned_sections` now applies one *uniform* ownership rule
+   instead of the two ad hoc v3 patches (see its own docstring for why
+   only the *first* div in a span, not "the first matching div anywhere
+   in the span," can ever be silently owned). Result: confirmed gaps via
+   `scripts/nxt_find_gaps.py` 28 -> 0. Spot-checked several previously
+   broken citations against the live site (105.08, 15.16/15.182,
+   44.404/44.406, 39.0142/39.0143, and the newly-discovered
+   175.333/175.341 pair -- see its docstring) and all now decode
+   correctly. Two of those (15.16, 44.404) now reach far enough into
+   their own body to hit the pre-existing, separately-documented Phase 2b
+   mid-token LPDD interruption -- real content loss inside a document
+   body, not an index-boundary bug, and not new: their old (buggy,
+   artificially short) span just didn't reach that far before.
 
 This is throwaway analysis code, not part of the installable package.
 """
@@ -52,19 +86,17 @@ import pathlib
 import re
 import sys
 
-TITLE_RE = re.compile(rb"<title>(.*?)</title>|<TITLE>(.*?)</TITLE>", re.DOTALL)
+TITLE_RE = re.compile(
+    rb"<title>([^\x13]{0,80})\x13\x37\x08</title>"
+    rb"|<TITLE>([^\x13]{0,80})\x13\x37\x08</TITLE>",
+    re.DOTALL,
+)
 SECTION_DIV_RE = re.compile(rb'<div class="Section">')
 SECNUM_RE = re.compile(rb'class="SectionNumber">[^0-9]{0,2}([0-9][0-9.]*)')
 DOCTYPE_LOOKBACK = 300
 
 
 def clean_title(raw: bytes) -> str:
-    """Strip the trailing \x13\x37<len> opcode (and anything after) that the
-    non-greedy regex sometimes pulls in before it finds the literal closing
-    tag bytes."""
-    cut = raw.find(b"\x13")
-    if cut != -1:
-        raw = raw[:cut]
     return raw.decode("utf-8", errors="replace").strip()
 
 
@@ -83,67 +115,35 @@ def find_doc_start(data: bytes, title_pos: int) -> int:
     return best if best != -1 else title_pos
 
 
-SPECIAL_TITLE_PREFIXES = ("CHAPTER", "Preface")
-
-
-def fix_mismatched_titles(data: bytes, title_entries: list[dict]) -> int:
-    """Phase 2c found that "closing-tag theft" -- a neighboring document's
-    own closing tag destroyed by page-boundary interruption, causing the
-    title-scan regex's non-greedy match to swallow forward and steal the
-    *next* title's closer instead -- merges two documents into one entry
-    that's correctly positioned but mislabeled with the wrong citation
-    (confirmed on F.S. 105.08, F.S. 15.16, F.S. 44.404; see
-    docs/nxt-format.md "Phase 2c"). Unlike true content loss, the stolen
-    document's real content -- including its own SectionNumber -- is still
-    sitting right there in the entry's span. Fix: for every title-scan
-    entry that isn't a CHAPTER/Preface heading, compare its title against
-    the first `<div class="Section">`'s own SectionNumber in its span; on
-    mismatch (including a garbled, unparseable title), trust the
-    SectionNumber and relabel. Confirmed against the full corpus: all 95
-    citations Phase 2c found missing this way are recoverable by this
-    check (see `scripts/nxt_find_gaps.py`)."""
-    spans = []
-    for i, e in enumerate(title_entries):
-        end = title_entries[i + 1]["offset"] if i + 1 < len(title_entries) else len(data)
-        spans.append((e["offset"], end))
-
-    div_positions = [m.start() for m in SECTION_DIV_RE.finditer(data)]
-    di = 0
-    n_divs = len(div_positions)
-    fixed = 0
-    for e, (start, end) in zip(title_entries, spans):
-        if e["title"].startswith(SPECIAL_TITLE_PREFIXES):
-            continue
-        while di < n_divs and div_positions[di] < start:
-            di += 1
-        if di >= n_divs or div_positions[di] >= end:
-            continue
-        m = SECNUM_RE.search(data[div_positions[di] : div_positions[di] + 120])
-        if not m:
-            continue
-        real_title = f"F.S. {m.group(1).decode()}"
-        if e["title"] != real_title:
-            e["title"] = real_title
-            fixed += 1
-    return fixed
+def citation_number(title: str) -> str | None:
+    return title.removeprefix("F.S. ") if title.startswith("F.S. ") else None
 
 
 def find_orphaned_sections(data: bytes, title_entries: list[dict]) -> list[dict]:
-    """Any `<div class="Section">` that isn't the first one inside a
-    title-scan entry's span was silently swallowed by v2. Split those out,
-    synthesizing a title from their own SectionNumber text.
+    """Find every `<div class="Section">` in the file and decide, per
+    title-scan span, whether that span's own title owns the *first* div in
+    it -- the only div position a title-entry's offset+length can actually
+    reach contiguously. It owns that div (silently, no separate entry) only
+    if the div's own SectionNumber matches the title exactly. Every other
+    div in the span -- the first one when it doesn't match (which subsumes
+    the CHAPTER/Preface case, since those titles never parse as
+    `F.S. <number>` and so never match), and every div after the first
+    regardless -- is an orphan: real content the v4 tag-aware title scan
+    correctly declined to attach to a neighboring title (see `TITLE_RE`'s
+    docstring note above), recovered here under its own SectionNumber
+    instead.
 
-    CHAPTER/Preface entries are a special case: those documents (chapter
-    headings, Part Index pages -- e.g. chapter 39 alone has 13 of them,
-    real, distinct documents that just happen to share the literal title
-    text "CHAPTER 39") never legitimately contain a Section div of their
-    own, so treat *any* div found in their span -- including the first --
-    as an orphan too. Confirmed cause: same closing-tag-theft mechanism as
-    `fix_mismatched_titles`, just landing on a CHAPTER/Preface entry's own
-    lost closing tag instead of another section's -- e.g. F.S. 39.0143,
-    Chapter 39's real last section, otherwise invisible because it's
-    swallowed as the "first" div inside an oversized Part Index entry (see
-    docs/nxt-format.md "Phase 2c")."""
+    Only the first div can ever be silently owned -- not "the first div
+    whose number matches," which was tried and reverted. A document's
+    title and its own Section div aren't always contiguous (confirmed: a
+    title-entry can have a *different* document's div physically
+    interleaved between it and its own real body, e.g. F.S. 175.341's
+    title sits before F.S. 175.333's body, which sits before 175.341's
+    own body) -- offset+length can only describe one contiguous range, so
+    granting ownership to a non-first match corrupts the length assigned
+    to whatever's in between. Letting a mismatched first div fall through
+    to drop_stub_duplicates (stub title vs. real orphan-recovered entry,
+    same as any other mismatch) handles this correctly instead."""
     spans = []
     for i, e in enumerate(title_entries):
         end = title_entries[i + 1]["offset"] if i + 1 < len(title_entries) else len(data)
@@ -157,17 +157,18 @@ def find_orphaned_sections(data: bytes, title_entries: list[dict]) -> list[dict]
     for e, (start, end) in zip(title_entries, spans):
         while di < n_divs and div_positions[di] < start:
             di += 1
-        skip_first = not e["title"].startswith(SPECIAL_TITLE_PREFIXES)
+        expected = citation_number(e["title"])
         first = True
         while di < n_divs and div_positions[di] < end:
             pos = div_positions[di]
-            if first and skip_first:
-                first = False
+            m = SECNUM_RE.search(data[pos : pos + 120])
+            number = m.group(1).decode() if m else ""
+            if first and expected is not None and number == expected:
+                pass  # owned: contiguous with its own title, no separate entry needed
             else:
-                first = False
-                m = SECNUM_RE.search(data[pos : pos + 120])
-                title = f"F.S. {m.group(1).decode()}" if m else f"[unrecovered section @ {pos}]"
+                title = f"F.S. {number}" if number else f"[unrecovered section @ {pos}]"
                 orphans.append({"title": title, "offset": pos, "source": "section-number"})
+            first = False
             di += 1
 
     return orphans
@@ -217,8 +218,6 @@ def build_index(data: bytes) -> dict:
         title_entries.append({"title": title, "offset": offset, "source": "title"})
     title_entries.sort(key=lambda e: e["offset"])
 
-    retitled = fix_mismatched_titles(data, title_entries)
-
     orphans = find_orphaned_sections(data, title_entries)
 
     entries = sorted(title_entries + orphans, key=lambda e: e["offset"])
@@ -233,7 +232,6 @@ def build_index(data: bytes) -> dict:
         "entries": entries,
         "recovered_sections": len(orphans),
         "dropped_stub_duplicates": dropped,
-        "retitled_via_sectionnumber": retitled,
     }
 
 
@@ -247,8 +245,6 @@ def main() -> None:
 
     print(f"{filename}: {index['total_documents']} documents "
           f"({index['recovered_sections']} recovered via SectionNumber, "
-          f"{index['retitled_via_sectionnumber']} retitled via SectionNumber "
-          f"mismatch (closing-tag theft fix), "
           f"{index['dropped_stub_duplicates']} empty-stub duplicates dropped)")
 
     by_title = {e["title"]: e for e in index["entries"]}
