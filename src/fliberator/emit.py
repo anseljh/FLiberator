@@ -17,13 +17,15 @@ strictly more complete -- rendering of what leg.state.fl.us publishes.
 `metadata.json` is the single file carrying everything the HTML can't:
 canonical ordering (document bodies are stored in build order, which has
 nothing to do with statutory order), the Title/Chapter/Part hierarchy, and
-the source-file provenance needed to tell two years' output apart.
+the edition year plus source-file provenance needed to tell two years'
+output apart.
 """
 
 import datetime
 import hashlib
 import json
 import pathlib
+import re
 
 from . import documents
 from .decode import decode
@@ -43,13 +45,50 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 </html>
 """
 
-# name -> (source file, section extractor, grouping over the emitted
+# name -> (filename prefix, section extractor, grouping over the emitted
 # entries). Only the statutes have a tier above the document itself.
+#
+# Source files are named <prefix><year>.nxt -- fs2025.nxt, flcnst2025.nxt,
+# lf2025.nxt -- and the year is *discovered*, not hardcoded, so next year's
+# edition needs no code change. Getting this wrong is the difference
+# between the downloader being useful and being decorative: `--download`
+# would fetch FLLawDL2026 correctly and then fail to find fs2025.nxt.
 COLLECTIONS = {
-    "statutes": ("fs2025.nxt", documents.statutes, documents.title_hierarchy),
-    "constitution": ("flcnst2025.nxt", documents.constitution, None),
-    "laws": ("lf2025.nxt", documents.session_laws, None),
+    "statutes": ("fs", documents.statutes, documents.title_hierarchy),
+    "constitution": ("flcnst", documents.constitution, None),
+    "laws": ("lf", documents.session_laws, None),
 }
+
+
+def resolve(library: pathlib.Path, prefix: str) -> tuple[pathlib.Path, int]:
+    """Find `<prefix><year>.nxt` in a Library directory; return it and the year."""
+    pattern = re.compile(rf"{prefix}(\d{{4}})\.nxt", re.IGNORECASE)
+    matched = sorted(
+        (int(m.group(1)), p) for p in library.glob("*.nxt") if (m := pattern.fullmatch(p.name))
+    )
+    if not matched:
+        raise FileNotFoundError(f"no {prefix}<year>.nxt in {library}")
+    if len(matched) > 1:
+        # Never guess between editions: which one is "the" corpus is the
+        # caller's decision, not a coin flip made three layers down.
+        raise ValueError(
+            f"{library} holds more than one edition of {prefix}<year>.nxt: "
+            + ", ".join(p.name for _, p in matched)
+        )
+    year, path = matched[0]
+    return path, year
+
+
+def sources(library: pathlib.Path) -> tuple[dict[str, pathlib.Path], int]:
+    """Every collection's source file, plus the edition year they share."""
+    found = {name: resolve(library, prefix) for name, (prefix, _, _) in COLLECTIONS.items()}
+    years = {year for _, year in found.values()}
+    if len(years) > 1:
+        raise ValueError(
+            f"{library} mixes editions: "
+            + ", ".join(f"{name}={path.name}" for name, (path, _) in found.items())
+        )
+    return {name: path for name, (path, _) in found.items()}, years.pop()
 
 
 def _digest(path: pathlib.Path) -> str:
@@ -72,14 +111,16 @@ def _wrap(record: dict, body: str, version: str) -> str:
 def build(library: pathlib.Path, output: pathlib.Path, version: str = "0.1.0") -> dict:
     """Decode, rewrite and write every collection. Returns the metadata."""
     library, output = pathlib.Path(library), pathlib.Path(output)
+    source_files, edition = sources(library)
     metadata: dict = {
         "generator": f"FLiberator {version}",
         "generated": datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds"),
+        "edition": edition,
         "collections": {},
     }
 
-    for name, (filename, extract, group) in COLLECTIONS.items():
-        source = library / filename
+    for name, (_, extract, group) in COLLECTIONS.items():
+        source = source_files[name]
         records = load_records(source)
         decoded = [decode(r, 0, len(r))[0] for r in records]
         found = extract(decoded)
@@ -103,7 +144,7 @@ def build(library: pathlib.Path, output: pathlib.Path, version: str = "0.1.0") -
 
         collection = {
             "source": {
-                "file": filename,
+                "file": source.name,
                 "bytes": source.stat().st_size,
                 "sha256": _digest(source),
             },

@@ -7,7 +7,6 @@ import sys
 from . import __version__, download
 from .emit import build
 
-DEFAULT_LIBRARY = pathlib.Path("download/FLLawDL2025/Library")
 DEFAULT_OUTPUT = pathlib.Path("output")
 
 
@@ -31,8 +30,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--library",
         type=pathlib.Path,
-        help=f"directory holding the .nxt files (default: {DEFAULT_LIBRARY}, "
-        "or whatever --download produces)",
+        help="directory holding the .nxt files (default: the newest edition "
+        "under download/, or whatever --download produces)",
     )
     parser.add_argument(
         "--output",
@@ -49,13 +48,18 @@ def main(argv: list[str] | None = None) -> int:
         # just fetched, whatever year it turns out to be.
         fetched = download.library(log=print, progress=_progress)
         library = library or fetched
-    library = library or DEFAULT_LIBRARY
+    library = library or download.default_library()
 
+    if library is None:
+        parser.error(
+            f"no {download.DOWNLOAD_DIR}/FLLawDL*/Library found. "
+            "Run `fliberate --download` first, or pass --library."
+        )
     if not library.is_dir():
-        parser.error(f"{library} is not a directory. Run `fliberate --download` first, "
-                     "or pass --library.")
+        parser.error(f"{library} is not a directory.")
 
     metadata = build(library, args.output, __version__)
+    print(f"{'edition':>14}: {metadata['edition']}")
     total = 0
     for name, collection in metadata["collections"].items():
         count = collection["documents"]

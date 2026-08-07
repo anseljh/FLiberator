@@ -5,6 +5,11 @@ the leg.state.fl.us download page into a git-ignored `download/` folder and
 extracts it there, leaving `download/FLLawDL<year>/Library/*.nxt` -- which
 is what `fliberate` reads.
 
+Only the `.nxt` files come out of the zip (issue #1). What Florida
+distributes is a Windows installer that happens to contain the data: 13 of
+its 1,382 entries are Infobase files and the rest are the bundled viewer
+application, which FLiberator never reads.
+
 The zip's filename and link are discovered by scraping the download page
 rather than hardcoded, so this keeps working as each year's edition replaces
 the last (the page's own link text is `FLLawDL<year>.zip`, e.g.
@@ -29,10 +34,21 @@ USER_AGENT = "FLiberator/0.1 (+https://github.com/anseljh/FLiberator)"
 
 DOWNLOAD_DIR = pathlib.Path("download")
 BLOCK = 1 << 20
+NXT_SUFFIX = ".nxt"
 
 
 def _silent(message: str) -> None:
     pass
+
+
+def is_data(name: str) -> bool:
+    """Is this zip member one of the Infobase files we actually decode?
+
+    The zip is a Windows installer: 1,382 entries, of which 13 are the data
+    (issue #1). The other 1,369 are the bundled viewer application -- DLLs,
+    Java applets, icons, an InstallShield payload -- which FLiberator never
+    reads and which cost 178 MB of disk to unpack."""
+    return name.lower().endswith(NXT_SUFFIX)
 
 
 def find_zip_url(page: str = DOWNLOAD_PAGE) -> str:
@@ -66,6 +82,16 @@ def fetch(url: str, destination: pathlib.Path, progress=None) -> pathlib.Path:
     return destination
 
 
+def default_library(root: pathlib.Path = DOWNLOAD_DIR) -> pathlib.Path | None:
+    """The Library directory of the newest edition already under `root`.
+
+    Discovered rather than hardcoded so that decoding keeps working once
+    `FLLawDL2025` is superseded. Editions sort by name because the year is
+    fixed-width."""
+    found = sorted(p for p in pathlib.Path(root).glob("FLLawDL*/Library") if p.is_dir())
+    return found[-1] if found else None
+
+
 def library(root: pathlib.Path = DOWNLOAD_DIR, log=_silent, progress=None) -> pathlib.Path:
     """Ensure the bulk data is present under `root`; return its Library path.
 
@@ -90,15 +116,22 @@ def library(root: pathlib.Path = DOWNLOAD_DIR, log=_silent, progress=None) -> pa
     # extracting straight into `root` reproduces the expected layout instead
     # of double-nesting it.
     extracted = root / archive.stem
-    if extracted.is_dir() and any(extracted.iterdir()):
-        log(f"{extracted} already extracted")
-    else:
-        log(f"extracting {archive} into {root}")
-        with zipfile.ZipFile(archive) as bundle:
-            bundle.extractall(root)
-        log(f"extracted {sum(1 for p in extracted.rglob('*') if p.is_file()):,} files")
-
     found = extracted / "Library"
+    if found.is_dir() and any(found.glob(f"*{NXT_SUFFIX}")):
+        log(f"{found} already extracted")
+        return found
+
+    log(f"extracting {archive} into {root}")
+    with zipfile.ZipFile(archive) as bundle:
+        members = [item for item in bundle.infolist() if is_data(item.filename)]
+        if not members:
+            raise RuntimeError(f"{archive} holds no {NXT_SUFFIX} files")
+        bundle.extractall(root, members=members)
+    log(
+        f"extracted {len(members)} {NXT_SUFFIX} files "
+        f"({sum(item.file_size for item in members):,} bytes)"
+    )
+
     if not found.is_dir():
         raise RuntimeError(f"{archive} did not contain the expected {found}")
     return found

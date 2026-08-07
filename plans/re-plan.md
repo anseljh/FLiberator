@@ -423,9 +423,10 @@ the three defects that shipped before the rules were right), the footnote
 rewriting, and document identity/ordering. The `scripts/` copies stay as
 the analysis originals and as regression checks against the live site.
 
-The downloader was promoted in Phase 10 below. Still not promoted: the
-index builder (`nxt_build_index.py`, superseded for output purposes by
-`documents.py` but still used by the validation harnesses).
+Phase 10 below promoted the last two: the downloader
+(`fliberator.download`) and the index builder (`fliberator.index`).
+Nothing load-bearing lives outside the package now — `scripts/` is
+analysis and validation only.
 
 ### Phase 8 — Extend to the rest of the corpus 🟡 triage done, scope open
 **Phase 8a (done)** answered the structural half: all 13 files reassemble
@@ -555,6 +556,40 @@ grouping chapters under their Title in canonical order. Verified against
 leg.state.fl.us's own Title index: 49/49 Titles match, and all 24,866
 sections fall inside their Title's official chapter range — 0
 disagreements.
+
+### Phase 11 — Making next year's edition a no-op ✅ done
+
+Done 2026-08-07. Phase 10's downloader promotion was half a fix: it would
+fetch `FLLawDL2026` correctly and then fail, because `emit.py` hardcoded
+`fs2025.nxt`/`flcnst2025.nxt`/`lf2025.nxt` and the CLI hardcoded
+`download/FLLawDL2025/Library`. Both now discover instead:
+`emit.resolve()` matches `<prefix><year>.nxt` and reports the year, and
+`download.default_library()` picks the newest `download/FLLawDL*/Library`.
+The year is recorded in `metadata.json` as `edition`. Two editions of one
+file in a single Library raises rather than guessing which is "the"
+corpus. Caught a name-shadowing bug in `build()` that the unit tests
+missed and the real run didn't — `build()` now has a fast test with the
+decode layers stubbed out.
+
+**Issue #1 — extract only the data files.** What Florida distributes is a
+Windows installer that happens to contain the corpus: 13 of the zip's
+1,382 entries are `.nxt` files and the other 1,369 are the bundled viewer
+(504 `.bcmap`, 419 images, 95 `.htm`, 81 `.css`, 50 `.js`, 47 Java
+`.class`, DLLs, an InstallShield payload). Extraction now filters to
+`.nxt`: 371 MB instead of 550 MB, and `FLLawDL<year>/` contains nothing
+but `Library/`. Verified against the real zip — all 13 files byte-identical
+(SHA-256) to the frozen reference copy, and a full `fliberate` run off
+that extraction produces the same 25,334 documents. The two small Folio
+definition files (`2025CD.libdef`, `Library.libinst`, 15 KB) are excluded
+by decision; they remain in the frozen `FLLawDL2025/` reference copy.
+
+**`nxt_build_index.py` promoted** to `fliberator.index`, runnable as
+`python -m fliberator.index`, defaulting its output to
+`data/fs<year>_citation_index.json` — the same path the `scripts/`
+harnesses read, so none of them changed. Regenerated output is
+**byte-identical** to the pre-promotion index. The `scripts/` copy is
+deleted; its v1-v6 approach history is condensed into the module
+docstring, with the full account still in docs/nxt-format.md and git.
 
 ## Tooling notes
 

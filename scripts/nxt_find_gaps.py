@@ -3,7 +3,8 @@
 Phase 4 found that F.S. 145.11 is silently absent from the citation index
 (data/fs2025_citation_index.json) because *both* existing detection paths
 failed for it: the Phase 3 <title> scan and the Phase 2b SectionNumber
-recovery. Since the index-quality checks in nxt_build_index.py rely on
+recovery. Since the index-quality checks in the index builder (then
+`nxt_build_index.py`, now `fliberator.index`) rely on
 exactly those two signals, that category of loss is invisible to them --
 its true prevalence across the full 26,317-document index was unknown.
 
