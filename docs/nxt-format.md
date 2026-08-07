@@ -1289,6 +1289,185 @@ comparison artifact; and 1 because Florida's own `.nxt` file disagrees with
 Florida's own website. There are **no known decoding defects left in
 `fs2025.nxt`**, and "validated by sample" is now "validated exhaustively."
 
+## Phase 4e: entity representation inside elements
+
+The last unverified layer of `fs2025.nxt` fidelity. Three things were
+already established and are not rechecked here: the rendered characters
+(Phase 4d, all 24,866 sections), the element stream (Phase 4b), and
+whitespace/doubling against the source bytes (Phase 4c). What none of them
+covers is whether a character arrives as `&#x2003;` or as a literal em
+space — both render identically, so it cannot break the text, but the
+deliverable is HTML.
+
+`scripts/nxt_check_entities.py` walks both sides with
+`convert_charrefs=False` so character references survive as their own
+parser events, builds a list of `(character, representation)` pairs, aligns
+on the characters (safe, because Phase 4d established the rendered strings
+agree) and compares the representations. ASCII letters, digits and spaces
+are excluded — they are never entity-encoded on either side and would
+swamp the signal.
+
+**Result: 19,359 aligned characters across 200 sections, 100.000%
+identical representation, 0 differences.** The check is not vacuous —
+both sides carry 2,120 entity-encoded characters, agreeing exactly in kind
+and count:
+
+| representation | ours | live |
+|---|---|---|
+| `&#x2003;` | 1,611 | 1,611 |
+| `&#x2014;` | 506 | 506 |
+| `&#x2013;` | 2 | 2 |
+| `&#xA0;` | 1 | 1 |
+
+Agreement extends to the exact spelling: hexadecimal rather than decimal,
+lowercase `x`, uppercase hex digits. There is a structural reason it holds
+— the decoder emits `\x13\x39` token payloads verbatim, so our entity
+spelling simply *is* the source's.
+
+**Coverage caveat:** 200 sections, bounded by the raw-HTML cache. The
+Phase 4d census cache stores reduced text, which has already discarded the
+entities, so extending this to all 24,866 would mean re-fetching the
+corpus as HTML. Given zero differences and the structural argument above,
+that was not judged worth a second multi-hour crawl.
+
+## Phase 8b: the other primary-law files
+
+Phase 8a established that all 13 files reassemble and decode, and
+identified four as holding primary law. Only `fs2025.nxt` had fidelity
+evidence; this covers the other three.
+
+### Florida Constitution (`flcnst2025.nxt`) — 213/213 pass
+
+Two things make it easier than the statutes. The live site publishes the
+whole constitution as **one page**, so the comparison costs one request
+rather than 213. And our section documents carry `<a name="A1S03">` — the
+*same* anchor the live page uses — so documents map to their counterparts
+directly, with no ordering assumption. That last point matters: the
+documents are not in canonical order (document 2 is A1S03, document 3 is
+A1S02), exactly as in `fs2025.nxt`.
+
+The counts line up before any comparison runs: 226 documents = 1
+constitution-title page + 12 article indexes + **213 sections**, against
+213 `A#S##` anchors live. No section is missing on either side.
+
+| | |
+|---|---|
+| sections compared | 213 |
+| byte-exact | **193 (90.6%)** |
+| at/above the 0.99 threshold | **213 (100%)** |
+| mean ratio | 0.99979 |
+| worst | 0.9942 |
+
+All 72 differences are known classes: 71 are the `[n]` footnote-marker
+representation, and 1 is the site restructuring markup we reproduce
+faithfully — in A7S04 the source has
+`<span class="Id">(j)(1)&#x2003;</span>` as a single element (confirmed in
+the raw bytes) where the live site splits it into `(j)` plus a nested
+paragraph for `(1)`. Same class as the `<span>`→`<p>` rewrite found in
+Phase 4b: ours is the faithful one.
+
+One harness bug found and fixed along the way: the constitution is
+embedded in the site's own page, so bounding the last section at
+end-of-page made A12S42 absorb the footer chrome and score 0.8816 against
+a copyright notice. Bounding on `</body>` — the same content boundary
+`nxt_validate.py` uses — fixed it.
+
+### Laws of Florida (`lf2025.nxt`) — 241/253, and the noise floor is the PDF
+
+The only primary-law file with **no HTML ground truth**. laws.flrules.org
+publishes each chapter as a PDF, so this compares against `pdftotext -layout`
+output, which makes the *extraction* the noisy side rather than our decoder.
+Documents are identified by chapter number: 255 documents = **253 numbered
+chapters + 2 joint resolutions**, the latter proposing constitutional
+amendments and legitimately carrying no Laws of Florida chapter number.
+
+| | |
+|---|---|
+| chapters compared | 253 |
+| byte-exact | 121 (47.8%) |
+| at/above the 0.99 threshold | **241 (95.3%)** |
+| mean ratio | 0.99781 |
+| worst | 0.9802 |
+
+Four artifacts of the PDF had to be folded, each symmetric and each found
+by looking at what the diff actually contained rather than by guessing:
+
+1. **Page furniture.** Running heads and a `CODING:` footer with a page
+   number. The footer text *varies* — the General Appropriations Act uses
+   "Language stricken has been vetoed by the Governor" on all 533 of its
+   pages, so the pattern matches the `CODING:` line whatever follows it.
+2. **Line-break hyphenation.** `pdftotext` preserves the typesetter's
+   hyphen (`revi- sion`). De-hyphenating only the PDF side is unsafe — it
+   merges genuine compounds that happen to break at a line end, which
+   turned `twenty-seven` into `twentyseven`. Removing every hyphen from
+   *both* sides is symmetric and cannot invent a difference.
+3. **Dot leaders.** Appropriations tables align columns with `....`; we
+   keep them attached to the preceding word, `pdftotext` emits them as
+   standalone tokens — 53,763 in that one chapter.
+4. **Em-dash spacing**, the same `tag-boundary-space` class as the
+   statutes census.
+
+Progression as each was found, which is also the honest measure of how
+much of the initial gap was ours (none of it):
+
+| | above threshold | mean | words only in the PDFs |
+|---|---|---|---|
+| first run | 236 | 0.99656 | 71,434 |
+| + footer variant, dot leaders | 239 | 0.99764 | 12,267 |
+| + re-collapse doubled spaces | **241** | **0.99781** | **5,032** |
+
+The residual — 5,032 words across 130 chapters, about 39 per chapter
+against roughly half a million words — is a noise floor, not a defect.
+Sampled across five below-threshold chapters, **150 of 151 difference
+blocks are the same characters with different spacing** (`(c)1.` vs
+`(c) 1.`, `1.a.` vs `1. a.`), because our HTML wraps each subsection
+number in its own element and tag-stripping puts a space where the PDF's
+inline text has none. The single remaining block is `pdftotext` dropping
+an em dash (`REQUIREMENTS. (a)` where both the source and our output have
+`REQUIREMENTS.—(a)`).
+
+**Caveat worth stating:** because the hyphen fold is symmetric, a hyphen
+we genuinely got wrong would be invisible to this comparison. That is the
+price of having only PDF ground truth, and it is why the statutes and the
+constitution — both of which have HTML ground truth — carry the stronger
+claims.
+
+Two engineering notes, recorded because they will recur on any large
+document:
+
+- `difflib.SequenceMatcher.ratio()` is O(n·m) and simply does not finish
+  on the 2,024,799-byte General Appropriations Act. This uses word-level
+  `quick_ratio()` (linear, multiset-based) plus exact
+  missing/extra word counts, which are more interpretable anyway.
+- The obvious dot-leader pattern `(?:\s*\.\s*){2,}` nests unbounded
+  quantifiers and backtracks catastrophically on that same chapter. Since
+  both sides have already had whitespace collapsed, `(?:\. ?){2,}` is
+  sufficient and runs in microseconds.
+
+### US Constitution (`uscon.nxt`) — structurally verified
+
+Two documents: the text and its index. Verified:
+
+- **7 original articles + 27 amendments = 34 headings**, all present. The
+  amendments use the historical bracketed style (`ARTICLE [XI.]`).
+- **594 of 594 index cross-references resolve** to a real `<A NAME=…>`
+  anchor in the text document. 0 unresolved.
+- Well-known passages present verbatim: Article I Section 1, the First
+  Amendment, the Twenty-seventh Amendment.
+
+The Preamble differs from the National Archives transcript by one
+character — `our posterity` rather than `our Posterity`. The raw source
+bytes contain the lowercase form, so this is an editorial choice in
+Florida's bundled printing, not a decoding defect.
+
+No full external text diff was run. `uscon.nxt` is a 2018-vintage build of
+a *US* document inside a Florida statutes distribution, its printing uses
+editorial conventions (bracketed article numbers, footnote markers) that
+any external transcript would differ on, and FLiberator's stated job is
+the Florida statutes. Structural verification is proportionate here; a
+line-by-line diff against an arbitrarily-chosen transcript would mostly
+measure that transcript's editorial choices.
+
 ## Phase 8a: the model generalizes — and the corpus found a defect `fs2025` couldn't
 
 Everything through Phase 4b was measured against `fs2025.nxt` alone. The open

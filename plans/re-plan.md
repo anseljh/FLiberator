@@ -432,13 +432,36 @@ markup files are finding aids derived from it (subject/definition/
 constitution indexes, cross-reference and tracing tables); the 13th is a
 help PDF.
 
-**Still open:** the per-file work those four need beyond reassembly —
-citation indexes of their own (`nxt_build_index.py` is `F.S. n`-specific),
-and validation against ground truth, which for `lf2025`/`flcnst2025`
-means a different URL scheme than `nxt_validate.py`'s. And the scope
-call: whether the eight finding-aid files are part of FLiberator's
-output at all, or whether "liberate the statutes" stops at primary law.
-That is a Phase 9 decision, but it is now a decision over a known list.
+**Phase 8b (done)** validated the other three primary-law files against
+ground truth — see `docs/nxt-format.md`:
+
+- **Florida Constitution** (`scripts/nxt_validate_constitution.py`):
+  213/213 sections pass, 193 byte-exact (90.6%), mean ratio 0.99979. Every
+  difference is a known class — 71 footnote markers plus one case of the
+  site restructuring markup we reproduce faithfully. The live site
+  publishes the whole constitution as one page, and our documents carry
+  the same `A1S03` anchors it does, so mapping is direct.
+- **Laws of Florida** (`scripts/nxt_validate_session_laws.py`): 241/253
+  chapters (95.3%) at/above threshold, 121 byte-exact, mean 0.99781. The
+  only primary-law file with **no HTML ground truth** — laws.flrules.org
+  publishes PDFs, so this compares against `pdftotext` output and folds
+  four artifacts of that extraction (page furniture, line-break
+  hyphenation, dot leaders, em-dash spacing), each symmetric and
+  documented. The 5,032-word residual across 130 chapters is a noise
+  floor: 150 of 151 sampled difference blocks are the same characters
+  with different spacing. Note the weaker claim here — the hyphen fold is
+  symmetric, so a hyphen we got wrong would be invisible.
+- **US Constitution**: structurally verified (7 articles + 27 amendments
+  all present, 594/594 index cross-references resolve, well-known
+  passages verbatim). No full external diff — it is a 2018-vintage build
+  of a *US* document whose printing conventions any transcript would
+  differ on, and it sits outside FLiberator's stated job.
+
+**Still open:** citation indexes of their own for these three
+(`nxt_build_index.py` is `F.S. n`-specific), and the scope call —
+whether the eight finding-aid files are part of FLiberator's output at
+all, or whether "liberate the statutes" stops at primary law. That is a
+Phase 9 decision, but it is now a decision over a known list.
 
 ### Phase 9 — Decide and implement the actual output shape ⬜ open
 The "liberated" deliverable format has never been decided — one HTML file

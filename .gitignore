@@ -230,3 +230,4 @@ __marimo__/
 # Cached live leg.state.fl.us page text for scripts/nxt_validate.py --sample
 /data/live_cache
 /data/live_cache_html
+/data/live_cache_laws
