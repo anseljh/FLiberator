@@ -19,11 +19,17 @@ addressed the same way:
                 no chapter number at all; they are identified by their
                 bill number instead.
 
+The statutes also carry a hierarchy above the section: Title > Chapter >
+Part. Only Part and Title need reconstructing -- the chapter is in the
+citation itself -- and each comes from a different index document, because
+neither is recorded on the sections they contain.
+
 Ordering is canonical, not physical. Document bodies are stored in
 build order, which has nothing to do with statutory order -- so every
 collection is sorted by a parsed numeric key rather than by file position.
 """
 
+import bisect
 import re
 
 STATUTE_TITLE_RE = re.compile(r"<title>\s*F\.S\.\s*([\d.]+)\s*</title>", re.IGNORECASE)
@@ -39,6 +45,20 @@ LAW_HEADING_RE = re.compile(r"CHAPTER\s+(\d{4}-\d+)", re.IGNORECASE)
 BILL_RE = re.compile(r"<title>\s*(.*?)\s*</title>", re.IGNORECASE | re.DOTALL)
 BILL_NAME_RE = re.compile(r"<BILLNUM>(.*?)</BILLNUM>", re.IGNORECASE | re.DOTALL)
 LAW_TITLE_TEXT_RE = re.compile(r"<LAWTITLE>(.*?)</LAWTITLE>", re.IGNORECASE | re.DOTALL)
+
+# Titles are the top tier of the hierarchy, above Chapter. Only the
+# *first* chapter of each Title carries the Title header -- 49 documents,
+# one per Florida Statutes Title -- so a Title's extent is the half-open
+# chapter range up to the next Title's first chapter.
+TITLE_MARKER = 'class="TitleNumber"'
+TITLE_BLOCK_RE = re.compile(
+    r'<div class="Title">\s*<div class="TitleNumber">\s*TITLE\s+([IVXL]+)\s*</div>'
+    r"\s*(?P<name>.*?)\s*</div>",
+    re.IGNORECASE | re.DOTALL,
+)
+CHAPTER_NUMBER_RE = re.compile(
+    r'<div class="ChapterNumber">\s*CHAPTER\s+(\d+)\s*</div>', re.IGNORECASE
+)
 
 # Chapter and Part tables of contents, used to place a section in the
 # statutory hierarchy. Their anchors carry the citation directly.
@@ -95,9 +115,72 @@ def part_membership(decoded: list[str]) -> dict[str, str]:
     return membership
 
 
+def titles(decoded: list[str]) -> list[dict]:
+    """The Florida Statutes Titles, ordered, with the chapter each begins at.
+
+    Only the first chapter of a Title carries the Title header, so this
+    returns one record per Title (49 in the 2025 edition) rather than one
+    per chapter."""
+    found = []
+    for html in decoded:
+        block = TITLE_BLOCK_RE.search(html)
+        if block is None:
+            continue
+        chapter = CHAPTER_NUMBER_RE.search(html)
+        if chapter is None:
+            continue
+        found.append(
+            {
+                "number": block.group(1),
+                "citation": f"TITLE {block.group(1)}",
+                "name": _text(block.group("name")),
+                "first_chapter": int(chapter.group(1)),
+            }
+        )
+    found.sort(key=lambda title: title["first_chapter"])
+    return found
+
+
+def title_of(chapter: str | int, ordered: list[dict]) -> dict | None:
+    """The Title a chapter belongs to: the last one starting at or before it.
+
+    Titles cover half-open chapter ranges (Title I begins at chapter 1,
+    Title II at chapter 6), and the ranges have gaps -- there is no chapter
+    between 2 and 6 -- so membership is a predecessor search, not a lookup."""
+    index = bisect.bisect_right([t["first_chapter"] for t in ordered], int(chapter)) - 1
+    return ordered[index] if index >= 0 else None
+
+
+def title_hierarchy(entries: list[dict]) -> list[dict]:
+    """Group emitted sections into the Title tier of the hierarchy.
+
+    Derived from the entries rather than re-scanning the corpus, so the
+    Titles and their chapters come out in the same canonical order the
+    entries are already in."""
+    grouped: dict[str, dict] = {}
+    for entry in entries:
+        citation = entry.get("title")
+        if citation is None:
+            continue
+        title = grouped.setdefault(
+            citation,
+            {
+                "number": citation.split()[-1],
+                "citation": citation,
+                "name": entry.get("title_name"),
+                "chapters": [],
+            },
+        )
+        if entry["chapter"] not in title["chapters"]:
+            title["chapters"].append(entry["chapter"])
+    return list(grouped.values())
+
+
 def statutes(decoded: list[str]) -> list[dict]:
     """One record per statute section, in canonical order."""
     parts = part_membership(decoded)
+    hierarchy = titles(decoded)
+    by_chapter: dict[str, dict | None] = {}
     found = []
     for html in decoded:
         match = STATUTE_TITLE_RE.search(html)
@@ -106,10 +189,15 @@ def statutes(decoded: list[str]) -> list[dict]:
         citation = match.group(1)
         catchline = CATCHLINE_RE.search(html)
         chapter = citation.split(".")[0]
+        if chapter not in by_chapter:
+            by_chapter[chapter] = title_of(chapter, hierarchy)
+        title = by_chapter[chapter]
         found.append(
             {
                 "citation": f"F.S. {citation}",
                 "number": citation,
+                "title": title["citation"] if title else None,
+                "title_name": title["name"] if title else None,
                 "chapter": chapter,
                 "part": parts.get(citation),
                 "catchline": _text(catchline.group(1)) if catchline else None,

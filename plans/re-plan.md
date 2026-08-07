@@ -423,8 +423,8 @@ the three defects that shipped before the rules were right), the footnote
 rewriting, and document identity/ordering. The `scripts/` copies stay as
 the analysis originals and as regression checks against the live site.
 
-Still not promoted: the downloader (`scripts/download.py`) and the index
-builder (`nxt_build_index.py`, superseded for output purposes by
+The downloader was promoted in Phase 10 below. Still not promoted: the
+index builder (`nxt_build_index.py`, superseded for output purposes by
 `documents.py` but still used by the validation harnesses).
 
 ### Phase 8 — Extend to the rest of the corpus 🟡 triage done, scope open
@@ -514,6 +514,47 @@ constitution sections, 255 session laws).
 - **No further work on PDF fidelity.** The session-law comparison
   against `pdftotext` output is as good as it needs to be; its residual
   is extraction noise and the symmetric hyphen fold is an accepted limit.
+
+### Phase 10 — Closing the three gaps Phase 9 left ✅ done
+
+Done 2026-08-07. Phase 9 shipped a working pipeline with three known
+holes; all three are now closed.
+
+**One command, not two.** `scripts/download.py` became
+`fliberator/download.py`, and `fliberate --download` fetches and unzips
+the current edition before decoding it — using whatever `FLLawDL<year>`
+the page actually offers, rather than the hardcoded default path. An
+explicit `--library` still wins. The `.part`-then-rename write and the
+skip-if-present checks carried over unchanged; the scripts/ copy is
+deleted rather than kept, since two copies of live-network code would
+drift. `find_zip_url` is now tested against a synthetic page.
+
+**The storage layer checks its own assumptions.** Every constant in
+`depage.py` — page size, content page type, the header field offsets at
+16/18/20, the 13-bit offset mask — came from the 2025 edition, and the
+failure mode without checking was *silent*: a different layout would be
+read as a valid slot directory and yield plausible-looking but wrong
+documents, which is the one failure this project can't afford. There is
+now a `FormatError` and checks for the Infobase banner, whole-page file
+size (`len // PAGE_SIZE` used to drop a partial tail page and its
+documents with it), the sentinel-slot identity, the slot array fitting
+before the end-of-array offset, fragment offsets landing inside the page
+body in strictly descending order, fragments long enough to hold their
+inline back-pointer, and chains that loop. Each was picked by measuring
+it across all 13 files first, so a violation means the *assumption*
+broke, not the data. Cost: none measurable — still ~18s end to end.
+
+**`metadata.json` carries the whole hierarchy.** It recorded Chapter and
+Part but not Title, so the top tier of Title > Chapter > Part was missing
+and the official table of contents couldn't be rebuilt from it. Only the
+first chapter of each Title carries the Title header (49 documents), so
+membership is a predecessor search over half-open chapter ranges with
+gaps, not a per-chapter field. Each section now carries `title` and
+`title_name`, and the statutes collection carries a `titles` array
+grouping chapters under their Title in canonical order. Verified against
+leg.state.fl.us's own Title index: 49/49 Titles match, and all 24,866
+sections fall inside their Title's official chapter range — 0
+disagreements.
 
 ## Tooling notes
 

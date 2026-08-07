@@ -43,10 +43,12 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 </html>
 """
 
+# name -> (source file, section extractor, grouping over the emitted
+# entries). Only the statutes have a tier above the document itself.
 COLLECTIONS = {
-    "statutes": ("fs2025.nxt", documents.statutes),
-    "constitution": ("flcnst2025.nxt", documents.constitution),
-    "laws": ("lf2025.nxt", documents.session_laws),
+    "statutes": ("fs2025.nxt", documents.statutes, documents.title_hierarchy),
+    "constitution": ("flcnst2025.nxt", documents.constitution, None),
+    "laws": ("lf2025.nxt", documents.session_laws, None),
 }
 
 
@@ -76,7 +78,7 @@ def build(library: pathlib.Path, output: pathlib.Path, version: str = "0.1.0") -
         "collections": {},
     }
 
-    for name, (filename, extract) in COLLECTIONS.items():
+    for name, (filename, extract, group) in COLLECTIONS.items():
         source = library / filename
         records = load_records(source)
         decoded = [decode(r, 0, len(r))[0] for r in records]
@@ -99,7 +101,7 @@ def build(library: pathlib.Path, output: pathlib.Path, version: str = "0.1.0") -
                 entry["footnotes"] = notes
             entries.append(entry)
 
-        metadata["collections"][name] = {
+        collection = {
             "source": {
                 "file": filename,
                 "bytes": source.stat().st_size,
@@ -107,8 +109,11 @@ def build(library: pathlib.Path, output: pathlib.Path, version: str = "0.1.0") -
             },
             "documents": len(entries),
             "order": "canonical (parsed numerically), not source file order",
-            "entries": entries,
         }
+        if group is not None:
+            collection["titles"] = group(entries)
+        collection["entries"] = entries
+        metadata["collections"][name] = collection
 
     output.mkdir(parents=True, exist_ok=True)
     (output / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")

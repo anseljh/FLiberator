@@ -1590,12 +1590,15 @@ now a decision over a known list rather than an unknown one.
   reasons. This is how 263,569 of Phase 2e's 327,048 doubled characters hid.
   Catching that class needs a check against the decoder's own output rather
   than against the live page.
-- Page geometry has only ever been exercised on the 2025 edition. Phase 8a
-  widened this to all 13 files of that edition — the 4096-byte page and the
-  slot/chain layout hold across every one — but they were all built by the
-  same tooling in the same year, so this says nothing about a future
-  edition. The reassembler should still assert its assumptions rather than
-  silently produce garbage if a later year's layout differs.
+- ~~Page geometry has only ever been exercised on the 2025 edition.~~
+  **Addressed (Phase 10).** Phase 8a widened this to all 13 files of that
+  edition — the 4096-byte page and the slot/chain layout hold across every
+  one — but they were all built by the same tooling in the same year, so
+  this still says nothing about a future edition. `depage.py` now asserts
+  its assumptions instead of silently producing garbage if a later year's
+  layout differs; see "Phase 10" below for the invariant list. Note this
+  makes a future mismatch *loud*, not *handled* — a changed layout still
+  needs re-derivation.
 - Fidelity for the non-`fs2025` files is unmeasured. Phase 8a shows they
   reassemble and decode to well-formed HTML, and the Florida Constitution
   spot-checks verbatim against the live text, but no systematic diff
@@ -1620,3 +1623,59 @@ now a decision over a known list rather than an unknown one.
   Infobase engine — confirmed via their string tables (`"Dialog: ..."` error
   boilerplate, `"Extender loaded: %s"`, `xAllocPrintf`, `wntServerList` all
   match WinBatch's runtime). Dead end for format analysis.
+
+## Phase 10: the storage layer asserts its geometry
+
+Every constant in the reassembler was derived from the 2025 edition, and
+the failure mode without checking is the bad kind: a different layout would
+not crash, it would be read as a valid slot directory, chased through
+nonsense chain pointers, and emitted as plausible-looking but wrong
+documents. `depage.py` now raises `FormatError` instead.
+
+Each invariant below was measured across all 13 files of the 2025
+distribution *before* being asserted, so a violation means the assumption
+broke, not the data:
+
+| Invariant | Measured across the corpus |
+| --- | --- |
+| File opens with the Rocket copyright banner and `Infobase` inside the first `0xE0` bytes | all 13 |
+| File size is an exact multiple of 4096 | all 13, remainder 0 (`len // PAGE_SIZE` silently dropped a partial tail page before) |
+| Content page has ≥ 1 slot | min 1, max 8 slots per page |
+| `20 + 2·n_slots ≤ slot_end ≤ 4096` | holds everywhere; `slot_end` ranges 22–3874 |
+| Final slot is the sentinel: its offset field equals `slot_end`, and bit 2 of its flags is set | 0 exceptions |
+| `header_len = slot_end + 6·(has_back + has_forward) ≤ 4096` | max 3880 |
+| Fragment offsets lie in `(header_len, 4096]` | min offset 42, min `header_len` 22 |
+| Slot directory is in **strictly** descending offset order | 0 non-strict pages (so `sorted()` in the original could be replaced by a reverse) |
+| A fragment at index > 0 is ≥ 6 bytes, enough to hold its inline back-pointer | min 13 bytes |
+| A fragment chain never revisits a fragment | `build_chains` already rejected conflicting successors, which rules out most bad links but not a closed loop |
+
+Record counts are unchanged under the checks — `fs2025` 26,306,
+`flcnst2025` 226, `lf2025` 255, `uscon` 2 — and so is the ~18s end-to-end
+runtime.
+
+## Phase 10: the Title tier
+
+The statutes hierarchy is Title > Chapter > Part > Section. The chapter is
+in the citation and Part membership comes from the Part index documents
+(Phase 9), but **Title membership is recorded nowhere on the sections
+themselves**. Only the *first* chapter of each Title carries the header:
+
+```html
+<div class="Title"><div class="TitleNumber">TITLE I</div>
+<p xml:space="preserve">CONSTRUCTION OF STATUTES</p></div>
+<div class="ChapterTitle"><div class="ChapterNumber">CHAPTER 1</div>…
+```
+
+49 documents carry it, one per Title, matching Florida's 49 Titles. So a
+Title's extent is the half-open chapter range up to the next Title's first
+chapter — and those ranges have gaps (Title I is Ch. 1–2, Title II starts
+at Ch. 6; there is no chapter 3, 4 or 5), which makes membership a
+predecessor search rather than a lookup in a dense table.
+
+Two Title names carry an explicit `<br />`, so the name needs flattening,
+not just tag-stripping.
+
+Verified against leg.state.fl.us's own Title index: 49/49 Titles present
+with matching names, and all 24,866 sections fall inside their Title's
+official chapter range — 0 disagreements, 638 chapters each assigned
+exactly once.

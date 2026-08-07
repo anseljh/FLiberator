@@ -20,12 +20,15 @@ import fliberator
 
 ## Steps
 
-1. FLiberator downloads, into the git-ignored `download/` folder, the "Advanced Legislative Search & Browse" application zip file from its [download page](https://www.leg.state.fl.us/Statutes/index.cfm?Mode=Statutes%20Download&Submenu=7&Tab=statutes). Run with `uv run python scripts/download.py` — it scrapes the download page for the current year's zip link (currently `FLLawDL2025.zip`) rather than hardcoding a year.
-2. FLiberator unzips the file, also into `download/` (same script).
+1. FLiberator downloads, into the git-ignored `download/` folder, the "Advanced Legislative Search & Browse" application zip file from its [download page](https://www.leg.state.fl.us/Statutes/index.cfm?Mode=Statutes%20Download&Submenu=7&Tab=statutes). It scrapes the download page for the current year's zip link (currently `FLLawDL2025.zip`) rather than hardcoding a year.
+2. FLiberator unzips the file, also into `download/`.
 3. FLiberator decodes the Rocket NXT (`.nxt`) files directly into HTML, plus a single JSON metadata file. See [`docs/nxt-format.md`](docs/nxt-format.md) for how the format was reverse-engineered and how decoding works.
 
+All three steps are one command:
+
 ```bash
-uv run fliberate                      # reads download/, writes output/
+uv run fliberate --download           # fetch + unzip into download/, then decode
+uv run fliberate                      # decode what's already in download/
 uv run fliberate --library path --output path
 ```
 
@@ -43,7 +46,7 @@ output/
 
 **Footnotes** are rewritten as semantic HTML5: each reference becomes a `<sup><a role="doc-noteref">`, and the note bodies are collected into a `<section role="doc-endnotes">` at the end of the section, with one backlink per referrer.
 
-**`metadata.json`** carries what the HTML can't — canonical ordering (documents are stored in build order, which has nothing to do with statutory order), the chapter/part hierarchy, per-document footnote counts, and the SHA-256 of each source file so two years' output can be told apart.
+**`metadata.json`** carries what the HTML can't — canonical ordering (documents are stored in build order, which has nothing to do with statutory order), the full Title → Chapter → Part hierarchy, per-document footnote counts, and the SHA-256 of each source file so two years' output can be told apart.
 
 ## Background
 

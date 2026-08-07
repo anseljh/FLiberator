@@ -11,6 +11,20 @@ def statute(citation: str, catchline: str = "Definitions.") -> str:
     )
 
 
+def chapter_index(title_number: str, title_name: str, chapter: str) -> str:
+    """A chapter's table of contents. Only the *first* chapter of a Title
+    carries the Title header, which is what makes Title membership a range
+    lookup rather than a per-chapter field."""
+    return (
+        f"<html><head><title>CHAPTER {chapter}</title></head><body>"
+        f'<div class="Chapter"><div class="Title">'
+        f'<div class="TitleNumber">TITLE {title_number}</div>'
+        f'<p xml:space="preserve">{title_name}</p></div>'
+        f'<div class="ChapterTitle"><div class="ChapterNumber">CHAPTER {chapter}</div>'
+        f'<div class="ChapterName">DEFINITIONS</div></div></div></body></html>'
+    )
+
+
 def test_statute_sort_key_is_numeric_not_lexical():
     # 1.015 sorts between 1.01 and 1.02; a string sort would put it after 1.02.
     order = sorted(["1.02", "1.015", "1.01", "10.01", "2.01"], key=documents.statute_sort_key)
@@ -50,6 +64,54 @@ def test_part_membership_comes_from_the_part_index():
     )
     found = documents.statutes([part, statute("39.201")])
     assert found[0]["part"] == "PART III"
+
+
+def test_titles_are_read_from_the_first_chapter_of_each():
+    found = documents.titles(
+        [chapter_index("II", "STATE ORGANIZATION", "6"), chapter_index("I", "CONSTRUCTION", "1")]
+    )
+    assert [t["citation"] for t in found] == ["TITLE I", "TITLE II"]
+    assert found[1]["name"] == "STATE ORGANIZATION"
+    assert found[1]["first_chapter"] == 6
+
+
+def test_a_multiline_title_name_is_flattened():
+    # Several Title names carry an explicit <br /> line break.
+    (title,) = documents.titles([chapter_index("XVI", "TEACHERS<br />BONDS", "238")])
+    assert title["name"] == "TEACHERS BONDS"
+
+
+def test_title_membership_spans_the_chapters_up_to_the_next_title():
+    ordered = documents.titles(
+        [chapter_index("I", "CONSTRUCTION", "1"), chapter_index("II", "STATE", "6")]
+    )
+    # Chapter 2 has no Title header of its own; it belongs to Title I.
+    assert documents.title_of("2", ordered)["citation"] == "TITLE I"
+    assert documents.title_of("6", ordered)["citation"] == "TITLE II"
+    # Ranges have gaps -- there is no chapter 3, 4 or 5 -- so membership is
+    # a predecessor search, not a lookup into a dense table.
+    assert documents.title_of("99", ordered)["citation"] == "TITLE II"
+    assert documents.title_of("0", ordered) is None
+
+
+def test_a_section_carries_its_title():
+    found = documents.statutes([chapter_index("I", "CONSTRUCTION", "1"), statute("1.01")])
+    assert found[0]["title"] == "TITLE I"
+    assert found[0]["title_name"] == "CONSTRUCTION"
+
+
+def test_the_title_tier_groups_chapters_in_canonical_order():
+    decoded = [
+        chapter_index("I", "CONSTRUCTION", "1"),
+        chapter_index("II", "STATE", "6"),
+        statute("6.01"),
+        statute("2.01"),
+        statute("1.01"),
+    ]
+    (first, second) = documents.title_hierarchy(documents.statutes(decoded))
+    assert first["citation"] == "TITLE I"
+    assert first["chapters"] == ["1", "2"]
+    assert second["chapters"] == ["6"]
 
 
 def test_constitution_identity_comes_from_the_anchor():
