@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-The `fliberator` package is still scaffolded (src layout, managed with `uv`) — `src/fliberator/__init__.py` only exports `__version__`. The actual NXT-decoding logic exists as throwaway analysis scripts in `scripts/`, not yet promoted into the package: `nxt_survey.py` (header/corpus survey), `nxt_depage.py` (**reassembles documents out of the paged store — run this first, everything else builds on it**), `nxt_decode_poc.py` (tokenized-markup decoder), `nxt_build_index.py` (citation → document index), `nxt_find_gaps.py` (decoder-independent completeness check via the CatchlineIndex), `nxt_validate.py` (validation harness vs. the live site, `--sample N` for a cached random-sample run), `nxt_validate_markup.py` (element-stream fidelity vs. the live site), `nxt_corpus_triage.py` (**runs both layers over all 13 `.nxt` files** — reassembly/decode health plus what each file actually contains), `nxt_check_output.py` (**decoder self-check against the source bytes** — catches the whitespace/doubling defects `nxt_validate.py` structurally cannot see, since it collapses `\s+` before scoring), `nxt_classify_diffs.py` (classifies census differences by *shape* — the number that matters, since the 0.99 ratio threshold sorts by document length rather than by badness), `nxt_check_entities.py` (entity-representation fidelity inside elements), `nxt_validate_constitution.py` and `nxt_validate_session_laws.py` (ground-truth validation for `flcnst2025.nxt` and `lf2025.nxt`; the latter needs `pdftotext`, since the session laws have no HTML ground truth), `download.py` (fetches + unzips the bulk data). See `docs/nxt-format.md` for the reverse-engineered format spec and `plans/re-plan.md` for phase-by-phase status (what's done vs. still open — promoting these scripts into the real package is one of the open phases).
+The `fliberator` package is **real** (src layout, managed with `uv`): `src/fliberator/` holds `depage.py` (storage layer), `decode.py` (content layer), `footnotes.py` (semantic HTML5 footnote rewriting), `documents.py` (identity + canonical ordering per collection), `emit.py` (writes HTML + `metadata.json`) and `cli.py`. Run the whole pipeline with `uv run fliberate` — ~18 seconds for 25,334 documents.
+
+Scope is **Florida primary law only**: `fs2025.nxt` (24,866 statute sections), `flcnst2025.nxt` (213 constitution sections), `lf2025.nxt` (255 session laws). The eight finding-aid files, `uscon.nxt` and the help PDF are deliberately out (see `plans/re-plan.md` Phase 9).
+
+`scripts/` holds the throwaway analysis and validation code the reverse-engineering was done with — still useful as regression checks, not part of the package: `nxt_survey.py` (header/corpus survey), `nxt_depage.py`/`nxt_decode_poc.py` (the originals the package modules were promoted from), `nxt_build_index.py` (citation → document index), `nxt_find_gaps.py` (decoder-independent completeness check), `nxt_validate.py` (fidelity vs. the live site; `--sample N`, `--all` for the full census), `nxt_validate_markup.py` (element-stream fidelity), `nxt_check_output.py` (**decoder self-check against the source bytes** — catches whitespace/doubling defects `nxt_validate.py` structurally cannot see, since it collapses `\s+` before scoring), `nxt_classify_diffs.py` (classifies differences by *shape*, which matters because the 0.99 ratio threshold sorts by document length rather than badness), `nxt_check_entities.py` (entity-representation fidelity), `nxt_corpus_triage.py` (both layers over all 13 files), `nxt_validate_constitution.py` and `nxt_validate_session_laws.py` (ground truth for the other primary-law files; the latter needs `pdftotext`), `download.py` (fetches + unzips the bulk data). See `docs/nxt-format.md` for the format spec and `plans/re-plan.md` for phase-by-phase status.
 
 ## Commands
 
@@ -13,7 +17,8 @@ Dependency management, the venv, and script running all go through [`uv`](https:
 ```bash
 uv sync                 # install/update the venv from pyproject.toml + uv.lock
 uv run pytest           # run the test suite
-uv run pytest tests/test_import.py::test_version_is_set  # run a single test
+uv run pytest tests/test_footnotes.py    # run one test file
+uv run fliberate        # decode download/ -> output/
 uv run ruff check .     # lint
 uv run ruff format .    # format
 ```
@@ -34,7 +39,8 @@ The intended data flow, in order — **settled** (see `plans/re-plan.md` Phase 5
    - **Storage layer (`scripts/nxt_depage.py`).** The file is a *paged store*: exactly 58,626 × 4096-byte pages, each with a typed header, where a document is a chain of fragments scattered across non-adjacent pages. Reassemble documents before reading any bytes as content. Skipping this step is what produced every "corruption" symptom recorded in `docs/nxt-format.md` before Phase 2d — the damage was never in the data.
    - **Content layer (`scripts/nxt_decode_poc.py`).** Once reassembled, a document is a thin opcode wrapper around otherwise-literal HTML text (a length-prefixed literal-text token plus a handful of control opcodes). Decoding it is a "decompress the tokens back to text" problem, not a format-conversion problem — which is why no intermediate format is needed.
 
-   Both, plus the citation index builder (`scripts/nxt_build_index.py`), exist as analysis scripts; promoting them into the installable package, and deciding/implementing where in `output/` their results should land, are `plans/re-plan.md` Phases 7 and 9.
+   Both now live in the package as `fliberator.depage` and `fliberator.decode`; the `scripts/` copies are kept as the analysis originals.
+4. **Emit** one HTML file per section plus a single `output/metadata.json` (`fliberator.emit`). Footnotes are rewritten as semantic HTML5 along the way (`fliberator.footnotes`).
 
 ## Key external references
 
@@ -45,6 +51,6 @@ The intended data flow, in order — **settled** (see `plans/re-plan.md` Phase 5
 
 - Three data folders, all git-ignored except where noted:
   - `FLLawDL2025/` — the **frozen, read-only reference copy** this entire reverse-engineering effort (Phases 1-4) was developed and validated against. Never written to by any script; treat it as fixed ground truth for development, not as the live data source.
-  - `download/` — where `scripts/download.py` fetches and unzips the **current, live** bulk data (`download/FLLawDL2025.zip`, `download/FLLawDL2025/Library/*.nxt`). This is what a real run of the pipeline should read from once one exists (Phase 7+); analysis scripts default to `FLLawDL2025/` for now since that's what they were developed and checked against.
-  - `output/` — where decoded HTML/JSON output belongs once Phase 9 decides its shape. Currently empty/unused.
+  - `download/` — where `scripts/download.py` fetches and unzips the **current, live** bulk data (`download/FLLawDL2025.zip`, `download/FLLawDL2025/Library/*.nxt`). This is what `uv run fliberate` reads by default. The analysis scripts in `scripts/` still default to `FLLawDL2025/`, since that is what they were developed and checked against; the two are currently byte-identical.
+  - `output/` — where `uv run fliberate` writes: `metadata.json` plus `statutes/`, `constitution/` and `laws/` trees. Regenerated from scratch each run.
 - Format research lives in `docs/nxt-format.md` (living notes — append as understanding grows, don't just overwrite history) and `plans/re-plan.md` (phase-by-phase status). Check both before re-deriving something about the format that's likely already been figured out.

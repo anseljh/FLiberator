@@ -22,7 +22,28 @@ import fliberator
 
 1. FLiberator downloads, into the git-ignored `download/` folder, the "Advanced Legislative Search & Browse" application zip file from its [download page](https://www.leg.state.fl.us/Statutes/index.cfm?Mode=Statutes%20Download&Submenu=7&Tab=statutes). Run with `uv run python scripts/download.py` — it scrapes the download page for the current year's zip link (currently `FLLawDL2025.zip`) rather than hardcoding a year.
 2. FLiberator unzips the file, also into `download/` (same script).
-3. FLiberator decodes the Rocket NXT (`.nxt`) files directly into HTML, plus a JSON sidecar mapping each statute citation to its location in the source file. See [`docs/nxt-format.md`](docs/nxt-format.md) for how the format was reverse-engineered and how decoding works. Output will land in the git-ignored `output/` folder once its shape is decided (see `plans/re-plan.md`).
+3. FLiberator decodes the Rocket NXT (`.nxt`) files directly into HTML, plus a single JSON metadata file. See [`docs/nxt-format.md`](docs/nxt-format.md) for how the format was reverse-engineered and how decoding works.
+
+```bash
+uv run fliberate                      # reads download/, writes output/
+uv run fliberate --library path --output path
+```
+
+Output lands in the git-ignored `output/` folder:
+
+```
+output/
+  metadata.json                            ordering, hierarchy, provenance
+  statutes/0001/1.01.html                  24,866 sections
+  constitution/article-01/section-03.html      213 sections
+  laws/2025-1.html                             255 session laws
+```
+
+**What's covered:** the three files holding Florida primary law — the statutes, the Florida Constitution, and the Laws of Florida. The bulk distribution's eight finding-aid files (subject and definition indexes, cross-reference and tracing tables), the bundled US Constitution, and the help PDF are deliberately out of scope.
+
+**Footnotes** are rewritten as semantic HTML5: each reference becomes a `<sup><a role="doc-noteref">`, and the note bodies are collected into a `<section role="doc-endnotes">` at the end of the section, with one backlink per referrer.
+
+**`metadata.json`** carries what the HTML can't — canonical ordering (documents are stored in build order, which has nothing to do with statutory order), the chapter/part hierarchy, per-document footnote counts, and the SHA-256 of each source file so two years' output can be told apart.
 
 ## Background
 

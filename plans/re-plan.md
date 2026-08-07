@@ -25,8 +25,9 @@ of inferred and eliminates the whole corruption class — see
 docs/nxt-format.md "Phase 2d". Phase 6 (`scripts/download.py`)
 established the `download/`/`output/` working-folder convention alongside
 the frozen `FLLawDL2025/` reference copy — see CLAUDE.md "Working
-conventions". Phases 7-9 (package promotion, rest-of-corpus, output
-format) are scoped but not started.
+conventions". **Phases 7, 8 and 9 are now done too**: the package is real
+(`uv run fliberate`), the corpus is triaged and the primary-law files
+validated, and the output shape is decided and implemented.
 
 **Since then**: Phase 2e accounted for every skipped byte and fixed two
 shipping defects; Phase 4b closed the three verification gaps (nothing is
@@ -414,12 +415,17 @@ full-text search, which FLiberator doesn't do); the exact meaning of
 `\x08`; the 62 non-conforming `\x15\x01\x01\x01` runs; the single record
 not ending in `</html>`; and the lone `Obsolete Cross-reference` title.
 
-### Phase 7 — Promote scripts/ into the installable package ⬜ open
-`src/fliberator/` is still just a scaffold (`__version__` only). Move the
-decoder (`nxt_decode_poc.py`), index builder (`nxt_build_index.py`), and
-eventually the downloader into real modules under `src/fliberator/`, add a
-CLI entry point, and add unit tests (decoder opcode rules, index builder
-against a small fixture) to replace ad hoc script runs.
+### Phase 7 — Promote scripts/ into the installable package ✅ done
+`src/fliberator/` now holds `depage.py`, `decode.py`, `footnotes.py`,
+`documents.py`, `emit.py` and `cli.py`, with a `fliberate` entry point.
+The test suite went from 1 test to 27, covering the opcode rules (including
+the three defects that shipped before the rules were right), the footnote
+rewriting, and document identity/ordering. The `scripts/` copies stay as
+the analysis originals and as regression checks against the live site.
+
+Still not promoted: the downloader (`scripts/download.py`) and the index
+builder (`nxt_build_index.py`, superseded for output purposes by
+`documents.py` but still used by the validation harnesses).
 
 ### Phase 8 — Extend to the rest of the corpus 🟡 triage done, scope open
 **Phase 8a (done)** answered the structural half: all 13 files reassemble
@@ -463,12 +469,51 @@ whether the eight finding-aid files are part of FLiberator's output at
 all, or whether "liberate the statutes" stops at primary law. That is a
 Phase 9 decision, but it is now a decision over a known list.
 
-### Phase 9 — Decide and implement the actual output shape ⬜ open
-The "liberated" deliverable format has never been decided — one HTML file
-per section? A single structured JSON/SQLite dataset keyed by citation?
-Depends on Phase 4 (validated content) and Phase 7 (a real package to emit
-it from). This is the phase that turns "we can decode this" into "here is
-the liberated Florida Statutes."
+### Phase 9 — The output shape ✅ decided and implemented
+
+**Decided and implemented (2026-08-06)** — `uv run fliberate` turns
+"we can decode this" into "here is the liberated Florida Statutes":
+**25,334 documents in ~18 seconds** (24,866 statute sections, 213
+constitution sections, 255 session laws).
+
+- **Shape:** one HTML file per section, plus **a single JSON metadata
+  file** carrying ordering and hierarchy. Not SQLite, not one big
+  document.
+- **Scope — three files, the primary law only:** `fs2025.nxt` (statutes),
+  `flcnst2025.nxt` (Florida Constitution), `lf2025.nxt` (Laws of
+  Florida). **Omitted:** the eight finding-aid files (subject/definition/
+  constitution indexes, cross-reference and tracing tables),
+  `uscon.nxt`, and `Law_Download_Help_PDF.nxt`. "Liberate the Florida
+  statutes" stops at Florida primary law.
+- **Footnotes — represent semantically in HTML5**, note bodies at the end
+  of the section. The source already supplies everything needed: an
+  inline `<sup><a href="#1">[1]</a></sup>` reference and a matching
+  `<div class="Note"><sup><a name="1">[1]</a></sup>…` body, with note
+  bodies already positioned after the last inline reference in **684 of
+  684** sections that have them, and every reference resolving to a note.
+  The transform is therefore a re-labelling, not a restructuring:
+
+  ```html
+  <sup><a id="fnref-1-1" href="#fn-1" role="doc-noteref">1</a></sup>
+  ...
+  <section role="doc-endnotes">
+    <ol>
+      <li id="fn-1" role="doc-endnote">Repealed by s. 20, ch. 97-180.
+        <a href="#fnref-1-1" role="doc-backlink">↩</a>
+        <a href="#fnref-1-2" role="doc-backlink">↩</a></li>
+    </ol>
+  </section>
+  ```
+
+  The marker renders as a plain `1`, not the source's `[1]` — `<sup>`
+  plus `doc-noteref` already carries that meaning, and it matches
+  leg.state.fl.us. **One backlink per referrer**, since 98 notes are
+  cited from more than one place (up to 15), so a single backlink would
+  silently pick one call site. Two notes corpus-wide have no referrer at
+  all and simply get no backlink.
+- **No further work on PDF fidelity.** The session-law comparison
+  against `pdftotext` output is as good as it needs to be; its residual
+  is extraction noise and the symmetric hyphen fold is an accepted limit.
 
 ## Tooling notes
 

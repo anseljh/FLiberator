@@ -15,6 +15,9 @@ classifiers = [
 ]
 dependencies = []
 
+[project.scripts]
+fliberate = "fliberator.cli:main"
+
 [project.urls]
 Homepage = "https://github.com/anseljh/FLiberator"
 Repository = "https://github.com/anseljh/FLiberator"
