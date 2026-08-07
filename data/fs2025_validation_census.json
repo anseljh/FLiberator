@@ -1,0 +1,4263 @@
+{
+  "compared": 24866,
+  "exact": 24157,
+  "at_or_above_threshold": 24851,
+  "mean_ratio": 0.9999577517808962,
+  "elapsed_seconds": 21540.1,
+  "not_exact": [
+    {
+      "citation": "F.S. 736.0708",
+      "status": "MISMATCH",
+      "ratio": 0.9588295976742005,
+      "chars": 5331
+    },
+    {
+      "citation": "F.S. 605.2801",
+      "status": "MISMATCH",
+      "ratio": 0.9803921568627451,
+      "chars": 206
+    },
+    {
+      "citation": "F.S. 420.5061",
+      "status": "MISMATCH",
+      "ratio": 0.9815880322209436,
+      "chars": 1748
+    },
+    {
+      "citation": "F.S. 290.001",
+      "status": "MISMATCH",
+      "ratio": 0.9865771812080537,
+      "chars": 300
+    },
+    {
+      "citation": "F.S. 747.036",
+      "status": "MISMATCH",
+      "ratio": 0.9875,
+      "chars": 322
+    },
+    {
+      "citation": "F.S. 125.571",
+      "status": "MISMATCH",
+      "ratio": 0.9876160990712074,
+      "chars": 325
+    },
+    {
+      "citation": "F.S. 166.0483",
+      "status": "MISMATCH",
+      "ratio": 0.9876160990712074,
+      "chars": 325
+    },
+    {
+      "citation": "F.S. 747.034",
+      "status": "MISMATCH",
+      "ratio": 0.9879518072289156,
+      "chars": 334
+    },
+    {
+      "citation": "F.S. 125.0102",
+      "status": "MISMATCH",
+      "ratio": 0.9882352941176471,
+      "chars": 342
+    },
+    {
+      "citation": "F.S. 166.0425",
+      "status": "MISMATCH",
+      "ratio": 0.9882352941176471,
+      "chars": 342
+    },
+    {
+      "citation": "F.S. 122.18",
+      "status": "MISMATCH",
+      "ratio": 0.9882869692532943,
+      "chars": 687
+    },
+    {
+      "citation": "F.S. 605.2101",
+      "status": "MISMATCH",
+      "ratio": 0.9888888888888889,
+      "chars": 182
+    },
+    {
+      "citation": "F.S. 450.27",
+      "status": "MISMATCH",
+      "ratio": 0.9891304347826086,
+      "chars": 370
+    },
+    {
+      "citation": "F.S. 106.32",
+      "status": "MISMATCH",
+      "ratio": 0.9892280071813285,
+      "chars": 1120
+    },
+    {
+      "citation": "F.S. 450.36",
+      "status": "MISMATCH",
+      "ratio": 0.9896373056994818,
+      "chars": 388
+    },
+    {
+      "citation": "F.S. 605.2604",
+      "status": "CLOSE",
+      "ratio": 0.9902912621359223,
+      "chars": 414
+    },
+    {
+      "citation": "F.S. 106.36",
+      "status": "CLOSE",
+      "ratio": 0.9906759906759907,
+      "chars": 862
+    },
+    {
+      "citation": "F.S. 580.0365",
+      "status": "CLOSE",
+      "ratio": 0.9907300115874855,
+      "chars": 867
+    },
+    {
+      "citation": "F.S. 570.321",
+      "status": "CLOSE",
+      "ratio": 0.9910179640718563,
+      "chars": 671
+    },
+    {
+      "citation": "F.S. 719.1255",
+      "status": "CLOSE",
+      "ratio": 0.9910913140311804,
+      "chars": 451
+    },
+    {
+      "citation": "F.S. 377.07",
+      "status": "CLOSE",
+      "ratio": 0.9912280701754386,
+      "chars": 458
+    },
+    {
+      "citation": "F.S. 175.1215",
+      "status": "CLOSE",
+      "ratio": 0.9912854030501089,
+      "chars": 461
+    },
+    {
+      "citation": "F.S. 185.105",
+      "status": "CLOSE",
+      "ratio": 0.9912854030501089,
+      "chars": 461
+    },
+    {
+      "citation": "F.S. 605.2802",
+      "status": "CLOSE",
+      "ratio": 0.9914346895074947,
+      "chars": 469
+    },
+    {
+      "citation": "F.S. 195.207",
+      "status": "CLOSE",
+      "ratio": 0.9915730337078652,
+      "chars": 715
+    },
+    {
+      "citation": "F.S. 43.18",
+      "status": "CLOSE",
+      "ratio": 0.9917695473251029,
+      "chars": 488
+    },
+    {
+      "citation": "F.S. 394.4995",
+      "status": "CLOSE",
+      "ratio": 0.9921568627450981,
+      "chars": 512
+    },
+    {
+      "citation": "F.S. 290.012",
+      "status": "CLOSE",
+      "ratio": 0.9924242424242424,
+      "chars": 530
+    },
+    {
+      "citation": "F.S. 625.314",
+      "status": "CLOSE",
+      "ratio": 0.9925742574257426,
+      "chars": 811
+    },
+    {
+      "citation": "F.S. 1000.361",
+      "status": "CLOSE",
+      "ratio": 0.992818671454219,
+      "chars": 559
+    },
+    {
+      "citation": "F.S. 450.37",
+      "status": "CLOSE",
+      "ratio": 0.9929701230228472,
+      "chars": 571
+    },
+    {
+      "citation": "F.S. 679.527",
+      "status": "CLOSE",
+      "ratio": 0.9932203389830508,
+      "chars": 6511
+    },
+    {
+      "citation": "F.S. 683.337",
+      "status": "CLOSE",
+      "ratio": 0.9933884297520661,
+      "chars": 607
+    },
+    {
+      "citation": "F.S. 625.313",
+      "status": "CLOSE",
+      "ratio": 0.993421052631579,
+      "chars": 1830
+    },
+    {
+      "citation": "F.S. 125.0109",
+      "status": "CLOSE",
+      "ratio": 0.9937106918238994,
+      "chars": 638
+    },
+    {
+      "citation": "F.S. 166.0445",
+      "status": "CLOSE",
+      "ratio": 0.9937106918238994,
+      "chars": 638
+    },
+    {
+      "citation": "F.S. 542.15",
+      "status": "CLOSE",
+      "ratio": 0.9937888198757764,
+      "chars": 646
+    },
+    {
+      "citation": "F.S. 203.0011",
+      "status": "CLOSE",
+      "ratio": 0.9939301972685888,
+      "chars": 661
+    },
+    {
+      "citation": "F.S. 212.05011",
+      "status": "CLOSE",
+      "ratio": 0.9939301972685888,
+      "chars": 661
+    },
+    {
+      "citation": "F.S. 542.41",
+      "status": "CLOSE",
+      "ratio": 0.9941176470588236,
+      "chars": 682
+    },
+    {
+      "citation": "F.S. 159.706",
+      "status": "CLOSE",
+      "ratio": 0.9941690962099126,
+      "chars": 688
+    },
+    {
+      "citation": "F.S. 425.29",
+      "status": "CLOSE",
+      "ratio": 0.9942363112391931,
+      "chars": 1044
+    },
+    {
+      "citation": "F.S. 627.4237",
+      "status": "CLOSE",
+      "ratio": 0.9942418426103646,
+      "chars": 1046
+    },
+    {
+      "citation": "F.S. 542.35",
+      "status": "CLOSE",
+      "ratio": 0.9942528735632183,
+      "chars": 698
+    },
+    {
+      "citation": "F.S. 669.705",
+      "status": "CLOSE",
+      "ratio": 0.9944521497919556,
+      "chars": 723
+    },
+    {
+      "citation": "F.S. 723.0861",
+      "status": "CLOSE",
+      "ratio": 0.9944979367262724,
+      "chars": 729
+    },
+    {
+      "citation": "F.S. 655.0321",
+      "status": "CLOSE",
+      "ratio": 0.9945872801082544,
+      "chars": 741
+    },
+    {
+      "citation": "F.S. 605.2103",
+      "status": "CLOSE",
+      "ratio": 0.9946164199192463,
+      "chars": 745
+    },
+    {
+      "citation": "F.S. 542.20",
+      "status": "CLOSE",
+      "ratio": 0.9946452476572959,
+      "chars": 749
+    },
+    {
+      "citation": "F.S. 450.35",
+      "status": "CLOSE",
+      "ratio": 0.9947712418300654,
+      "chars": 767
+    },
+    {
+      "citation": "F.S. 605.2202",
+      "status": "CLOSE",
+      "ratio": 0.9947780678851175,
+      "chars": 768
+    },
+    {
+      "citation": "F.S. 290.016",
+      "status": "CLOSE",
+      "ratio": 0.9948051948051948,
+      "chars": 772
+    },
+    {
+      "citation": "F.S. 631.0515",
+      "status": "CLOSE",
+      "ratio": 0.9949238578680203,
+      "chars": 1580
+    },
+    {
+      "citation": "F.S. 290.014",
+      "status": "CLOSE",
+      "ratio": 0.9952324195470799,
+      "chars": 841
+    },
+    {
+      "citation": "F.S. 92.30",
+      "status": "CLOSE",
+      "ratio": 0.9952550415183867,
+      "chars": 845
+    },
+    {
+      "citation": "F.S. 542.16",
+      "status": "CLOSE",
+      "ratio": 0.9953106682297772,
+      "chars": 855
+    },
+    {
+      "citation": "F.S. 542.36",
+      "status": "CLOSE",
+      "ratio": 0.9954022988505747,
+      "chars": 872
+    },
+    {
+      "citation": "F.S. 901.1503",
+      "status": "CLOSE",
+      "ratio": 0.9955406911928651,
+      "chars": 899
+    },
+    {
+      "citation": "F.S. 542.30",
+      "status": "CLOSE",
+      "ratio": 0.995575221238938,
+      "chars": 906
+    },
+    {
+      "citation": "F.S. 542.29",
+      "status": "CLOSE",
+      "ratio": 0.9957081545064378,
+      "chars": 934
+    },
+    {
+      "citation": "F.S. 30.60",
+      "status": "CLOSE",
+      "ratio": 0.9957537154989384,
+      "chars": 473
+    },
+    {
+      "citation": "F.S. 166.0485",
+      "status": "CLOSE",
+      "ratio": 0.9957537154989384,
+      "chars": 473
+    },
+    {
+      "citation": "F.S. 542.31",
+      "status": "CLOSE",
+      "ratio": 0.9957537154989384,
+      "chars": 944
+    },
+    {
+      "citation": "F.S. 634.322",
+      "status": "CLOSE",
+      "ratio": 0.9957939011566772,
+      "chars": 953
+    },
+    {
+      "citation": "F.S. 450.29",
+      "status": "CLOSE",
+      "ratio": 0.99581589958159,
+      "chars": 958
+    },
+    {
+      "citation": "F.S. 669.706",
+      "status": "CLOSE",
+      "ratio": 0.99581589958159,
+      "chars": 958
+    },
+    {
+      "citation": "F.S. 542.23",
+      "status": "CLOSE",
+      "ratio": 0.9959266802443992,
+      "chars": 984
+    },
+    {
+      "citation": "F.S. 542.32",
+      "status": "CLOSE",
+      "ratio": 0.9959718026183283,
+      "chars": 995
+    },
+    {
+      "citation": "F.S. 634.319",
+      "status": "CLOSE",
+      "ratio": 0.9960745829244357,
+      "chars": 1021
+    },
+    {
+      "citation": "F.S. 943.17261",
+      "status": "CLOSE",
+      "ratio": 0.9961127308066083,
+      "chars": 1031
+    },
+    {
+      "citation": "F.S. 542.24",
+      "status": "CLOSE",
+      "ratio": 0.9961315280464217,
+      "chars": 1036
+    },
+    {
+      "citation": "F.S. 627.805",
+      "status": "CLOSE",
+      "ratio": 0.996219281663516,
+      "chars": 1060
+    },
+    {
+      "citation": "F.S. 440.60",
+      "status": "CLOSE",
+      "ratio": 0.9963065558633426,
+      "chars": 1085
+    },
+    {
+      "citation": "F.S. 215.56021",
+      "status": "CLOSE",
+      "ratio": 0.9963336388634281,
+      "chars": 1093
+    },
+    {
+      "citation": "F.S. 381.92201",
+      "status": "CLOSE",
+      "ratio": 0.9963336388634281,
+      "chars": 1093
+    },
+    {
+      "citation": "F.S. 320.90",
+      "status": "CLOSE",
+      "ratio": 0.9963636363636363,
+      "chars": 1102
+    },
+    {
+      "citation": "F.S. 290.0066",
+      "status": "CLOSE",
+      "ratio": 0.9965095986038395,
+      "chars": 1148
+    },
+    {
+      "citation": "F.S. 624.51056",
+      "status": "CLOSE",
+      "ratio": 0.9965412883700822,
+      "chars": 2317
+    },
+    {
+      "citation": "F.S. 290.003",
+      "status": "CLOSE",
+      "ratio": 0.9965546942291128,
+      "chars": 1163
+    },
+    {
+      "citation": "F.S. 458.3192",
+      "status": "CLOSE",
+      "ratio": 0.9966358284272497,
+      "chars": 1191
+    },
+    {
+      "citation": "F.S. 459.0082",
+      "status": "CLOSE",
+      "ratio": 0.9966358284272497,
+      "chars": 1191
+    },
+    {
+      "citation": "F.S. 316.88",
+      "status": "CLOSE",
+      "ratio": 0.9967266775777414,
+      "chars": 613
+    },
+    {
+      "citation": "F.S. 1000.38",
+      "status": "CLOSE",
+      "ratio": 0.9968253968253968,
+      "chars": 1262
+    },
+    {
+      "citation": "F.S. 736.151",
+      "status": "CLOSE",
+      "ratio": 0.9968329374505146,
+      "chars": 1265
+    },
+    {
+      "citation": "F.S. 320.031",
+      "status": "CLOSE",
+      "ratio": 0.9968520461699895,
+      "chars": 1909
+    },
+    {
+      "citation": "F.S. 410.603",
+      "status": "CLOSE",
+      "ratio": 0.9969111969111969,
+      "chars": 1297
+    },
+    {
+      "citation": "F.S. 617.1108",
+      "status": "CLOSE",
+      "ratio": 0.996958174904943,
+      "chars": 1317
+    },
+    {
+      "citation": "F.S. 290.00677",
+      "status": "CLOSE",
+      "ratio": 0.9969604863221885,
+      "chars": 1318
+    },
+    {
+      "citation": "F.S. 106.355",
+      "status": "CLOSE",
+      "ratio": 0.9970348406226834,
+      "chars": 1351
+    },
+    {
+      "citation": "F.S. 605.2503",
+      "status": "CLOSE",
+      "ratio": 0.9970544918998527,
+      "chars": 681
+    },
+    {
+      "citation": "F.S. 627.7405",
+      "status": "CLOSE",
+      "ratio": 0.9970631424375918,
+      "chars": 1364
+    },
+    {
+      "citation": "F.S. 379.413",
+      "status": "CLOSE",
+      "ratio": 0.9970738844184345,
+      "chars": 1369
+    },
+    {
+      "citation": "F.S. 624.608",
+      "status": "CLOSE",
+      "ratio": 0.9970866715222141,
+      "chars": 1375
+    },
+    {
+      "citation": "F.S. 626.551",
+      "status": "CLOSE",
+      "ratio": 0.9970972423802612,
+      "chars": 1380
+    },
+    {
+      "citation": "F.S. 220.241",
+      "status": "CLOSE",
+      "ratio": 0.9971326164874552,
+      "chars": 1397
+    },
+    {
+      "citation": "F.S. 106.34",
+      "status": "CLOSE",
+      "ratio": 0.9971550497866287,
+      "chars": 1408
+    },
+    {
+      "citation": "F.S. 605.2602",
+      "status": "CLOSE",
+      "ratio": 0.9971751412429378,
+      "chars": 710
+    },
+    {
+      "citation": "F.S. 542.26",
+      "status": "CLOSE",
+      "ratio": 0.9972144846796658,
+      "chars": 1438
+    },
+    {
+      "citation": "F.S. 782.072",
+      "status": "CLOSE",
+      "ratio": 0.9972318339100346,
+      "chars": 1447
+    },
+    {
+      "citation": "F.S. 288.80125",
+      "status": "CLOSE",
+      "ratio": 0.9972337482710927,
+      "chars": 1448
+    },
+    {
+      "citation": "F.S. 1012.07",
+      "status": "CLOSE",
+      "ratio": 0.9972394755003451,
+      "chars": 1451
+    },
+    {
+      "citation": "F.S. 605.2403",
+      "status": "CLOSE",
+      "ratio": 0.9972489683631361,
+      "chars": 729
+    },
+    {
+      "citation": "F.S. 450.34",
+      "status": "CLOSE",
+      "ratio": 0.9972807613868117,
+      "chars": 1473
+    },
+    {
+      "citation": "F.S. 27.151",
+      "status": "CLOSE",
+      "ratio": 0.9972844534962662,
+      "chars": 1475
+    },
+    {
+      "citation": "F.S. 542.25",
+      "status": "CLOSE",
+      "ratio": 0.997289972899729,
+      "chars": 1478
+    },
+    {
+      "citation": "F.S. 290.004",
+      "status": "CLOSE",
+      "ratio": 0.997291807718348,
+      "chars": 1479
+    },
+    {
+      "citation": "F.S. 193.4516",
+      "status": "CLOSE",
+      "ratio": 0.9973492379058979,
+      "chars": 1511
+    },
+    {
+      "citation": "F.S. 205.0532",
+      "status": "CLOSE",
+      "ratio": 0.9973614775725593,
+      "chars": 760
+    },
+    {
+      "citation": "F.S. 561.1212",
+      "status": "CLOSE",
+      "ratio": 0.9973736047275115,
+      "chars": 1525
+    },
+    {
+      "citation": "F.S. 561.02",
+      "status": "CLOSE",
+      "ratio": 0.9974522292993631,
+      "chars": 1572
+    },
+    {
+      "citation": "F.S. 944.278",
+      "status": "CLOSE",
+      "ratio": 0.9974554707379135,
+      "chars": 1576
+    },
+    {
+      "citation": "F.S. 671.309",
+      "status": "CLOSE",
+      "ratio": 0.997508896797153,
+      "chars": 2817
+    },
+    {
+      "citation": "F.S. 938.085",
+      "status": "CLOSE",
+      "ratio": 0.9975201487910725,
+      "chars": 1615
+    },
+    {
+      "citation": "F.S. 458.313",
+      "status": "CLOSE",
+      "ratio": 0.9975698663426489,
+      "chars": 1648
+    },
+    {
+      "citation": "F.S. 328.80",
+      "status": "CLOSE",
+      "ratio": 0.9975903614457832,
+      "chars": 832
+    },
+    {
+      "citation": "F.S. 211.0252",
+      "status": "CLOSE",
+      "ratio": 0.9976047904191617,
+      "chars": 1672
+    },
+    {
+      "citation": "F.S. 561.1214",
+      "status": "CLOSE",
+      "ratio": 0.9976047904191617,
+      "chars": 1672
+    },
+    {
+      "citation": "F.S. 624.51058",
+      "status": "CLOSE",
+      "ratio": 0.9976119402985074,
+      "chars": 1677
+    },
+    {
+      "citation": "F.S. 380.0551",
+      "status": "CLOSE",
+      "ratio": 0.9976949673453708,
+      "chars": 2609
+    },
+    {
+      "citation": "F.S. 47.025",
+      "status": "CLOSE",
+      "ratio": 0.9977037887485649,
+      "chars": 873
+    },
+    {
+      "citation": "F.S. 290.007",
+      "status": "CLOSE",
+      "ratio": 0.9977064220183486,
+      "chars": 1746
+    },
+    {
+      "citation": "F.S. 379.2413",
+      "status": "CLOSE",
+      "ratio": 0.9977116704805492,
+      "chars": 1750
+    },
+    {
+      "citation": "F.S. 215.211",
+      "status": "CLOSE",
+      "ratio": 0.9977181973759269,
+      "chars": 1755
+    },
+    {
+      "citation": "F.S. 624.51057",
+      "status": "CLOSE",
+      "ratio": 0.9977452085682075,
+      "chars": 1776
+    },
+    {
+      "citation": "F.S. 628.421",
+      "status": "CLOSE",
+      "ratio": 0.9977528089887641,
+      "chars": 1782
+    },
+    {
+      "citation": "F.S. 212.1833",
+      "status": "CLOSE",
+      "ratio": 0.997815401419989,
+      "chars": 1833
+    },
+    {
+      "citation": "F.S. 1004.441",
+      "status": "CLOSE",
+      "ratio": 0.9978165938864629,
+      "chars": 1834
+    },
+    {
+      "citation": "F.S. 408.802",
+      "status": "CLOSE",
+      "ratio": 0.9978510028653295,
+      "chars": 2795
+    },
+    {
+      "citation": "F.S. 605.2107",
+      "status": "CLOSE",
+      "ratio": 0.9978609625668449,
+      "chars": 1872
+    },
+    {
+      "citation": "F.S. 364.01",
+      "status": "CLOSE",
+      "ratio": 0.99786438868126,
+      "chars": 1875
+    },
+    {
+      "citation": "F.S. 717.1071",
+      "status": "CLOSE",
+      "ratio": 0.9978858350951374,
+      "chars": 1894
+    },
+    {
+      "citation": "F.S. 106.353",
+      "status": "CLOSE",
+      "ratio": 0.9979006298110566,
+      "chars": 1432
+    },
+    {
+      "citation": "F.S. 794.056",
+      "status": "CLOSE",
+      "ratio": 0.9979090433873498,
+      "chars": 1915
+    },
+    {
+      "citation": "F.S. 211.0254",
+      "status": "CLOSE",
+      "ratio": 0.997911227154047,
+      "chars": 1917
+    },
+    {
+      "citation": "F.S. 201.031",
+      "status": "CLOSE",
+      "ratio": 0.997926386728875,
+      "chars": 1931
+    },
+    {
+      "citation": "F.S. 605.2302",
+      "status": "CLOSE",
+      "ratio": 0.9979317476732161,
+      "chars": 969
+    },
+    {
+      "citation": "F.S. 599.012",
+      "status": "CLOSE",
+      "ratio": 0.997948717948718,
+      "chars": 977
+    },
+    {
+      "citation": "F.S. 626.861",
+      "status": "CLOSE",
+      "ratio": 0.9979777553083923,
+      "chars": 1980
+    },
+    {
+      "citation": "F.S. 385.211",
+      "status": "CLOSE",
+      "ratio": 0.9979889391654098,
+      "chars": 1991
+    },
+    {
+      "citation": "F.S. 212.1835",
+      "status": "CLOSE",
+      "ratio": 0.9979899497487437,
+      "chars": 1992
+    },
+    {
+      "citation": "F.S. 186.503",
+      "status": "CLOSE",
+      "ratio": 0.9980069755854509,
+      "chars": 2009
+    },
+    {
+      "citation": "F.S. 605.2603",
+      "status": "CLOSE",
+      "ratio": 0.998025666337611,
+      "chars": 1015
+    },
+    {
+      "citation": "F.S. 627.64725",
+      "status": "CLOSE",
+      "ratio": 0.9980314960629921,
+      "chars": 1018
+    },
+    {
+      "citation": "F.S. 641.31015",
+      "status": "CLOSE",
+      "ratio": 0.9980314960629921,
+      "chars": 1018
+    },
+    {
+      "citation": "F.S. 106.33",
+      "status": "CLOSE",
+      "ratio": 0.9980324643384161,
+      "chars": 2035
+    },
+    {
+      "citation": "F.S. 782.071",
+      "status": "CLOSE",
+      "ratio": 0.998038254046101,
+      "chars": 2041
+    },
+    {
+      "citation": "F.S. 220.1876",
+      "status": "CLOSE",
+      "ratio": 0.9980475105759844,
+      "chars": 3077
+    },
+    {
+      "citation": "F.S. 605.2104",
+      "status": "CLOSE",
+      "ratio": 0.9980506822612085,
+      "chars": 1028
+    },
+    {
+      "citation": "F.S. 479.156",
+      "status": "CLOSE",
+      "ratio": 0.9980525803310614,
+      "chars": 2056
+    },
+    {
+      "citation": "F.S. 624.5107",
+      "status": "CLOSE",
+      "ratio": 0.9980722891566265,
+      "chars": 2077
+    },
+    {
+      "citation": "F.S. 513.045",
+      "status": "CLOSE",
+      "ratio": 0.9980759980759981,
+      "chars": 2081
+    },
+    {
+      "citation": "F.S. 605.2702",
+      "status": "CLOSE",
+      "ratio": 0.9981900452488688,
+      "chars": 1107
+    },
+    {
+      "citation": "F.S. 410.504",
+      "status": "CLOSE",
+      "ratio": 0.9981941309255079,
+      "chars": 2219
+    },
+    {
+      "citation": "F.S. 628.431",
+      "status": "CLOSE",
+      "ratio": 0.9982046678635548,
+      "chars": 2230
+    },
+    {
+      "citation": "F.S. 605.2606",
+      "status": "CLOSE",
+      "ratio": 0.9982062780269059,
+      "chars": 1117
+    },
+    {
+      "citation": "F.S. 634.201",
+      "status": "CLOSE",
+      "ratio": 0.9982118909253465,
+      "chars": 2239
+    },
+    {
+      "citation": "F.S. 220.186",
+      "status": "CLOSE",
+      "ratio": 0.9982285208148804,
+      "chars": 2260
+    },
+    {
+      "citation": "F.S. 585.11",
+      "status": "CLOSE",
+      "ratio": 0.9982332155477032,
+      "chars": 2266
+    },
+    {
+      "citation": "F.S. 624.46223",
+      "status": "CLOSE",
+      "ratio": 0.9982876712328768,
+      "chars": 1170
+    },
+    {
+      "citation": "F.S. 322.66",
+      "status": "CLOSE",
+      "ratio": 0.9982905982905983,
+      "chars": 1172
+    },
+    {
+      "citation": "F.S. 605.0211",
+      "status": "CLOSE",
+      "ratio": 0.9982960077896786,
+      "chars": 4115
+    },
+    {
+      "citation": "F.S. 605.2601",
+      "status": "CLOSE",
+      "ratio": 0.9983457402812241,
+      "chars": 1211
+    },
+    {
+      "citation": "F.S. 501.0117",
+      "status": "CLOSE",
+      "ratio": 0.9983477901693515,
+      "chars": 2423
+    },
+    {
+      "citation": "F.S. 212.099",
+      "status": "CLOSE",
+      "ratio": 0.9983741725699686,
+      "chars": 8625
+    },
+    {
+      "citation": "F.S. 947.005",
+      "status": "CLOSE",
+      "ratio": 0.9983812221772562,
+      "chars": 2473
+    },
+    {
+      "citation": "F.S. 322.02",
+      "status": "CLOSE",
+      "ratio": 0.9983853606027987,
+      "chars": 3719
+    },
+    {
+      "citation": "F.S. 379.246",
+      "status": "CLOSE",
+      "ratio": 0.9984012789768185,
+      "chars": 2504
+    },
+    {
+      "citation": "F.S. 984.21",
+      "status": "CLOSE",
+      "ratio": 0.9984338292873923,
+      "chars": 1279
+    },
+    {
+      "citation": "F.S. 193.015",
+      "status": "CLOSE",
+      "ratio": 0.9984375,
+      "chars": 1282
+    },
+    {
+      "citation": "F.S. 400.0077",
+      "status": "CLOSE",
+      "ratio": 0.9984405458089669,
+      "chars": 2567
+    },
+    {
+      "citation": "F.S. 213.05",
+      "status": "CLOSE",
+      "ratio": 0.9984579799537394,
+      "chars": 2596
+    },
+    {
+      "citation": "F.S. 288.0001",
+      "status": "CLOSE",
+      "ratio": 0.9984688018374378,
+      "chars": 7844
+    },
+    {
+      "citation": "F.S. 153.19",
+      "status": "CLOSE",
+      "ratio": 0.9984813971146546,
+      "chars": 1319
+    },
+    {
+      "citation": "F.S. 736.1502",
+      "status": "CLOSE",
+      "ratio": 0.998496993987976,
+      "chars": 1999
+    },
+    {
+      "citation": "F.S. 605.2303",
+      "status": "CLOSE",
+      "ratio": 0.998546511627907,
+      "chars": 1378
+    },
+    {
+      "citation": "F.S. 542.42",
+      "status": "CLOSE",
+      "ratio": 0.9985580389329488,
+      "chars": 1389
+    },
+    {
+      "citation": "F.S. 335.074",
+      "status": "CLOSE",
+      "ratio": 0.9985861442132903,
+      "chars": 4958
+    },
+    {
+      "citation": "F.S. 220.19",
+      "status": "CLOSE",
+      "ratio": 0.99858806918461,
+      "chars": 2835
+    },
+    {
+      "citation": "F.S. 215.18",
+      "status": "CLOSE",
+      "ratio": 0.9986028641285365,
+      "chars": 5730
+    },
+    {
+      "citation": "F.S. 125.581",
+      "status": "CLOSE",
+      "ratio": 0.9986139986139986,
+      "chars": 1445
+    },
+    {
+      "citation": "F.S. 672.511",
+      "status": "CLOSE",
+      "ratio": 0.9986139986139986,
+      "chars": 2888
+    },
+    {
+      "citation": "F.S. 166.0443",
+      "status": "CLOSE",
+      "ratio": 0.9986178299930891,
+      "chars": 1449
+    },
+    {
+      "citation": "F.S. 605.0117",
+      "status": "CLOSE",
+      "ratio": 0.9986197377501725,
+      "chars": 1451
+    },
+    {
+      "citation": "F.S. 122.35",
+      "status": "CLOSE",
+      "ratio": 0.998631074606434,
+      "chars": 2924
+    },
+    {
+      "citation": "F.S. 605.2201",
+      "status": "CLOSE",
+      "ratio": 0.998645903859174,
+      "chars": 1479
+    },
+    {
+      "citation": "F.S. 194.171",
+      "status": "CLOSE",
+      "ratio": 0.9986463620981387,
+      "chars": 2957
+    },
+    {
+      "citation": "F.S. 624.51059",
+      "status": "CLOSE",
+      "ratio": 0.9986789960369881,
+      "chars": 1516
+    },
+    {
+      "citation": "F.S. 561.12135",
+      "status": "CLOSE",
+      "ratio": 0.9986850756081526,
+      "chars": 1523
+    },
+    {
+      "citation": "F.S. 482.157",
+      "status": "CLOSE",
+      "ratio": 0.9986893840104849,
+      "chars": 3054
+    },
+    {
+      "citation": "F.S. 731.1065",
+      "status": "CLOSE",
+      "ratio": 0.998694942903752,
+      "chars": 3067
+    },
+    {
+      "citation": "F.S. 395.404",
+      "status": "CLOSE",
+      "ratio": 0.9986953685583823,
+      "chars": 1535
+    },
+    {
+      "citation": "F.S. 379.2425",
+      "status": "CLOSE",
+      "ratio": 0.9986987638256344,
+      "chars": 3076
+    },
+    {
+      "citation": "F.S. 605.2203",
+      "status": "CLOSE",
+      "ratio": 0.9987088444157521,
+      "chars": 1551
+    },
+    {
+      "citation": "F.S. 465.017",
+      "status": "CLOSE",
+      "ratio": 0.998712584486643,
+      "chars": 3109
+    },
+    {
+      "citation": "F.S. 605.2206",
+      "status": "CLOSE",
+      "ratio": 0.9987228607918263,
+      "chars": 1568
+    },
+    {
+      "citation": "F.S. 605.2402",
+      "status": "CLOSE",
+      "ratio": 0.9987381703470032,
+      "chars": 1587
+    },
+    {
+      "citation": "F.S. 790.174",
+      "status": "CLOSE",
+      "ratio": 0.9987484355444305,
+      "chars": 1600
+    },
+    {
+      "citation": "F.S. 454.021",
+      "status": "CLOSE",
+      "ratio": 0.9987492182614134,
+      "chars": 1601
+    },
+    {
+      "citation": "F.S. 403.905",
+      "status": "CLOSE",
+      "ratio": 0.9987569919204475,
+      "chars": 1611
+    },
+    {
+      "citation": "F.S. 440.50",
+      "status": "CLOSE",
+      "ratio": 0.9987733823980374,
+      "chars": 3263
+    },
+    {
+      "citation": "F.S. 390.011",
+      "status": "CLOSE",
+      "ratio": 0.998776758409786,
+      "chars": 6544
+    },
+    {
+      "citation": "F.S. 552.12",
+      "status": "CLOSE",
+      "ratio": 0.9987878787878788,
+      "chars": 1652
+    },
+    {
+      "citation": "F.S. 219.06",
+      "status": "CLOSE",
+      "ratio": 0.9987929993964997,
+      "chars": 1659
+    },
+    {
+      "citation": "F.S. 458.3193",
+      "status": "CLOSE",
+      "ratio": 0.9988425925925926,
+      "chars": 1730
+    },
+    {
+      "citation": "F.S. 459.0083",
+      "status": "CLOSE",
+      "ratio": 0.9988425925925926,
+      "chars": 1730
+    },
+    {
+      "citation": "F.S. 605.2501",
+      "status": "CLOSE",
+      "ratio": 0.9988545246277205,
+      "chars": 1748
+    },
+    {
+      "citation": "F.S. 106.35",
+      "status": "CLOSE",
+      "ratio": 0.9988719684151156,
+      "chars": 3550
+    },
+    {
+      "citation": "F.S. 394.4575",
+      "status": "CLOSE",
+      "ratio": 0.9988767200224656,
+      "chars": 3563
+    },
+    {
+      "citation": "F.S. 385.102",
+      "status": "CLOSE",
+      "ratio": 0.9988851727982163,
+      "chars": 1796
+    },
+    {
+      "citation": "F.S. 206.9931",
+      "status": "CLOSE",
+      "ratio": 0.9988898140438524,
+      "chars": 3605
+    },
+    {
+      "citation": "F.S. 473.305",
+      "status": "CLOSE",
+      "ratio": 0.9988974641675854,
+      "chars": 1816
+    },
+    {
+      "citation": "F.S. 290.002",
+      "status": "CLOSE",
+      "ratio": 0.9989218328840971,
+      "chars": 1857
+    },
+    {
+      "citation": "F.S. 627.06501",
+      "status": "CLOSE",
+      "ratio": 0.9989258861439313,
+      "chars": 1864
+    },
+    {
+      "citation": "F.S. 339.1371",
+      "status": "CLOSE",
+      "ratio": 0.9989316239316239,
+      "chars": 1874
+    },
+    {
+      "citation": "F.S. 11.52",
+      "status": "CLOSE",
+      "ratio": 0.9989412387506618,
+      "chars": 1891
+    },
+    {
+      "citation": "F.S. 627.446",
+      "status": "CLOSE",
+      "ratio": 0.9989462592202318,
+      "chars": 1900
+    },
+    {
+      "citation": "F.S. 605.2305",
+      "status": "CLOSE",
+      "ratio": 0.9989545216936748,
+      "chars": 1915
+    },
+    {
+      "citation": "F.S. 551.118",
+      "status": "CLOSE",
+      "ratio": 0.9989664082687338,
+      "chars": 1937
+    },
+    {
+      "citation": "F.S. 627.6045",
+      "status": "CLOSE",
+      "ratio": 0.998972250770812,
+      "chars": 1948
+    },
+    {
+      "citation": "F.S. 450.161",
+      "status": "CLOSE",
+      "ratio": 0.9989725147701002,
+      "chars": 3895
+    },
+    {
+      "citation": "F.S. 253.77",
+      "status": "CLOSE",
+      "ratio": 0.9989743589743589,
+      "chars": 2928
+    },
+    {
+      "citation": "F.S. 695.20",
+      "status": "CLOSE",
+      "ratio": 0.9989821882951654,
+      "chars": 1967
+    },
+    {
+      "citation": "F.S. 518.115",
+      "status": "CLOSE",
+      "ratio": 0.9989851150202977,
+      "chars": 2959
+    },
+    {
+      "citation": "F.S. 627.42397",
+      "status": "CLOSE",
+      "ratio": 0.9990123456790123,
+      "chars": 2027
+    },
+    {
+      "citation": "F.S. 605.2704",
+      "status": "CLOSE",
+      "ratio": 0.9990379990379991,
+      "chars": 2081
+    },
+    {
+      "citation": "F.S. 641.514",
+      "status": "CLOSE",
+      "ratio": 0.9990393852065321,
+      "chars": 2084
+    },
+    {
+      "citation": "F.S. 542.27",
+      "status": "CLOSE",
+      "ratio": 0.9990458015267175,
+      "chars": 2098
+    },
+    {
+      "citation": "F.S. 450.33",
+      "status": "CLOSE",
+      "ratio": 0.9990467111534795,
+      "chars": 4200
+    },
+    {
+      "citation": "F.S. 672.320",
+      "status": "CLOSE",
+      "ratio": 0.9990485252140818,
+      "chars": 2104
+    },
+    {
+      "citation": "F.S. 366.20",
+      "status": "CLOSE",
+      "ratio": 0.9990525817148271,
+      "chars": 2113
+    },
+    {
+      "citation": "F.S. 427.0159",
+      "status": "CLOSE",
+      "ratio": 0.999061473486626,
+      "chars": 2133
+    },
+    {
+      "citation": "F.S. 255.078",
+      "status": "CLOSE",
+      "ratio": 0.9990662931839402,
+      "chars": 2144
+    },
+    {
+      "citation": "F.S. 605.2502",
+      "status": "CLOSE",
+      "ratio": 0.9990671641791045,
+      "chars": 2146
+    },
+    {
+      "citation": "F.S. 624.44",
+      "status": "CLOSE",
+      "ratio": 0.9990684676292502,
+      "chars": 2149
+    },
+    {
+      "citation": "F.S. 65.071",
+      "status": "CLOSE",
+      "ratio": 0.9990693345742205,
+      "chars": 2151
+    },
+    {
+      "citation": "F.S. 542.17",
+      "status": "CLOSE",
+      "ratio": 0.9990693345742205,
+      "chars": 2151
+    },
+    {
+      "citation": "F.S. 339.041",
+      "status": "CLOSE",
+      "ratio": 0.9990759990759991,
+      "chars": 4333
+    },
+    {
+      "citation": "F.S. 48.151",
+      "status": "CLOSE",
+      "ratio": 0.9990806711100896,
+      "chars": 4353
+    },
+    {
+      "citation": "F.S. 215.472",
+      "status": "CLOSE",
+      "ratio": 0.9990838295923041,
+      "chars": 2185
+    },
+    {
+      "citation": "F.S. 403.111",
+      "status": "CLOSE",
+      "ratio": 0.9990917347865577,
+      "chars": 2204
+    },
+    {
+      "citation": "F.S. 391.026",
+      "status": "CLOSE",
+      "ratio": 0.9990921470721743,
+      "chars": 2205
+    },
+    {
+      "citation": "F.S. 420.5096",
+      "status": "CLOSE",
+      "ratio": 0.9991067440821796,
+      "chars": 4482
+    },
+    {
+      "citation": "F.S. 784.05",
+      "status": "CLOSE",
+      "ratio": 0.9991071428571429,
+      "chars": 2242
+    },
+    {
+      "citation": "F.S. 605.2204",
+      "status": "CLOSE",
+      "ratio": 0.9991079393398751,
+      "chars": 2244
+    },
+    {
+      "citation": "F.S. 395.403",
+      "status": "CLOSE",
+      "ratio": 0.9991130820399113,
+      "chars": 2257
+    },
+    {
+      "citation": "F.S. 215.471",
+      "status": "CLOSE",
+      "ratio": 0.999113475177305,
+      "chars": 2258
+    },
+    {
+      "citation": "F.S. 605.2401",
+      "status": "CLOSE",
+      "ratio": 0.999113867966327,
+      "chars": 2259
+    },
+    {
+      "citation": "F.S. 106.22",
+      "status": "CLOSE",
+      "ratio": 0.9991273996509599,
+      "chars": 2294
+    },
+    {
+      "citation": "F.S. 605.2608",
+      "status": "CLOSE",
+      "ratio": 0.9991315675206253,
+      "chars": 2305
+    },
+    {
+      "citation": "F.S. 196.1978",
+      "status": "CLOSE",
+      "ratio": 0.9991327368997627,
+      "chars": 21927
+    },
+    {
+      "citation": "F.S. 450.28",
+      "status": "CLOSE",
+      "ratio": 0.9991431019708654,
+      "chars": 2336
+    },
+    {
+      "citation": "F.S. 212.081",
+      "status": "CLOSE",
+      "ratio": 0.9991434689507495,
+      "chars": 2337
+    },
+    {
+      "citation": "F.S. 83.5615",
+      "status": "CLOSE",
+      "ratio": 0.9991485738612176,
+      "chars": 2351
+    },
+    {
+      "citation": "F.S. 605.2605",
+      "status": "CLOSE",
+      "ratio": 0.9991536182818451,
+      "chars": 2365
+    },
+    {
+      "citation": "F.S. 713.21",
+      "status": "CLOSE",
+      "ratio": 0.9991663192997082,
+      "chars": 2401
+    },
+    {
+      "citation": "F.S. 605.2607",
+      "status": "CLOSE",
+      "ratio": 0.9991697799916978,
+      "chars": 2411
+    },
+    {
+      "citation": "F.S. 409.916",
+      "status": "CLOSE",
+      "ratio": 0.9991708126036484,
+      "chars": 2414
+    },
+    {
+      "citation": "F.S. 48.102",
+      "status": "CLOSE",
+      "ratio": 0.9991738950846758,
+      "chars": 2423
+    },
+    {
+      "citation": "F.S. 395.4001",
+      "status": "CLOSE",
+      "ratio": 0.999177090190915,
+      "chars": 6081
+    },
+    {
+      "citation": "F.S. 220.1878",
+      "status": "CLOSE",
+      "ratio": 0.9991786447638604,
+      "chars": 2437
+    },
+    {
+      "citation": "F.S. 385.212",
+      "status": "CLOSE",
+      "ratio": 0.9991809991809992,
+      "chars": 2444
+    },
+    {
+      "citation": "F.S. 290.0135",
+      "status": "CLOSE",
+      "ratio": 0.9991826726604005,
+      "chars": 2449
+    },
+    {
+      "citation": "F.S. 280.21",
+      "status": "CLOSE",
+      "ratio": 0.9991830065359477,
+      "chars": 2450
+    },
+    {
+      "citation": "F.S. 215.22",
+      "status": "CLOSE",
+      "ratio": 0.9991836734693877,
+      "chars": 4902
+    },
+    {
+      "citation": "F.S. 220.18775",
+      "status": "CLOSE",
+      "ratio": 0.9991843393148451,
+      "chars": 2454
+    },
+    {
+      "citation": "F.S. 605.2304",
+      "status": "CLOSE",
+      "ratio": 0.9991850040749797,
+      "chars": 2456
+    },
+    {
+      "citation": "F.S. 48.081",
+      "status": "CLOSE",
+      "ratio": 0.999190447277879,
+      "chars": 4943
+    },
+    {
+      "citation": "F.S. 339.2817",
+      "status": "CLOSE",
+      "ratio": 0.9991967871485944,
+      "chars": 2492
+    },
+    {
+      "citation": "F.S. 627.551",
+      "status": "CLOSE",
+      "ratio": 0.9992,
+      "chars": 2502
+    },
+    {
+      "citation": "F.S. 497.2675",
+      "status": "CLOSE",
+      "ratio": 0.9992025518341308,
+      "chars": 2510
+    },
+    {
+      "citation": "F.S. 28.222",
+      "status": "CLOSE",
+      "ratio": 0.9992035045798486,
+      "chars": 5026
+    },
+    {
+      "citation": "F.S. 220.1877",
+      "status": "CLOSE",
+      "ratio": 0.9992041384799045,
+      "chars": 2515
+    },
+    {
+      "citation": "F.S. 908.1031",
+      "status": "CLOSE",
+      "ratio": 0.9992058765137979,
+      "chars": 5041
+    },
+    {
+      "citation": "F.S. 48.071",
+      "status": "CLOSE",
+      "ratio": 0.9992076069730587,
+      "chars": 2526
+    },
+    {
+      "citation": "F.S. 672.321",
+      "status": "CLOSE",
+      "ratio": 0.9992082343626286,
+      "chars": 1264
+    },
+    {
+      "citation": "F.S. 379.2521",
+      "status": "CLOSE",
+      "ratio": 0.9992163009404389,
+      "chars": 2554
+    },
+    {
+      "citation": "F.S. 322.135",
+      "status": "CLOSE",
+      "ratio": 0.9992169146436961,
+      "chars": 5112
+    },
+    {
+      "citation": "F.S. 378.406",
+      "status": "CLOSE",
+      "ratio": 0.9992181391712275,
+      "chars": 2560
+    },
+    {
+      "citation": "F.S. 562.11",
+      "status": "CLOSE",
+      "ratio": 0.9992222942320156,
+      "chars": 7719
+    },
+    {
+      "citation": "F.S. 542.235",
+      "status": "CLOSE",
+      "ratio": 0.9992242048099301,
+      "chars": 2580
+    },
+    {
+      "citation": "F.S. 7.26",
+      "status": "CLOSE",
+      "ratio": 0.9992292870905588,
+      "chars": 5192
+    },
+    {
+      "citation": "F.S. 409.816",
+      "status": "CLOSE",
+      "ratio": 0.9992292870905588,
+      "chars": 2597
+    },
+    {
+      "citation": "F.S. 320.131",
+      "status": "CLOSE",
+      "ratio": 0.9992303463441451,
+      "chars": 9102
+    },
+    {
+      "citation": "F.S. 193.624",
+      "status": "CLOSE",
+      "ratio": 0.99923273657289,
+      "chars": 3913
+    },
+    {
+      "citation": "F.S. 458.3191",
+      "status": "CLOSE",
+      "ratio": 0.9992418498862775,
+      "chars": 2640
+    },
+    {
+      "citation": "F.S. 459.0081",
+      "status": "CLOSE",
+      "ratio": 0.9992418498862775,
+      "chars": 2640
+    },
+    {
+      "citation": "F.S. 48.062",
+      "status": "CLOSE",
+      "ratio": 0.9992419456727732,
+      "chars": 7921
+    },
+    {
+      "citation": "F.S. 196.19781",
+      "status": "CLOSE",
+      "ratio": 0.9992438563327032,
+      "chars": 2647
+    },
+    {
+      "citation": "F.S. 605.2108",
+      "status": "CLOSE",
+      "ratio": 0.9992447129909365,
+      "chars": 2650
+    },
+    {
+      "citation": "F.S. 394.75",
+      "status": "CLOSE",
+      "ratio": 0.9992545657845695,
+      "chars": 13425
+    },
+    {
+      "citation": "F.S. 252.3712",
+      "status": "CLOSE",
+      "ratio": 0.9992609016999261,
+      "chars": 2708
+    },
+    {
+      "citation": "F.S. 655.937",
+      "status": "CLOSE",
+      "ratio": 0.9992729916394039,
+      "chars": 2753
+    },
+    {
+      "citation": "F.S. 450.30",
+      "status": "CLOSE",
+      "ratio": 0.9992779783393502,
+      "chars": 2772
+    },
+    {
+      "citation": "F.S. 509.214",
+      "status": "CLOSE",
+      "ratio": 0.999278759466282,
+      "chars": 2775
+    },
+    {
+      "citation": "F.S. 336.68",
+      "status": "CLOSE",
+      "ratio": 0.9992849481587415,
+      "chars": 2799
+    },
+    {
+      "citation": "F.S. 290.0058",
+      "status": "CLOSE",
+      "ratio": 0.9992885094272501,
+      "chars": 2813
+    },
+    {
+      "citation": "F.S. 327.4111",
+      "status": "CLOSE",
+      "ratio": 0.9992892679459844,
+      "chars": 2816
+    },
+    {
+      "citation": "F.S. 672.323",
+      "status": "CLOSE",
+      "ratio": 0.9992902767920511,
+      "chars": 1410
+    },
+    {
+      "citation": "F.S. 605.2703",
+      "status": "CLOSE",
+      "ratio": 0.9992937853107344,
+      "chars": 2834
+    },
+    {
+      "citation": "F.S. 445.08",
+      "status": "CLOSE",
+      "ratio": 0.9993009437259699,
+      "chars": 5726
+    },
+    {
+      "citation": "F.S. 718.407",
+      "status": "CLOSE",
+      "ratio": 0.9993031358885017,
+      "chars": 5744
+    },
+    {
+      "citation": "F.S. 521.004",
+      "status": "CLOSE",
+      "ratio": 0.9993098688750862,
+      "chars": 1450
+    },
+    {
+      "citation": "F.S. 311.101",
+      "status": "CLOSE",
+      "ratio": 0.9993109151047409,
+      "chars": 7261
+    },
+    {
+      "citation": "F.S. 121.111",
+      "status": "CLOSE",
+      "ratio": 0.9993136582017845,
+      "chars": 5832
+    },
+    {
+      "citation": "F.S. 605.2106",
+      "status": "CLOSE",
+      "ratio": 0.9993143640726774,
+      "chars": 2919
+    },
+    {
+      "citation": "F.S. 48.197",
+      "status": "CLOSE",
+      "ratio": 0.9993150684931507,
+      "chars": 2922
+    },
+    {
+      "citation": "F.S. 218.136",
+      "status": "CLOSE",
+      "ratio": 0.9993153029784321,
+      "chars": 2923
+    },
+    {
+      "citation": "F.S. 499.065",
+      "status": "CLOSE",
+      "ratio": 0.999315537303217,
+      "chars": 4386
+    },
+    {
+      "citation": "F.S. 125.379",
+      "status": "CLOSE",
+      "ratio": 0.9993234100135318,
+      "chars": 2958
+    },
+    {
+      "citation": "F.S. 7.22",
+      "status": "CLOSE",
+      "ratio": 0.9993308798929408,
+      "chars": 2991
+    },
+    {
+      "citation": "F.S. 562.111",
+      "status": "CLOSE",
+      "ratio": 0.9993313273152792,
+      "chars": 2993
+    },
+    {
+      "citation": "F.S. 166.0451",
+      "status": "CLOSE",
+      "ratio": 0.9993342210386151,
+      "chars": 3006
+    },
+    {
+      "citation": "F.S. 903.105",
+      "status": "CLOSE",
+      "ratio": 0.99933598937583,
+      "chars": 3014
+    },
+    {
+      "citation": "F.S. 501.95",
+      "status": "CLOSE",
+      "ratio": 0.9993394980184941,
+      "chars": 3030
+    },
+    {
+      "citation": "F.S. 704.04",
+      "status": "CLOSE",
+      "ratio": 0.9993429697766097,
+      "chars": 3046
+    },
+    {
+      "citation": "F.S. 468.8419",
+      "status": "CLOSE",
+      "ratio": 0.9993486756404689,
+      "chars": 4609
+    },
+    {
+      "citation": "F.S. 319.29",
+      "status": "CLOSE",
+      "ratio": 0.9993525412754937,
+      "chars": 3091
+    },
+    {
+      "citation": "F.S. 376.91",
+      "status": "CLOSE",
+      "ratio": 0.9993535875888817,
+      "chars": 3096
+    },
+    {
+      "citation": "F.S. 288.101",
+      "status": "CLOSE",
+      "ratio": 0.9993564993564994,
+      "chars": 3110
+    },
+    {
+      "citation": "F.S. 213.0535",
+      "status": "CLOSE",
+      "ratio": 0.9993570165568236,
+      "chars": 6225
+    },
+    {
+      "citation": "F.S. 420.6075",
+      "status": "CLOSE",
+      "ratio": 0.9993591797500802,
+      "chars": 3123
+    },
+    {
+      "citation": "F.S. 186.502",
+      "status": "CLOSE",
+      "ratio": 0.9993626513702996,
+      "chars": 3140
+    },
+    {
+      "citation": "F.S. 1003.621",
+      "status": "CLOSE",
+      "ratio": 0.9993652808632181,
+      "chars": 6304
+    },
+    {
+      "citation": "F.S. 1012.335",
+      "status": "CLOSE",
+      "ratio": 0.9993657505285413,
+      "chars": 4733
+    },
+    {
+      "citation": "F.S. 339.08",
+      "status": "CLOSE",
+      "ratio": 0.9993670886075949,
+      "chars": 6322
+    },
+    {
+      "citation": "F.S. 946.525",
+      "status": "CLOSE",
+      "ratio": 0.9993781094527363,
+      "chars": 3218
+    },
+    {
+      "citation": "F.S. 1000.39",
+      "status": "CLOSE",
+      "ratio": 0.999379074821484,
+      "chars": 3223
+    },
+    {
+      "citation": "F.S. 605.0103",
+      "status": "CLOSE",
+      "ratio": 0.9993792675356921,
+      "chars": 3224
+    },
+    {
+      "citation": "F.S. 605.2404",
+      "status": "CLOSE",
+      "ratio": 0.9993800371977681,
+      "chars": 3228
+    },
+    {
+      "citation": "F.S. 48.111",
+      "status": "CLOSE",
+      "ratio": 0.9993809965954813,
+      "chars": 3233
+    },
+    {
+      "citation": "F.S. 1004.89",
+      "status": "CLOSE",
+      "ratio": 0.9993821439604572,
+      "chars": 3239
+    },
+    {
+      "citation": "F.S. 220.199",
+      "status": "CLOSE",
+      "ratio": 0.9993848046754845,
+      "chars": 3253
+    },
+    {
+      "citation": "F.S. 908.1032",
+      "status": "CLOSE",
+      "ratio": 0.9993960136903564,
+      "chars": 4970
+    },
+    {
+      "citation": "F.S. 403.927",
+      "status": "CLOSE",
+      "ratio": 0.9994040524433849,
+      "chars": 3358
+    },
+    {
+      "citation": "F.S. 403.809",
+      "status": "CLOSE",
+      "ratio": 0.9994095069382934,
+      "chars": 3389
+    },
+    {
+      "citation": "F.S. 542.33",
+      "status": "CLOSE",
+      "ratio": 0.9994128009395185,
+      "chars": 3408
+    },
+    {
+      "citation": "F.S. 908.1033",
+      "status": "CLOSE",
+      "ratio": 0.9994137476183497,
+      "chars": 6827
+    },
+    {
+      "citation": "F.S. 220.33",
+      "status": "CLOSE",
+      "ratio": 0.9994170795686389,
+      "chars": 3433
+    },
+    {
+      "citation": "F.S. 320.07",
+      "status": "CLOSE",
+      "ratio": 0.9994304428306992,
+      "chars": 7025
+    },
+    {
+      "citation": "F.S. 218.077",
+      "status": "CLOSE",
+      "ratio": 0.9994318181818181,
+      "chars": 5283
+    },
+    {
+      "citation": "F.S. 626.9521",
+      "status": "CLOSE",
+      "ratio": 0.9994323020153278,
+      "chars": 3525
+    },
+    {
+      "citation": "F.S. 220.1915",
+      "status": "CLOSE",
+      "ratio": 0.9994423377202766,
+      "chars": 8971
+    },
+    {
+      "citation": "F.S. 450.38",
+      "status": "CLOSE",
+      "ratio": 0.9994445987225771,
+      "chars": 3603
+    },
+    {
+      "citation": "F.S. 605.2102",
+      "status": "CLOSE",
+      "ratio": 0.9994455225949542,
+      "chars": 3609
+    },
+    {
+      "citation": "F.S. 361.08",
+      "status": "CLOSE",
+      "ratio": 0.99944582986977,
+      "chars": 3611
+    },
+    {
+      "citation": "F.S. 220.1992",
+      "status": "CLOSE",
+      "ratio": 0.9994469026548672,
+      "chars": 3618
+    },
+    {
+      "citation": "F.S. 267.0721",
+      "status": "CLOSE",
+      "ratio": 0.999448275862069,
+      "chars": 3627
+    },
+    {
+      "citation": "F.S. 196.031",
+      "status": "CLOSE",
+      "ratio": 0.9994569644311703,
+      "chars": 7368
+    },
+    {
+      "citation": "F.S. 290.0057",
+      "status": "CLOSE",
+      "ratio": 0.9994590208276981,
+      "chars": 3699
+    },
+    {
+      "citation": "F.S. 110.116",
+      "status": "CLOSE",
+      "ratio": 0.9994593133279265,
+      "chars": 3701
+    },
+    {
+      "citation": "F.S. 125.0103",
+      "status": "CLOSE",
+      "ratio": 0.9994594594594595,
+      "chars": 3702
+    },
+    {
+      "citation": "F.S. 420.531",
+      "status": "CLOSE",
+      "ratio": 0.9994596055120237,
+      "chars": 3703
+    },
+    {
+      "citation": "F.S. 166.043",
+      "status": "CLOSE",
+      "ratio": 0.9994633753689295,
+      "chars": 3729
+    },
+    {
+      "citation": "F.S. 482.072",
+      "status": "CLOSE",
+      "ratio": 0.9994651691402594,
+      "chars": 7483
+    },
+    {
+      "citation": "F.S. 620.8914",
+      "status": "CLOSE",
+      "ratio": 0.9994659546061415,
+      "chars": 3747
+    },
+    {
+      "citation": "F.S. 409.9081",
+      "status": "CLOSE",
+      "ratio": 0.9994675186368477,
+      "chars": 3758
+    },
+    {
+      "citation": "F.S. 48.101",
+      "status": "CLOSE",
+      "ratio": 0.9994722955145119,
+      "chars": 3792
+    },
+    {
+      "citation": "F.S. 258.004",
+      "status": "CLOSE",
+      "ratio": 0.9994722955145119,
+      "chars": 3792
+    },
+    {
+      "citation": "F.S. 429.65",
+      "status": "CLOSE",
+      "ratio": 0.9994722955145119,
+      "chars": 3792
+    },
+    {
+      "citation": "F.S. 944.28",
+      "status": "CLOSE",
+      "ratio": 0.9994727128921698,
+      "chars": 3795
+    },
+    {
+      "citation": "F.S. 48.194",
+      "status": "CLOSE",
+      "ratio": 0.9994746059544658,
+      "chars": 5713
+    },
+    {
+      "citation": "F.S. 420.50871",
+      "status": "CLOSE",
+      "ratio": 0.9994775339602926,
+      "chars": 3830
+    },
+    {
+      "citation": "F.S. 284.01",
+      "status": "CLOSE",
+      "ratio": 0.9994830705608685,
+      "chars": 3871
+    },
+    {
+      "citation": "F.S. 258.42",
+      "status": "CLOSE",
+      "ratio": 0.9994862133927043,
+      "chars": 5842
+    },
+    {
+      "citation": "F.S. 914.27",
+      "status": "CLOSE",
+      "ratio": 0.9994874423372629,
+      "chars": 3904
+    },
+    {
+      "citation": "F.S. 427.703",
+      "status": "CLOSE",
+      "ratio": 0.9994920634920635,
+      "chars": 7879
+    },
+    {
+      "citation": "F.S. 542.22",
+      "status": "CLOSE",
+      "ratio": 0.9994935426690301,
+      "chars": 3951
+    },
+    {
+      "citation": "F.S. 605.2105",
+      "status": "CLOSE",
+      "ratio": 0.9994958406856567,
+      "chars": 3969
+    },
+    {
+      "citation": "F.S. 395.1012",
+      "status": "CLOSE",
+      "ratio": 0.9994973611460166,
+      "chars": 3981
+    },
+    {
+      "citation": "F.S. 379.2423",
+      "status": "CLOSE",
+      "ratio": 0.9995017438963627,
+      "chars": 4016
+    },
+    {
+      "citation": "F.S. 213.67",
+      "status": "CLOSE",
+      "ratio": 0.9995027349577325,
+      "chars": 8048
+    },
+    {
+      "citation": "F.S. 443.1113",
+      "status": "CLOSE",
+      "ratio": 0.999504132231405,
+      "chars": 6053
+    },
+    {
+      "citation": "F.S. 395.3042",
+      "status": "CLOSE",
+      "ratio": 0.9995047052996533,
+      "chars": 4040
+    },
+    {
+      "citation": "F.S. 379.2525",
+      "status": "CLOSE",
+      "ratio": 0.9995074498214506,
+      "chars": 8123
+    },
+    {
+      "citation": "F.S. 499.0295",
+      "status": "CLOSE",
+      "ratio": 0.9995090819833088,
+      "chars": 8152
+    },
+    {
+      "citation": "F.S. 339.2818",
+      "status": "CLOSE",
+      "ratio": 0.9995093228655545,
+      "chars": 4078
+    },
+    {
+      "citation": "F.S. 420.504",
+      "status": "CLOSE",
+      "ratio": 0.999510603588907,
+      "chars": 6133
+    },
+    {
+      "citation": "F.S. 456.0135",
+      "status": "CLOSE",
+      "ratio": 0.9995111219750672,
+      "chars": 4093
+    },
+    {
+      "citation": "F.S. 379.367",
+      "status": "CLOSE",
+      "ratio": 0.9995170831824218,
+      "chars": 8285
+    },
+    {
+      "citation": "F.S. 388.46",
+      "status": "CLOSE",
+      "ratio": 0.9995171414775471,
+      "chars": 4144
+    },
+    {
+      "citation": "F.S. 553.792",
+      "status": "CLOSE",
+      "ratio": 0.9995253164556962,
+      "chars": 6323
+    },
+    {
+      "citation": "F.S. 390.01112",
+      "status": "CLOSE",
+      "ratio": 0.9995256166982922,
+      "chars": 4218
+    },
+    {
+      "citation": "F.S. 400.211",
+      "status": "CLOSE",
+      "ratio": 0.9995328558081594,
+      "chars": 6425
+    },
+    {
+      "citation": "F.S. 16.63",
+      "status": "CLOSE",
+      "ratio": 0.9995348837209302,
+      "chars": 4302
+    },
+    {
+      "citation": "F.S. 409.8132",
+      "status": "CLOSE",
+      "ratio": 0.9995366079703429,
+      "chars": 4318
+    },
+    {
+      "citation": "F.S. 605.2301",
+      "status": "CLOSE",
+      "ratio": 0.999536715311559,
+      "chars": 4319
+    },
+    {
+      "citation": "F.S. 605.2701",
+      "status": "CLOSE",
+      "ratio": 0.999536715311559,
+      "chars": 4319
+    },
+    {
+      "citation": "F.S. 456.0145",
+      "status": "CLOSE",
+      "ratio": 0.9995376791493297,
+      "chars": 6492
+    },
+    {
+      "citation": "F.S. 284.51",
+      "status": "CLOSE",
+      "ratio": 0.9995378927911276,
+      "chars": 4330
+    },
+    {
+      "citation": "F.S. 509.144",
+      "status": "CLOSE",
+      "ratio": 0.9995389580451821,
+      "chars": 4340
+    },
+    {
+      "citation": "F.S. 435.12",
+      "status": "CLOSE",
+      "ratio": 0.9995404411764706,
+      "chars": 8708
+    },
+    {
+      "citation": "F.S. 220.222",
+      "status": "CLOSE",
+      "ratio": 0.9995411791695343,
+      "chars": 4361
+    },
+    {
+      "citation": "F.S. 216.013",
+      "status": "CLOSE",
+      "ratio": 0.9995414947271893,
+      "chars": 4364
+    },
+    {
+      "citation": "F.S. 429.55",
+      "status": "CLOSE",
+      "ratio": 0.9995425434583715,
+      "chars": 4374
+    },
+    {
+      "citation": "F.S. 1011.61",
+      "status": "CLOSE",
+      "ratio": 0.9995433268637972,
+      "chars": 8761
+    },
+    {
+      "citation": "F.S. 27.40",
+      "status": "CLOSE",
+      "ratio": 0.9995458084609395,
+      "chars": 15419
+    },
+    {
+      "citation": "F.S. 375.041",
+      "status": "CLOSE",
+      "ratio": 0.9995469475591799,
+      "chars": 8831
+    },
+    {
+      "citation": "F.S. 520.994",
+      "status": "CLOSE",
+      "ratio": 0.9995482267901513,
+      "chars": 4429
+    },
+    {
+      "citation": "F.S. 542.28",
+      "status": "CLOSE",
+      "ratio": 0.9995499549954996,
+      "chars": 11115
+    },
+    {
+      "citation": "F.S. 560.205",
+      "status": "CLOSE",
+      "ratio": 0.9995524725889461,
+      "chars": 4471
+    },
+    {
+      "citation": "F.S. 542.43",
+      "status": "CLOSE",
+      "ratio": 0.999554565701559,
+      "chars": 4492
+    },
+    {
+      "citation": "F.S. 951.27",
+      "status": "CLOSE",
+      "ratio": 0.9995552590615966,
+      "chars": 4499
+    },
+    {
+      "citation": "F.S. 381.989",
+      "status": "CLOSE",
+      "ratio": 0.9995590828924162,
+      "chars": 4538
+    },
+    {
+      "citation": "F.S. 394.67",
+      "status": "CLOSE",
+      "ratio": 0.9995654441161134,
+      "chars": 11511
+    },
+    {
+      "citation": "F.S. 267.081",
+      "status": "CLOSE",
+      "ratio": 0.9995657837603127,
+      "chars": 1152
+    },
+    {
+      "citation": "F.S. 1011.45",
+      "status": "CLOSE",
+      "ratio": 0.999566599248772,
+      "chars": 6925
+    },
+    {
+      "citation": "F.S. 704.01",
+      "status": "CLOSE",
+      "ratio": 0.9995682210708118,
+      "chars": 4634
+    },
+    {
+      "citation": "F.S. 20.04",
+      "status": "CLOSE",
+      "ratio": 0.9995709075305729,
+      "chars": 4663
+    },
+    {
+      "citation": "F.S. 201.15",
+      "status": "CLOSE",
+      "ratio": 0.9995726952248691,
+      "chars": 9363
+    },
+    {
+      "citation": "F.S. 48.184",
+      "status": "CLOSE",
+      "ratio": 0.9995728321230244,
+      "chars": 4684
+    },
+    {
+      "citation": "F.S. 220.03",
+      "status": "CLOSE",
+      "ratio": 0.999573891148557,
+      "chars": 25822
+    },
+    {
+      "citation": "F.S. 27.5304",
+      "status": "CLOSE",
+      "ratio": 0.99957434268688,
+      "chars": 30554
+    },
+    {
+      "citation": "F.S. 736.04117",
+      "status": "CLOSE",
+      "ratio": 0.9995757832858615,
+      "chars": 16508
+    },
+    {
+      "citation": "F.S. 381.00319",
+      "status": "CLOSE",
+      "ratio": 0.999578947368421,
+      "chars": 4752
+    },
+    {
+      "citation": "F.S. 560.155",
+      "status": "CLOSE",
+      "ratio": 0.9995834201208081,
+      "chars": 4803
+    },
+    {
+      "citation": "F.S. 196.26",
+      "status": "CLOSE",
+      "ratio": 0.999585835576724,
+      "chars": 4831
+    },
+    {
+      "citation": "F.S. 465.0157",
+      "status": "CLOSE",
+      "ratio": 0.9995864350703061,
+      "chars": 4838
+    },
+    {
+      "citation": "F.S. 641.513",
+      "status": "CLOSE",
+      "ratio": 0.9995866060355518,
+      "chars": 7260
+    },
+    {
+      "citation": "F.S. 595.420",
+      "status": "CLOSE",
+      "ratio": 0.9995866914651788,
+      "chars": 4841
+    },
+    {
+      "citation": "F.S. 1003.485",
+      "status": "CLOSE",
+      "ratio": 0.9995877563640111,
+      "chars": 19411
+    },
+    {
+      "citation": "F.S. 379.248",
+      "status": "CLOSE",
+      "ratio": 0.9995892380365579,
+      "chars": 4871
+    },
+    {
+      "citation": "F.S. 201.21",
+      "status": "CLOSE",
+      "ratio": 0.9995946493717065,
+      "chars": 4936
+    },
+    {
+      "citation": "F.S. 679.3171",
+      "status": "CLOSE",
+      "ratio": 0.9995953874165486,
+      "chars": 4945
+    },
+    {
+      "citation": "F.S. 48.091",
+      "status": "CLOSE",
+      "ratio": 0.999597747385358,
+      "chars": 4974
+    },
+    {
+      "citation": "F.S. 379.2421",
+      "status": "CLOSE",
+      "ratio": 0.9995980707395499,
+      "chars": 4978
+    },
+    {
+      "citation": "F.S. 450.31",
+      "status": "CLOSE",
+      "ratio": 0.9995983935742971,
+      "chars": 4982
+    },
+    {
+      "citation": "F.S. 332.08",
+      "status": "CLOSE",
+      "ratio": 0.9995994392149009,
+      "chars": 4995
+    },
+    {
+      "citation": "F.S. 48.181",
+      "status": "CLOSE",
+      "ratio": 0.9996007984031936,
+      "chars": 5012
+    },
+    {
+      "citation": "F.S. 393.066",
+      "status": "CLOSE",
+      "ratio": 0.9996016465276856,
+      "chars": 7534
+    },
+    {
+      "citation": "F.S. 395.301",
+      "status": "CLOSE",
+      "ratio": 0.9996091205211727,
+      "chars": 15356
+    },
+    {
+      "citation": "F.S. 220.151",
+      "status": "CLOSE",
+      "ratio": 0.9996140486298727,
+      "chars": 5184
+    },
+    {
+      "citation": "F.S. 403.93344",
+      "status": "CLOSE",
+      "ratio": 0.9996141230947327,
+      "chars": 5185
+    },
+    {
+      "citation": "F.S. 766.314",
+      "status": "CLOSE",
+      "ratio": 0.9996184480373921,
+      "chars": 20975
+    },
+    {
+      "citation": "F.S. 287.0947",
+      "status": "CLOSE",
+      "ratio": 0.9996204213323211,
+      "chars": 5271
+    },
+    {
+      "citation": "F.S. 216.292",
+      "status": "CLOSE",
+      "ratio": 0.9996229616363465,
+      "chars": 10611
+    },
+    {
+      "citation": "F.S. 561.14",
+      "status": "CLOSE",
+      "ratio": 0.9996230682246513,
+      "chars": 5308
+    },
+    {
+      "citation": "F.S. 288.066",
+      "status": "CLOSE",
+      "ratio": 0.999623706491063,
+      "chars": 5317
+    },
+    {
+      "citation": "F.S. 605.2205",
+      "status": "CLOSE",
+      "ratio": 0.999623706491063,
+      "chars": 5317
+    },
+    {
+      "citation": "F.S. 196.198",
+      "status": "CLOSE",
+      "ratio": 0.9996271439224459,
+      "chars": 5366
+    },
+    {
+      "citation": "F.S. 1006.062",
+      "status": "CLOSE",
+      "ratio": 0.9996292863762744,
+      "chars": 5397
+    },
+    {
+      "citation": "F.S. 408.040",
+      "status": "CLOSE",
+      "ratio": 0.9996294237539374,
+      "chars": 5399
+    },
+    {
+      "citation": "F.S. 320.072",
+      "status": "CLOSE",
+      "ratio": 0.9996324880558618,
+      "chars": 5444
+    },
+    {
+      "citation": "F.S. 459.0076",
+      "status": "CLOSE",
+      "ratio": 0.99963530269876,
+      "chars": 5486
+    },
+    {
+      "citation": "F.S. 409.915",
+      "status": "CLOSE",
+      "ratio": 0.9996394447449072,
+      "chars": 11096
+    },
+    {
+      "citation": "F.S. 901.41",
+      "status": "CLOSE",
+      "ratio": 0.9996425379803396,
+      "chars": 5597
+    },
+    {
+      "citation": "F.S. 290.0055",
+      "status": "CLOSE",
+      "ratio": 0.9996485679142506,
+      "chars": 5693
+    },
+    {
+      "citation": "F.S. 679.4081",
+      "status": "CLOSE",
+      "ratio": 0.9996540390935824,
+      "chars": 5783
+    },
+    {
+      "citation": "F.S. 1012.71",
+      "status": "CLOSE",
+      "ratio": 0.9996541587411378,
+      "chars": 5785
+    },
+    {
+      "citation": "F.S. 1009.26",
+      "status": "CLOSE",
+      "ratio": 0.9996569206724355,
+      "chars": 26242
+    },
+    {
+      "citation": "F.S. 458.315",
+      "status": "CLOSE",
+      "ratio": 0.9996569468267581,
+      "chars": 5832
+    },
+    {
+      "citation": "F.S. 379.3752",
+      "status": "CLOSE",
+      "ratio": 0.9996578857338351,
+      "chars": 1462
+    },
+    {
+      "citation": "F.S. 220.02",
+      "status": "CLOSE",
+      "ratio": 0.9996592264440279,
+      "chars": 11740
+    },
+    {
+      "citation": "F.S. 382.016",
+      "status": "CLOSE",
+      "ratio": 0.9996594005449592,
+      "chars": 5874
+    },
+    {
+      "citation": "F.S. 1004.4351",
+      "status": "CLOSE",
+      "ratio": 0.9996597482136781,
+      "chars": 5880
+    },
+    {
+      "citation": "F.S. 287.17",
+      "status": "CLOSE",
+      "ratio": 0.9996613613274636,
+      "chars": 5908
+    },
+    {
+      "citation": "F.S. 220.1991",
+      "status": "CLOSE",
+      "ratio": 0.9996617622188398,
+      "chars": 5915
+    },
+    {
+      "citation": "F.S. 626.171",
+      "status": "CLOSE",
+      "ratio": 0.9996625611607896,
+      "chars": 5929
+    },
+    {
+      "citation": "F.S. 403.0673",
+      "status": "CLOSE",
+      "ratio": 0.999663129526697,
+      "chars": 5939
+    },
+    {
+      "citation": "F.S. 542.45",
+      "status": "CLOSE",
+      "ratio": 0.9996666111018503,
+      "chars": 6001
+    },
+    {
+      "citation": "F.S. 213.053",
+      "status": "CLOSE",
+      "ratio": 0.9996669885777082,
+      "chars": 30035
+    },
+    {
+      "citation": "F.S. 220.13",
+      "status": "CLOSE",
+      "ratio": 0.9996681048788583,
+      "chars": 24108
+    },
+    {
+      "citation": "F.S. 395.4036",
+      "status": "CLOSE",
+      "ratio": 0.9996689289852674,
+      "chars": 6043
+    },
+    {
+      "citation": "F.S. 409.903",
+      "status": "CLOSE",
+      "ratio": 0.9996691480562448,
+      "chars": 6047
+    },
+    {
+      "citation": "F.S. 381.988",
+      "status": "CLOSE",
+      "ratio": 0.999669394164807,
+      "chars": 12103
+    },
+    {
+      "citation": "F.S. 112.22",
+      "status": "CLOSE",
+      "ratio": 0.999669749009247,
+      "chars": 6058
+    },
+    {
+      "citation": "F.S. 634.401",
+      "status": "CLOSE",
+      "ratio": 0.9996698580389568,
+      "chars": 6060
+    },
+    {
+      "citation": "F.S. 542.44",
+      "status": "CLOSE",
+      "ratio": 0.999671052631579,
+      "chars": 6082
+    },
+    {
+      "citation": "F.S. 48.061",
+      "status": "CLOSE",
+      "ratio": 0.9996729888816219,
+      "chars": 6118
+    },
+    {
+      "citation": "F.S. 984.151",
+      "status": "CLOSE",
+      "ratio": 0.9996759559300065,
+      "chars": 6174
+    },
+    {
+      "citation": "F.S. 932.701",
+      "status": "CLOSE",
+      "ratio": 0.9996782496782497,
+      "chars": 6218
+    },
+    {
+      "citation": "F.S. 679.4061",
+      "status": "CLOSE",
+      "ratio": 0.9996805111821087,
+      "chars": 6262
+    },
+    {
+      "citation": "F.S. 768.81",
+      "status": "CLOSE",
+      "ratio": 0.9996806132226126,
+      "chars": 6264
+    },
+    {
+      "citation": "F.S. 497.270",
+      "status": "CLOSE",
+      "ratio": 0.9996826907821672,
+      "chars": 6305
+    },
+    {
+      "citation": "F.S. 1012.715",
+      "status": "CLOSE",
+      "ratio": 0.9996853861884537,
+      "chars": 6359
+    },
+    {
+      "citation": "F.S. 322.251",
+      "status": "CLOSE",
+      "ratio": 0.9996857816182246,
+      "chars": 6367
+    },
+    {
+      "citation": "F.S. 719.403",
+      "status": "CLOSE",
+      "ratio": 0.999686176055233,
+      "chars": 6375
+    },
+    {
+      "citation": "F.S. 458.3145",
+      "status": "CLOSE",
+      "ratio": 0.9996868639423829,
+      "chars": 6389
+    },
+    {
+      "citation": "F.S. 655.97",
+      "status": "CLOSE",
+      "ratio": 0.9996896819239721,
+      "chars": 6447
+    },
+    {
+      "citation": "F.S. 215.615",
+      "status": "CLOSE",
+      "ratio": 0.9996982498491249,
+      "chars": 6630
+    },
+    {
+      "citation": "F.S. 499.005",
+      "status": "CLOSE",
+      "ratio": 0.9996983408748115,
+      "chars": 6632
+    },
+    {
+      "citation": "F.S. 212.0606",
+      "status": "CLOSE",
+      "ratio": 0.9997013588173809,
+      "chars": 6699
+    },
+    {
+      "citation": "F.S. 984.19",
+      "status": "CLOSE",
+      "ratio": 0.9997044917257684,
+      "chars": 6770
+    },
+    {
+      "citation": "F.S. 1004.421",
+      "status": "CLOSE",
+      "ratio": 0.9997045790251108,
+      "chars": 6772
+    },
+    {
+      "citation": "F.S. 499.015",
+      "status": "CLOSE",
+      "ratio": 0.9997077305275464,
+      "chars": 6845
+    },
+    {
+      "citation": "F.S. 339.55",
+      "status": "CLOSE",
+      "ratio": 0.9997108573080815,
+      "chars": 6919
+    },
+    {
+      "citation": "F.S. 560.141",
+      "status": "CLOSE",
+      "ratio": 0.9997145711431425,
+      "chars": 7009
+    },
+    {
+      "citation": "F.S. 561.15",
+      "status": "CLOSE",
+      "ratio": 0.9997165934533088,
+      "chars": 7059
+    },
+    {
+      "citation": "F.S. 39.0132",
+      "status": "CLOSE",
+      "ratio": 0.9997179921037789,
+      "chars": 7094
+    },
+    {
+      "citation": "F.S. 318.21",
+      "status": "CLOSE",
+      "ratio": 0.9997181709293314,
+      "chars": 14195
+    },
+    {
+      "citation": "F.S. 48.161",
+      "status": "CLOSE",
+      "ratio": 0.9997189037245257,
+      "chars": 7117
+    },
+    {
+      "citation": "F.S. 125.01055",
+      "status": "CLOSE",
+      "ratio": 0.9997194295066636,
+      "chars": 21391
+    },
+    {
+      "citation": "F.S. 561.01",
+      "status": "CLOSE",
+      "ratio": 0.9997213708553915,
+      "chars": 10770
+    },
+    {
+      "citation": "F.S. 202.34",
+      "status": "CLOSE",
+      "ratio": 0.9997256139388119,
+      "chars": 7291
+    },
+    {
+      "citation": "F.S. 166.04151",
+      "status": "CLOSE",
+      "ratio": 0.9997289972899729,
+      "chars": 22146
+    },
+    {
+      "citation": "F.S. 395.402",
+      "status": "CLOSE",
+      "ratio": 0.9997324772605671,
+      "chars": 7478
+    },
+    {
+      "citation": "F.S. 159.608",
+      "status": "CLOSE",
+      "ratio": 0.9997329416477501,
+      "chars": 7491
+    },
+    {
+      "citation": "F.S. 609.08",
+      "status": "CLOSE",
+      "ratio": 0.9997337947557567,
+      "chars": 7515
+    },
+    {
+      "citation": "F.S. 380.5105",
+      "status": "CLOSE",
+      "ratio": 0.9997346072186837,
+      "chars": 7538
+    },
+    {
+      "citation": "F.S. 381.00316",
+      "status": "CLOSE",
+      "ratio": 0.9997371879106439,
+      "chars": 7612
+    },
+    {
+      "citation": "F.S. 215.986",
+      "status": "CLOSE",
+      "ratio": 0.9997395833333333,
+      "chars": 7682
+    },
+    {
+      "citation": "F.S. 494.0011",
+      "status": "CLOSE",
+      "ratio": 0.9997395833333333,
+      "chars": 3841
+    },
+    {
+      "citation": "F.S. 475.451",
+      "status": "CLOSE",
+      "ratio": 0.999740158503313,
+      "chars": 7699
+    },
+    {
+      "citation": "F.S. 550.6305",
+      "status": "CLOSE",
+      "ratio": 0.9997415798087691,
+      "chars": 11612
+    },
+    {
+      "citation": "F.S. 56.29",
+      "status": "CLOSE",
+      "ratio": 0.9997476977418948,
+      "chars": 7929
+    },
+    {
+      "citation": "F.S. 380.0552",
+      "status": "CLOSE",
+      "ratio": 0.9997480156230314,
+      "chars": 15878
+    },
+    {
+      "citation": "F.S. 373.0421",
+      "status": "CLOSE",
+      "ratio": 0.9997485857950974,
+      "chars": 7957
+    },
+    {
+      "citation": "F.S. 322.12",
+      "status": "CLOSE",
+      "ratio": 0.9997502497502497,
+      "chars": 12015
+    },
+    {
+      "citation": "F.S. 288.0655",
+      "status": "CLOSE",
+      "ratio": 0.999750499001996,
+      "chars": 8018
+    },
+    {
+      "citation": "F.S. 560.103",
+      "status": "CLOSE",
+      "ratio": 0.9997513983840896,
+      "chars": 16094
+    },
+    {
+      "citation": "F.S. 409.979",
+      "status": "CLOSE",
+      "ratio": 0.9997524446094813,
+      "chars": 8081
+    },
+    {
+      "citation": "F.S. 400.191",
+      "status": "CLOSE",
+      "ratio": 0.9997530559328313,
+      "chars": 8101
+    },
+    {
+      "citation": "F.S. 400.4765",
+      "status": "CLOSE",
+      "ratio": 0.9997530559328313,
+      "chars": 8101
+    },
+    {
+      "citation": "F.S. 474.203",
+      "status": "CLOSE",
+      "ratio": 0.9997537552327013,
+      "chars": 8124
+    },
+    {
+      "citation": "F.S. 318.14",
+      "status": "CLOSE",
+      "ratio": 0.9997540277948592,
+      "chars": 16264
+    },
+    {
+      "citation": "F.S. 420.503",
+      "status": "CLOSE",
+      "ratio": 0.9997543842412929,
+      "chars": 20362
+    },
+    {
+      "citation": "F.S. 395.401",
+      "status": "CLOSE",
+      "ratio": 0.9997549319936282,
+      "chars": 8163
+    },
+    {
+      "citation": "F.S. 617.0401",
+      "status": "CLOSE",
+      "ratio": 0.9997571046878795,
+      "chars": 2059
+    },
+    {
+      "citation": "F.S. 201.02",
+      "status": "CLOSE",
+      "ratio": 0.9997579473939002,
+      "chars": 12397
+    },
+    {
+      "citation": "F.S. 497.271",
+      "status": "CLOSE",
+      "ratio": 0.9997604503533357,
+      "chars": 8351
+    },
+    {
+      "citation": "F.S. 607.0401",
+      "status": "CLOSE",
+      "ratio": 0.9997611655123,
+      "chars": 2094
+    },
+    {
+      "citation": "F.S. 201.08",
+      "status": "CLOSE",
+      "ratio": 0.9997629020785584,
+      "chars": 12656
+    },
+    {
+      "citation": "F.S. 379.3671",
+      "status": "CLOSE",
+      "ratio": 0.9997643176997407,
+      "chars": 16976
+    },
+    {
+      "citation": "F.S. 122.02",
+      "status": "CLOSE",
+      "ratio": 0.9997643732327992,
+      "chars": 8490
+    },
+    {
+      "citation": "F.S. 153.03",
+      "status": "CLOSE",
+      "ratio": 0.9997685720897941,
+      "chars": 8644
+    },
+    {
+      "citation": "F.S. 125.0167",
+      "status": "CLOSE",
+      "ratio": 0.9997697709220674,
+      "chars": 8689
+    },
+    {
+      "citation": "F.S. 627.706",
+      "status": "CLOSE",
+      "ratio": 0.9997697974217311,
+      "chars": 8690
+    },
+    {
+      "citation": "F.S. 321.23",
+      "status": "CLOSE",
+      "ratio": 0.9997710098465766,
+      "chars": 2184
+    },
+    {
+      "citation": "F.S. 560.214",
+      "status": "CLOSE",
+      "ratio": 0.9997712455678829,
+      "chars": 8745
+    },
+    {
+      "citation": "F.S. 560.109",
+      "status": "CLOSE",
+      "ratio": 0.9997714808043876,
+      "chars": 8754
+    },
+    {
+      "citation": "F.S. 985.255",
+      "status": "CLOSE",
+      "ratio": 0.9997728821258233,
+      "chars": 8808
+    },
+    {
+      "citation": "F.S. 39.507",
+      "status": "CLOSE",
+      "ratio": 0.9997729594732659,
+      "chars": 8811
+    },
+    {
+      "citation": "F.S. 631.695",
+      "status": "CLOSE",
+      "ratio": 0.9997744954335326,
+      "chars": 8871
+    },
+    {
+      "citation": "F.S. 339.12",
+      "status": "CLOSE",
+      "ratio": 0.9997764863656683,
+      "chars": 8950
+    },
+    {
+      "citation": "F.S. 253.12",
+      "status": "CLOSE",
+      "ratio": 0.9997777119146414,
+      "chars": 13499
+    },
+    {
+      "citation": "F.S. 376.12",
+      "status": "CLOSE",
+      "ratio": 0.9997782950892362,
+      "chars": 9023
+    },
+    {
+      "citation": "F.S. 212.0306",
+      "status": "CLOSE",
+      "ratio": 0.9997811337272926,
+      "chars": 9140
+    },
+    {
+      "citation": "F.S. 290.0065",
+      "status": "CLOSE",
+      "ratio": 0.9997834325933946,
+      "chars": 9237
+    },
+    {
+      "citation": "F.S. 215.47",
+      "status": "CLOSE",
+      "ratio": 0.9997857984363285,
+      "chars": 18678
+    },
+    {
+      "citation": "F.S. 747.051",
+      "status": "CLOSE",
+      "ratio": 0.9997862791194699,
+      "chars": 2340
+    },
+    {
+      "citation": "F.S. 1012.56",
+      "status": "CLOSE",
+      "ratio": 0.9997867854350762,
+      "chars": 42220
+    },
+    {
+      "citation": "F.S. 790.251",
+      "status": "CLOSE",
+      "ratio": 0.9997879109225875,
+      "chars": 9432
+    },
+    {
+      "citation": "F.S. 565.03",
+      "status": "CLOSE",
+      "ratio": 0.999791013584117,
+      "chars": 9572
+    },
+    {
+      "citation": "F.S. 921.0022",
+      "status": "CLOSE",
+      "ratio": 0.9997913934914769,
+      "chars": 67122
+    },
+    {
+      "citation": "F.S. 497.458",
+      "status": "CLOSE",
+      "ratio": 0.9997937080969572,
+      "chars": 9697
+    },
+    {
+      "citation": "F.S. 420.50872",
+      "status": "CLOSE",
+      "ratio": 0.9997948086590746,
+      "chars": 9749
+    },
+    {
+      "citation": "F.S. 836.13",
+      "status": "CLOSE",
+      "ratio": 0.9997954801104407,
+      "chars": 9781
+    },
+    {
+      "citation": "F.S. 570.822",
+      "status": "CLOSE",
+      "ratio": 0.9997956472872177,
+      "chars": 9789
+    },
+    {
+      "citation": "F.S. 409.9913",
+      "status": "CLOSE",
+      "ratio": 0.9997961471817348,
+      "chars": 9813
+    },
+    {
+      "citation": "F.S. 641.51",
+      "status": "CLOSE",
+      "ratio": 0.9997963962129696,
+      "chars": 9825
+    },
+    {
+      "citation": "F.S. 112.3188",
+      "status": "CLOSE",
+      "ratio": 0.99979820401574,
+      "chars": 9913
+    },
+    {
+      "citation": "F.S. 624.5105",
+      "status": "CLOSE",
+      "ratio": 0.9997991967871486,
+      "chars": 9962
+    },
+    {
+      "citation": "F.S. 627.3511",
+      "status": "CLOSE",
+      "ratio": 0.9998009950248756,
+      "chars": 10052
+    },
+    {
+      "citation": "F.S. 718.202",
+      "status": "CLOSE",
+      "ratio": 0.9998011928429423,
+      "chars": 10062
+    },
+    {
+      "citation": "F.S. 251.001",
+      "status": "CLOSE",
+      "ratio": 0.9998015479261758,
+      "chars": 10080
+    },
+    {
+      "citation": "F.S. 212.13",
+      "status": "CLOSE",
+      "ratio": 0.9998021760633037,
+      "chars": 10112
+    },
+    {
+      "citation": "F.S. 339.0809",
+      "status": "CLOSE",
+      "ratio": 0.9998023520110683,
+      "chars": 10121
+    },
+    {
+      "citation": "F.S. 494.004",
+      "status": "CLOSE",
+      "ratio": 0.9998028002366397,
+      "chars": 2536
+    },
+    {
+      "citation": "F.S. 409.814",
+      "status": "CLOSE",
+      "ratio": 0.999803343166175,
+      "chars": 10172
+    },
+    {
+      "citation": "F.S. 499.0285",
+      "status": "CLOSE",
+      "ratio": 0.9998046684246509,
+      "chars": 10241
+    },
+    {
+      "citation": "F.S. 420.0003",
+      "status": "CLOSE",
+      "ratio": 0.9998058817820052,
+      "chars": 10305
+    },
+    {
+      "citation": "F.S. 409.975",
+      "status": "CLOSE",
+      "ratio": 0.9998066325050758,
+      "chars": 10345
+    },
+    {
+      "citation": "F.S. 212.05",
+      "status": "CLOSE",
+      "ratio": 0.9998079561042524,
+      "chars": 36457
+    },
+    {
+      "citation": "F.S. 394.9082",
+      "status": "CLOSE",
+      "ratio": 0.9998085653339167,
+      "chars": 36573
+    },
+    {
+      "citation": "F.S. 499.028",
+      "status": "CLOSE",
+      "ratio": 0.9998090874379534,
+      "chars": 10478
+    },
+    {
+      "citation": "F.S. 456.44",
+      "status": "CLOSE",
+      "ratio": 0.9998114748947402,
+      "chars": 15916
+    },
+    {
+      "citation": "F.S. 196.1979",
+      "status": "CLOSE",
+      "ratio": 0.9998118001317399,
+      "chars": 10629
+    },
+    {
+      "citation": "F.S. 379.247",
+      "status": "CLOSE",
+      "ratio": 0.9998121183654298,
+      "chars": 10647
+    },
+    {
+      "citation": "F.S. 718.103",
+      "status": "CLOSE",
+      "ratio": 0.9998124882805175,
+      "chars": 10668
+    },
+    {
+      "citation": "F.S. 212.054",
+      "status": "CLOSE",
+      "ratio": 0.9998129704960957,
+      "chars": 21391
+    },
+    {
+      "citation": "F.S. 409.401",
+      "status": "CLOSE",
+      "ratio": 0.99981301421092,
+      "chars": 10698
+    },
+    {
+      "citation": "F.S. 290.0056",
+      "status": "CLOSE",
+      "ratio": 0.9998132411989915,
+      "chars": 10711
+    },
+    {
+      "citation": "F.S. 1003.27",
+      "status": "CLOSE",
+      "ratio": 0.9998151058518998,
+      "chars": 10819
+    },
+    {
+      "citation": "F.S. 282.201",
+      "status": "CLOSE",
+      "ratio": 0.9998156172213515,
+      "chars": 10849
+    },
+    {
+      "citation": "F.S. 220.183",
+      "status": "CLOSE",
+      "ratio": 0.9998163452708907,
+      "chars": 10892
+    },
+    {
+      "citation": "F.S. 499.012",
+      "status": "CLOSE",
+      "ratio": 0.9998165204946607,
+      "chars": 54512
+    },
+    {
+      "citation": "F.S. 1012.34",
+      "status": "CLOSE",
+      "ratio": 0.9998181818181818,
+      "chars": 16503
+    },
+    {
+      "citation": "F.S. 718.1255",
+      "status": "CLOSE",
+      "ratio": 0.9998189936044407,
+      "chars": 16577
+    },
+    {
+      "citation": "F.S. 626.99",
+      "status": "CLOSE",
+      "ratio": 0.9998211091234347,
+      "chars": 16773
+    },
+    {
+      "citation": "F.S. 120.541",
+      "status": "CLOSE",
+      "ratio": 0.9998215241834731,
+      "chars": 11208
+    },
+    {
+      "citation": "F.S. 934.255",
+      "status": "CLOSE",
+      "ratio": 0.9998228991410608,
+      "chars": 11295
+    },
+    {
+      "citation": "F.S. 627.7074",
+      "status": "CLOSE",
+      "ratio": 0.9998229148220295,
+      "chars": 11296
+    },
+    {
+      "citation": "F.S. 373.421",
+      "status": "CLOSE",
+      "ratio": 0.9998232434821034,
+      "chars": 11317
+    },
+    {
+      "citation": "F.S. 216.262",
+      "status": "CLOSE",
+      "ratio": 0.9998296422487223,
+      "chars": 11742
+    },
+    {
+      "citation": "F.S. 288.062",
+      "status": "CLOSE",
+      "ratio": 0.999829989799388,
+      "chars": 23532
+    },
+    {
+      "citation": "F.S. 893.02",
+      "status": "CLOSE",
+      "ratio": 0.9998314227916386,
+      "chars": 11866
+    },
+    {
+      "citation": "F.S. 440.105",
+      "status": "CLOSE",
+      "ratio": 0.9998323132388698,
+      "chars": 11929
+    },
+    {
+      "citation": "F.S. 341.051",
+      "status": "CLOSE",
+      "ratio": 0.9998340799734527,
+      "chars": 12056
+    },
+    {
+      "citation": "F.S. 282.709",
+      "status": "CLOSE",
+      "ratio": 0.9998345466578424,
+      "chars": 12090
+    },
+    {
+      "citation": "F.S. 1012.33",
+      "status": "CLOSE",
+      "ratio": 0.9998347790169352,
+      "chars": 12107
+    },
+    {
+      "citation": "F.S. 373.1501",
+      "status": "CLOSE",
+      "ratio": 0.9998349290194783,
+      "chars": 12118
+    },
+    {
+      "citation": "F.S. 620.1108",
+      "status": "CLOSE",
+      "ratio": 0.9998366280019605,
+      "chars": 3061
+    },
+    {
+      "citation": "F.S. 379.366",
+      "status": "CLOSE",
+      "ratio": 0.9998366546880104,
+      "chars": 12246
+    },
+    {
+      "citation": "F.S. 330.41",
+      "status": "CLOSE",
+      "ratio": 0.9998375832385902,
+      "chars": 12316
+    },
+    {
+      "citation": "F.S. 24.105",
+      "status": "CLOSE",
+      "ratio": 0.9998390471591824,
+      "chars": 12428
+    },
+    {
+      "citation": "F.S. 216.023",
+      "status": "CLOSE",
+      "ratio": 0.9998445515311675,
+      "chars": 12868
+    },
+    {
+      "citation": "F.S. 402.261",
+      "status": "CLOSE",
+      "ratio": 0.9998449612403101,
+      "chars": 12902
+    },
+    {
+      "citation": "F.S. 624.91",
+      "status": "CLOSE",
+      "ratio": 0.9998460591133005,
+      "chars": 12994
+    },
+    {
+      "citation": "F.S. 720.3032",
+      "status": "CLOSE",
+      "ratio": 0.999847258286238,
+      "chars": 3274
+    },
+    {
+      "citation": "F.S. 106.141",
+      "status": "CLOSE",
+      "ratio": 0.9998482664441242,
+      "chars": 13183
+    },
+    {
+      "citation": "F.S. 253.0341",
+      "status": "CLOSE",
+      "ratio": 0.9998495335540174,
+      "chars": 13294
+    },
+    {
+      "citation": "F.S. 655.005",
+      "status": "CLOSE",
+      "ratio": 0.9998499512341511,
+      "chars": 13331
+    },
+    {
+      "citation": "F.S. 790.065",
+      "status": "CLOSE",
+      "ratio": 0.9998499624906226,
+      "chars": 26664
+    },
+    {
+      "citation": "F.S. 1004.42",
+      "status": "CLOSE",
+      "ratio": 0.9998515439429929,
+      "chars": 13474
+    },
+    {
+      "citation": "F.S. 400.126",
+      "status": "CLOSE",
+      "ratio": 0.9998523004209438,
+      "chars": 13543
+    },
+    {
+      "citation": "F.S. 605.0112",
+      "status": "CLOSE",
+      "ratio": 0.9998527462818436,
+      "chars": 3396
+    },
+    {
+      "citation": "F.S. 196.1995",
+      "status": "CLOSE",
+      "ratio": 0.9998528004710385,
+      "chars": 13589
+    },
+    {
+      "citation": "F.S. 403.814",
+      "status": "CLOSE",
+      "ratio": 0.9998532756217445,
+      "chars": 13633
+    },
+    {
+      "citation": "F.S. 110.12303",
+      "status": "CLOSE",
+      "ratio": 0.9998544501855761,
+      "chars": 13743
+    },
+    {
+      "citation": "F.S. 252.38",
+      "status": "CLOSE",
+      "ratio": 0.9998550094243874,
+      "chars": 13796
+    },
+    {
+      "citation": "F.S. 215.5595",
+      "status": "CLOSE",
+      "ratio": 0.9998554808873473,
+      "chars": 13841
+    },
+    {
+      "citation": "F.S. 215.32",
+      "status": "CLOSE",
+      "ratio": 0.9998576816338148,
+      "chars": 14055
+    },
+    {
+      "citation": "F.S. 494.0067",
+      "status": "CLOSE",
+      "ratio": 0.9998579747195001,
+      "chars": 3521
+    },
+    {
+      "citation": "F.S. 409.910",
+      "status": "CLOSE",
+      "ratio": 0.9998584451616557,
+      "chars": 35327
+    },
+    {
+      "citation": "F.S. 458.3475",
+      "status": "CLOSE",
+      "ratio": 0.9998586272707994,
+      "chars": 14149
+    },
+    {
+      "citation": "F.S. 1012.22",
+      "status": "CLOSE",
+      "ratio": 0.9998590258687531,
+      "chars": 14189
+    },
+    {
+      "citation": "F.S. 459.023",
+      "status": "CLOSE",
+      "ratio": 0.9998602961721151,
+      "chars": 14318
+    },
+    {
+      "citation": "F.S. 641.3155",
+      "status": "CLOSE",
+      "ratio": 0.9998630324613067,
+      "chars": 14604
+    },
+    {
+      "citation": "F.S. 193.461",
+      "status": "CLOSE",
+      "ratio": 0.9998630887185104,
+      "chars": 14610
+    },
+    {
+      "citation": "F.S. 196.012",
+      "status": "CLOSE",
+      "ratio": 0.9998655462184874,
+      "chars": 14877
+    },
+    {
+      "citation": "F.S. 655.50",
+      "status": "CLOSE",
+      "ratio": 0.9998668530723653,
+      "chars": 15023
+    },
+    {
+      "citation": "F.S. 121.0515",
+      "status": "CLOSE",
+      "ratio": 0.9998719344304284,
+      "chars": 31238
+    },
+    {
+      "citation": "F.S. 216.181",
+      "status": "CLOSE",
+      "ratio": 0.9998738568274992,
+      "chars": 15857
+    },
+    {
+      "citation": "F.S. 212.08",
+      "status": "CLOSE",
+      "ratio": 0.9998748684960583,
+      "chars": 215800
+    },
+    {
+      "citation": "F.S. 320.0848",
+      "status": "CLOSE",
+      "ratio": 0.9998749635310299,
+      "chars": 23996
+    },
+    {
+      "citation": "F.S. 499.0051",
+      "status": "CLOSE",
+      "ratio": 0.9998759843740311,
+      "chars": 16129
+    },
+    {
+      "citation": "F.S. 322.271",
+      "status": "CLOSE",
+      "ratio": 0.9998760612257545,
+      "chars": 16139
+    },
+    {
+      "citation": "F.S. 934.50",
+      "status": "CLOSE",
+      "ratio": 0.9998763218106487,
+      "chars": 16173
+    },
+    {
+      "citation": "F.S. 624.509",
+      "status": "CLOSE",
+      "ratio": 0.999877345762296,
+      "chars": 16308
+    },
+    {
+      "citation": "F.S. 627.410",
+      "status": "CLOSE",
+      "ratio": 0.9998787511367081,
+      "chars": 16497
+    },
+    {
+      "citation": "F.S. 402.62",
+      "status": "CLOSE",
+      "ratio": 0.9998791467762402,
+      "chars": 16551
+    },
+    {
+      "citation": "F.S. 350.81",
+      "status": "CLOSE",
+      "ratio": 0.999880611270296,
+      "chars": 16754
+    },
+    {
+      "citation": "F.S. 402.63",
+      "status": "CLOSE",
+      "ratio": 0.9998806397708283,
+      "chars": 16758
+    },
+    {
+      "citation": "F.S. 213.21",
+      "status": "CLOSE",
+      "ratio": 0.9998806540159924,
+      "chars": 16760
+    },
+    {
+      "citation": "F.S. 215.5586",
+      "status": "CLOSE",
+      "ratio": 0.9998807465267426,
+      "chars": 16773
+    },
+    {
+      "citation": "F.S. 718.112",
+      "status": "CLOSE",
+      "ratio": 0.999883066768875,
+      "chars": 76976
+    },
+    {
+      "citation": "F.S. 377.711",
+      "status": "CLOSE",
+      "ratio": 0.9998859098687963,
+      "chars": 17532
+    },
+    {
+      "citation": "F.S. 420.5087",
+      "status": "CLOSE",
+      "ratio": 0.999887209564629,
+      "chars": 17734
+    },
+    {
+      "citation": "F.S. 1006.28",
+      "status": "CLOSE",
+      "ratio": 0.9998901762670913,
+      "chars": 18213
+    },
+    {
+      "citation": "F.S. 27.52",
+      "status": "CLOSE",
+      "ratio": 0.9998906805138016,
+      "chars": 18297
+    },
+    {
+      "citation": "F.S. 390.0111",
+      "status": "CLOSE",
+      "ratio": 0.9998908654370839,
+      "chars": 18328
+    },
+    {
+      "citation": "F.S. 376.3072",
+      "status": "CLOSE",
+      "ratio": 0.9998919035779915,
+      "chars": 18504
+    },
+    {
+      "citation": "F.S. 288.9603",
+      "status": "CLOSE",
+      "ratio": 0.999892322601486,
+      "chars": 4644
+    },
+    {
+      "citation": "F.S. 319.24",
+      "status": "CLOSE",
+      "ratio": 0.9998926405067368,
+      "chars": 18631
+    },
+    {
+      "citation": "F.S. 626.99296",
+      "status": "CLOSE",
+      "ratio": 0.999893899204244,
+      "chars": 18852
+    },
+    {
+      "citation": "F.S. 215.61",
+      "status": "CLOSE",
+      "ratio": 0.9998942582214233,
+      "chars": 4729
+    },
+    {
+      "citation": "F.S. 631.57",
+      "status": "CLOSE",
+      "ratio": 0.9998947257606063,
+      "chars": 19000
+    },
+    {
+      "citation": "F.S. 328.72",
+      "status": "CLOSE",
+      "ratio": 0.9998951617130576,
+      "chars": 19079
+    },
+    {
+      "citation": "F.S. 719.106",
+      "status": "CLOSE",
+      "ratio": 0.9998953938421842,
+      "chars": 57364
+    },
+    {
+      "citation": "F.S. 627.6131",
+      "status": "CLOSE",
+      "ratio": 0.9998961254804196,
+      "chars": 19256
+    },
+    {
+      "citation": "F.S. 518.01",
+      "status": "CLOSE",
+      "ratio": 0.9998999049096642,
+      "chars": 19983
+    },
+    {
+      "citation": "F.S. 373.414",
+      "status": "CLOSE",
+      "ratio": 0.9999034492746627,
+      "chars": 41433
+    },
+    {
+      "citation": "F.S. 202.20",
+      "status": "CLOSE",
+      "ratio": 0.9999034609258097,
+      "chars": 41438
+    },
+    {
+      "citation": "F.S. 718.111",
+      "status": "CLOSE",
+      "ratio": 0.9999036546984392,
+      "chars": 62282
+    },
+    {
+      "citation": "F.S. 121.051",
+      "status": "CLOSE",
+      "ratio": 0.9999047959062239,
+      "chars": 42019
+    },
+    {
+      "citation": "F.S. 491.012",
+      "status": "CLOSE",
+      "ratio": 0.99990590006587,
+      "chars": 5314
+    },
+    {
+      "citation": "F.S. 458.3265",
+      "status": "CLOSE",
+      "ratio": 0.9999062573236466,
+      "chars": 21337
+    },
+    {
+      "citation": "F.S. 628.461",
+      "status": "CLOSE",
+      "ratio": 0.9999075913690338,
+      "chars": 21645
+    },
+    {
+      "citation": "F.S. 459.0137",
+      "status": "CLOSE",
+      "ratio": 0.9999080036798528,
+      "chars": 21742
+    },
+    {
+      "citation": "F.S. 440.49",
+      "status": "CLOSE",
+      "ratio": 0.9999085086916742,
+      "chars": 21862
+    },
+    {
+      "citation": "F.S. 499.01",
+      "status": "CLOSE",
+      "ratio": 0.9999091487235395,
+      "chars": 44032
+    },
+    {
+      "citation": "F.S. 719.503",
+      "status": "CLOSE",
+      "ratio": 0.9999099869481075,
+      "chars": 22221
+    },
+    {
+      "citation": "F.S. 395.4025",
+      "status": "CLOSE",
+      "ratio": 0.9999128426373818,
+      "chars": 22949
+    },
+    {
+      "citation": "F.S. 253.034",
+      "status": "CLOSE",
+      "ratio": 0.9999157681940701,
+      "chars": 23746
+    },
+    {
+      "citation": "F.S. 570.07",
+      "status": "CLOSE",
+      "ratio": 0.9999174338438674,
+      "chars": 24225
+    },
+    {
+      "citation": "F.S. 285.710",
+      "status": "CLOSE",
+      "ratio": 0.9999181937172775,
+      "chars": 12225
+    },
+    {
+      "citation": "F.S. 212.02",
+      "status": "CLOSE",
+      "ratio": 0.9999195721236981,
+      "chars": 24869
+    },
+    {
+      "citation": "F.S. 255.05",
+      "status": "CLOSE",
+      "ratio": 0.9999195753578897,
+      "chars": 24870
+    },
+    {
+      "citation": "F.S. 379.354",
+      "status": "CLOSE",
+      "ratio": 0.999919810753378,
+      "chars": 24943
+    },
+    {
+      "citation": "F.S. 458.331",
+      "status": "CLOSE",
+      "ratio": 0.9999202424629128,
+      "chars": 25078
+    },
+    {
+      "citation": "F.S. 420.507",
+      "status": "CLOSE",
+      "ratio": 0.9999207669756754,
+      "chars": 25244
+    },
+    {
+      "citation": "F.S. 628.4615",
+      "status": "CLOSE",
+      "ratio": 0.9999210578251431,
+      "chars": 25337
+    },
+    {
+      "citation": "F.S. 559.952",
+      "status": "CLOSE",
+      "ratio": 0.9999217496772174,
+      "chars": 25561
+    },
+    {
+      "citation": "F.S. 718.501",
+      "status": "CLOSE",
+      "ratio": 0.9999226993390794,
+      "chars": 25875
+    },
+    {
+      "citation": "F.S. 459.015",
+      "status": "CLOSE",
+      "ratio": 0.9999249587273,
+      "chars": 26654
+    },
+    {
+      "citation": "F.S. 1002.42",
+      "status": "CLOSE",
+      "ratio": 0.9999308293560213,
+      "chars": 28916
+    },
+    {
+      "citation": "F.S. 381.4015",
+      "status": "CLOSE",
+      "ratio": 0.9999310273476567,
+      "chars": 28999
+    },
+    {
+      "citation": "F.S. 316.193",
+      "status": "CLOSE",
+      "ratio": 0.9999321918969317,
+      "chars": 29497
+    },
+    {
+      "citation": "F.S. 626.9541",
+      "status": "CLOSE",
+      "ratio": 0.9999328949134344,
+      "chars": 59612
+    },
+    {
+      "citation": "F.S. 403.061",
+      "status": "CLOSE",
+      "ratio": 0.9999357429718876,
+      "chars": 31127
+    },
+    {
+      "citation": "F.S. 320.02",
+      "status": "CLOSE",
+      "ratio": 0.999936447410232,
+      "chars": 31472
+    },
+    {
+      "citation": "F.S. 381.986",
+      "status": "CLOSE",
+      "ratio": 0.9999366467103804,
+      "chars": 126284
+    },
+    {
+      "citation": "F.S. 121.35",
+      "status": "CLOSE",
+      "ratio": 0.9999368308013012,
+      "chars": 31663
+    },
+    {
+      "citation": "F.S. 440.15",
+      "status": "CLOSE",
+      "ratio": 0.9999372391502181,
+      "chars": 31869
+    },
+    {
+      "citation": "F.S. 893.03",
+      "status": "CLOSE",
+      "ratio": 0.9999393130234252,
+      "chars": 65914
+    },
+    {
+      "citation": "F.S. 100.371",
+      "status": "CLOSE",
+      "ratio": 0.9999394984420849,
+      "chars": 33059
+    },
+    {
+      "citation": "F.S. 39.001",
+      "status": "CLOSE",
+      "ratio": 0.9999415016525783,
+      "chars": 34191
+    },
+    {
+      "citation": "F.S. 339.135",
+      "status": "CLOSE",
+      "ratio": 0.9999429125991893,
+      "chars": 35036
+    },
+    {
+      "citation": "F.S. 376.3071",
+      "status": "CLOSE",
+      "ratio": 0.9999437293381164,
+      "chars": 71089
+    },
+    {
+      "citation": "F.S. 486.112",
+      "status": "CLOSE",
+      "ratio": 0.9999485914044828,
+      "chars": 38906
+    },
+    {
+      "citation": "F.S. 318.18",
+      "status": "CLOSE",
+      "ratio": 0.9999508418335996,
+      "chars": 40687
+    },
+    {
+      "citation": "F.S. 1000.36",
+      "status": "CLOSE",
+      "ratio": 0.9999528635399482,
+      "chars": 42432
+    },
+    {
+      "citation": "F.S. 943.0435",
+      "status": "CLOSE",
+      "ratio": 0.9999541021227768,
+      "chars": 43577
+    },
+    {
+      "citation": "F.S. 212.055",
+      "status": "CLOSE",
+      "ratio": 0.9999556894718185,
+      "chars": 67707
+    },
+    {
+      "citation": "F.S. 1008.25",
+      "status": "CLOSE",
+      "ratio": 0.9999560526489266,
+      "chars": 45511
+    },
+    {
+      "citation": "F.S. 320.08058",
+      "status": "CLOSE",
+      "ratio": 0.9999561509925954,
+      "chars": 171049
+    },
+    {
+      "citation": "F.S. 121.091",
+      "status": "CLOSE",
+      "ratio": 0.9999575875816439,
+      "chars": 94316
+    },
+    {
+      "citation": "F.S. 259.105",
+      "status": "CLOSE",
+      "ratio": 0.9999614227297277,
+      "chars": 51846
+    },
+    {
+      "citation": "F.S. 409.908",
+      "status": "CLOSE",
+      "ratio": 0.9999621506027516,
+      "chars": 52843
+    },
+    {
+      "citation": "F.S. 440.13",
+      "status": "CLOSE",
+      "ratio": 0.9999642403761912,
+      "chars": 55931
+    },
+    {
+      "citation": "F.S. 629.401",
+      "status": "CLOSE",
+      "ratio": 0.9999644993521132,
+      "chars": 56339
+    },
+    {
+      "citation": "F.S. 215.555",
+      "status": "CLOSE",
+      "ratio": 0.9999666399786495,
+      "chars": 59954
+    },
+    {
+      "citation": "F.S. 651.035",
+      "status": "CLOSE",
+      "ratio": 0.9999679661722779,
+      "chars": 15609
+    },
+    {
+      "citation": "F.S. 381.0065",
+      "status": "CLOSE",
+      "ratio": 0.9999683353915328,
+      "chars": 63164
+    },
+    {
+      "citation": "F.S. 1011.62",
+      "status": "CLOSE",
+      "ratio": 0.999969073280861,
+      "chars": 64671
+    },
+    {
+      "citation": "F.S. 627.6699",
+      "status": "CLOSE",
+      "ratio": 0.999969177659968,
+      "chars": 64890
+    },
+    {
+      "citation": "F.S. 1002.395",
+      "status": "CLOSE",
+      "ratio": 0.9999725531097327,
+      "chars": 72870
+    },
+    {
+      "citation": "F.S. 627.351",
+      "status": "CLOSE",
+      "ratio": 0.9999794163506219,
+      "chars": 194333
+    },
+    {
+      "citation": "F.S. 61.30",
+      "status": "CLOSE",
+      "ratio": 0.9999821991206366,
+      "chars": 28089
+    },
+    {
+      "citation": "F.S. 624.610",
+      "status": "CLOSE",
+      "ratio": 0.9999864870343094,
+      "chars": 37002
+    }
+  ]
+}

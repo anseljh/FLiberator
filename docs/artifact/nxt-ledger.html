@@ -452,15 +452,16 @@
       out to be a <strong>paged store</strong>, and nearly everything previously
       logged as corruption was storage metadata being read as content. Phase 2e
       then accounted for every remaining byte, Phase 4b started checking the
-      markup rather than just the words, and Phase 8a finally ran both layers
-      over the whole corpus instead of one file.
+      markup rather than just the words, Phase 8a ran both layers over the
+      whole corpus instead of one file, and Phase 4d stopped sampling and
+      checked <em>every</em> statute section against the live site.
     </p>
     <div class="stat-strip">
       <div class="stat"><div class="n">13 / 13</div><div class="l">files reassemble &amp; decode</div></div>
-      <div class="stat"><div class="n">45,520</div><div class="l">documents corpus-wide</div></div>
-      <div class="stat"><div class="n">0</div><div class="l">unclosed or mismatched tags</div></div>
-      <div class="stat"><div class="n">99.46%</div><div class="l">live elements matched</div></div>
-      <div class="stat"><div class="n">0</div><div class="l">missing elements or links</div></div>
+      <div class="stat"><div class="n">24,866</div><div class="l">sections validated — all of them</div></div>
+      <div class="stat"><div class="n">97.24%</div><div class="l">byte-exact vs. the live site</div></div>
+      <div class="stat"><div class="n">1</div><div class="l">unexplained difference, corpus-wide</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">known decoding defects left</div></div>
     </div>
   </div>
 </header>
@@ -635,9 +636,9 @@
 
 <section id="validation">
   <div class="section-head">
-    <div class="eyebrow">Phase 4 / 4b · validated against leg.state.fl.us</div>
+    <div class="eyebrow">Phase 4 / 4b / 4d · validated against leg.state.fl.us</div>
     <h2>How close is decoded text to the live statute?</h2>
-    <p>Decoded text is diffed against the live page word-for-word, after folding away the live site's smart-quote typography. Gold line marks the 0.99 pass threshold; the "was" figures are the same citations before reassembly. The harness takes a reproducible random sample, so this describes the corpus rather than a hand-picked shortlist — <strong>200 random sections, 100% at or above threshold, 96% byte-exact, mean ratio 0.99993</strong>. Phase 2e made that comparison strictly harder by deleting the dash-folding it used to rely on, and the score held.</p>
+    <p>Decoded text is diffed against the live page word-for-word, after folding away the live site's smart-quote typography. Gold line marks the 0.99 pass threshold; the "was" figures are the same citations before reassembly. This is no longer a sample: Phase 4d ran the <strong>census</strong> — <strong>all 24,866 statute sections, 5.98 hours, 0 fetch failures, 24,179 byte-exact (97.24%)</strong>. Phase 2e made the comparison strictly harder by deleting the dash-folding it used to rely on, and the score held.</p>
     <p>All eight non-exact cases share one cause, and it isn't content loss: leg.state.fl.us renders footnote markers as superscripts, which reduce to a bare <code>1</code> after tag-stripping, where the source encodes a literal <code>[1]</code>. Every difference is an <em>insertion</em> on our side.</p>
   </div>
 
@@ -665,6 +666,34 @@
   <p class="legend-note">Our output is a strict superset of what leg.state.fl.us publishes. Nothing is missing; the differences are all markup the website discards.</p>
 
   <p class="legend-note" style="margin-top:18px;"><strong>A measurement trap worth recording.</strong> The first run of this comparison reported 167 missing elements, 131 of them in F.S. 39.303 alone — against text matching the live page character for character. The cause was <code>difflib</code>'s <code>autojunk</code> heuristic, which discards any element appearing in more than 1% of a sequence of 200+ as "popular". Statute markup repeats <code>div.Subsection</code> and <code>span.Number</code> hundreds of times, so exactly the anchors the alignment depends on were thrown away. With <code>autojunk=False</code> the number is 0.</p>
+</section>
+
+<section id="census">
+  <div class="section-head">
+    <div class="eyebrow">Phase 4d · the census</div>
+    <h2>Every section, not a sample</h2>
+    <p>Phase 4c is the argument for this. The 62 doubled ampersands it found lived in 25 documents the sample had never drawn, and they scored 0.9999 rather than failing — sampling plus a ratio threshold systematically misses small defects in large documents.</p>
+  </div>
+
+  <p class="legend-note"><strong>The 0.99 threshold is the wrong lens here.</strong> Every section carrying footnotes differs in the same known, undecided way, but the cost to the ratio scales inversely with document length. F.S. 122.18 scores 0.9883 on four markers in 687 characters; F.S. 320.08058 scores 1.0000 on the same difference in 171,038. Ranking by ratio sorts by length, not by badness — so the census is judged by the <em>shape</em> of each difference instead.</p>
+
+  <div class="table-scroll" style="margin-top:28px;">
+    <div class="table-card">
+      <table>
+        <thead><tr><th>Difference shape</th><th>Occurrences</th><th>Sections</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="off">byte-exact — no difference at all</td><td class="off">—</td><td class="off">24,179</td><td><span class="status-chip confirmed">97.24%</span></td></tr>
+          <tr><td class="off">footnote-marker</td><td class="off">1,756</td><td class="off">684</td><td>Undecided representation, a Phase&nbsp;9 call — literal <code>[1]</code> vs. the site's stripped superscript</td></tr>
+          <tr><td class="off">tag-boundary-space</td><td class="off">2</td><td class="off">2</td><td>Artifact of comparing, present in neither side's output — our <code>&lt;a&gt;</code> anchors become spaces when tags are stripped</td></tr>
+          <tr><td class="off">genuinely unexplained</td><td class="off">2</td><td class="off">1</td><td><span class="status-chip confirmed">Traced — see below</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="legend-note" style="margin-top:22px;"><strong>The one real difference is in Florida's data, not ours.</strong> F.S. 736.0708 — worst ratio in the corpus at 0.9588 — puts the notice-form item <em>“1. Unless specifically disqualified…is eligible to serve as a trustee.”</em> inside the form on the live site, but before the outer list's item 2 in our output, leaving the form's inner list starting at <code>2.</code> Same content, different position; the whole document differs by one character.</p>
+
+  <p class="legend-note" style="margin-top:14px;">The source markup is mis-nested — the sentence and the following <code>2.</code> sit <em>inside</em> the <code>&lt;span class="Number"&gt;</code> of the outer item. Ruled out as ours on the evidence: the passage sits at chain offset 4,780 while that document's nearest fragment boundaries are 4,068 and 8,130, comfortably mid-fragment, so reassembly cannot have reordered it. <strong>leg.state.fl.us publishes from a corrected or differently-processed source than the bulk data it distributes.</strong></p>
 </section>
 
 <section id="corpus">
@@ -750,6 +779,8 @@
     <p><strong>Content is missing somewhere — the header says 26,348 documents, we find 26,306:</strong> false. All 26,306 <code>LPDD</code> record markers in the 240&nbsp;MB file lie in content pages, every one of the 63,741 fragments is reachable, every chain starts at a record marker, and the fragment tiling covers every byte of every content page. Across all 13 files <code>0x1BC</code> always exceeds the true count by 1&ndash;44 with no correlation to size, page counts or index entries — an allocation high-water mark, not missing content.</p>
     <p><strong>The 1,440 documents without a Section div were never validated:</strong> now they are. Chapter and Part contents pages diff byte-exact against the live site (120/120 each), all 47 SubPart headings appear verbatim in their chapter's live Part page, and all 490 section anchors they list resolve to real documents. Also settled: no statute section lacks a body.</p>
     <p><strong>Mid-token interruptions and the doubled punctuation were source-data quirks:</strong> half true, and the half that wasn't mattered. The doubling is real in the source, but our decoder was emitting <em>both</em> copies — 327,048 characters across 94.8% of documents rendered twice — and the validation harness was folding exactly that away before scoring. Fixed at the decoder, and the fold deleted rather than kept so the defect can't return unnoticed.</p>
+    <p><strong>Whitespace defects can hide from the harness forever:</strong> true, and one was hiding. <code>normalize()</code> collapses <code>\s+</code>, so extra whitespace can never be seen — which is how 263,569 doubled characters scored 1.0000. Closed by checking the decoder against the source bytes instead: every doubled-character marker claimed, no character beside its own entity form, every byte consumed exactly once. It immediately found 62 doubled ampersands (<code>AT&amp;&amp;T</code>, <code>Child &amp;&amp; Dependent</code>) that a byte-width heuristic had let through.</p>
+    <p><strong>Fidelity is only known for a sample:</strong> no longer. The census checked all 24,866 sections — 97.24% byte-exact, and every remaining difference classified. Worth noting <em>why</em> sampling wasn't enough: the 62 ampersands lived in 25 documents none of the 250 sampled sections had drawn, and scored 0.9999 rather than failing.</p>
     <p><strong>The paging model might only work on <code>fs2025.nxt</code>:</strong> false. All 13 files reassemble with zero chain conflicts and 12 of 13 decode to well-formed HTML — 45,520 documents, 0 unclosed and 0 mismatched tags. The lone structural outlier is real content, not damage: the 2&nbsp;MB General Appropriations Act closes with <code>&lt;/approp&gt;</code> and uses a custom tag vocabulary, which is what the source contains.</p>
     <p><strong>Guessing file contents from filenames:</strong> closed, and several guesses were wrong. Every file is now identified from its decoded title and body — <code>conndx2025.nxt</code> is the Florida Constitution index, not a "connection index." Four files hold primary law; the other eight markup files are finding aids derived from it.</p>
     <p><strong>Phase 3 v1's document count was wrong:</strong> false, and worth recording. Its figure of 26,306 — taken straight from the record markers — was right from the beginning. What v1 got wrong was assuming those documents sat contiguously in file order; versions 2 through 4 were three rounds of increasingly elaborate machinery built to work around that single wrong assumption, and v5 discards all of it.</p>
@@ -760,7 +791,7 @@
 
 <footer>
   <div class="wrap">
-    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 8a took both layers across the whole corpus. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against — all 13 reassemble without error and 12 of 13 decode to well-formed HTML, but only <span class="mono">fs2025.nxt</span> has been indexed and validated against ground truth.
+    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 4d validated every statute section against the live site. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against — all 13 reassemble without error and 12 of 13 decode to well-formed HTML. <span class="mono">fs2025.nxt</span> is now exhaustively validated; the other three files holding primary law are decoded but not yet indexed or diffed against ground truth.
   </div>
 </footer>
 
@@ -812,7 +843,8 @@
   });
 
   const validations = [
-    ["200 random sections", "mean ratio across the sample — 100% pass, 96% byte-exact", 0.99993],
+    ["ALL 24,866 sections", "the census — 97.24% byte-exact, 0 fetch failures, 5.98 h", 0.99996],
+    ["F.S. 736.0708", "worst in the corpus — Florida's file disagrees with Florida's site", 0.9588],
     ["F.S. 1.01", "simple baseline (was 0.993)", 1.0000],
     ["F.S. 145.10", "has a table (was 0.654)", 1.0000],
     ["F.S. 215.22", "59 History citations (was 0.939)", 0.9992],
@@ -847,7 +879,9 @@
     ["2d", "Undo the paged store", "done"],
     ["2e", "Account for every byte", "done"],
     ["4b", "Validate the markup", "done"],
+    ["4c", "Self-check vs. the source", "done"],
     ["8a", "Triage the whole corpus", "done"],
+    ["4d", "Validate every section", "done"],
     [5, "Pipeline decision", "done"],
     [6, "Download automation", "done"],
     [7, "Package promotion", "open"],

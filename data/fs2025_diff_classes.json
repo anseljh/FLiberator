@@ -1,21 +1,46 @@
 {
-  "sections_classified": 9231,
-  "byte_exact": 8935,
-  "below_threshold": 7,
-  "below_threshold_but_only_known_classes": 7,
+  "sections_classified": 24866,
+  "byte_exact": 24179,
+  "below_threshold": 15,
+  "below_threshold_but_only_known_classes": 14,
   "difference_shapes": {
-    "footnote-marker": 784,
-    "tag-boundary-space": 1
+    "footnote-marker": 1756,
+    "tag-boundary-space": 2,
+    "UNCLASSIFIED": 2
   },
   "sections_affected_by_shape": {
-    "footnote-marker": 295,
-    "tag-boundary-space": 1
+    "footnote-marker": 684,
+    "tag-boundary-space": 2,
+    "UNCLASSIFIED": 1
   },
-  "unclassified_examples": [],
+  "unclassified_examples": [
+    [
+      "F.S. 736.0708",
+      "2.",
+      "1. Unless specifically disqualified by the terms of the trust instrume"
+    ],
+    [
+      "F.S. 736.0708",
+      "1. Unless specifically disqualified by the terms of the trust instrume",
+      ""
+    ]
+  ],
   "threshold_artifacts": [
+    [
+      "F.S. 605.2801",
+      0.9803921568627451
+    ],
+    [
+      "F.S. 420.5061",
+      0.9815880322209436
+    ],
     [
       "F.S. 290.001",
       0.9865771812080537
+    ],
+    [
+      "F.S. 747.036",
+      0.9875
     ],
     [
       "F.S. 125.571",
@@ -24,6 +49,10 @@
     [
       "F.S. 166.0483",
       0.9876160990712074
+    ],
+    [
+      "F.S. 747.034",
+      0.9879518072289156
     ],
     [
       "F.S. 125.0102",
@@ -38,8 +67,20 @@
       0.9882869692532943
     ],
     [
+      "F.S. 605.2101",
+      0.9888888888888889
+    ],
+    [
+      "F.S. 450.27",
+      0.9891304347826086
+    ],
+    [
       "F.S. 106.32",
       0.9892280071813285
+    ],
+    [
+      "F.S. 450.36",
+      0.9896373056994818
     ]
   ]
 }

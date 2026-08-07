@@ -1206,6 +1206,89 @@ Their *counts* are exactly what the live-site harness cannot see — emitting
 three NBSPs where the source has five would still score 1.0000 — so
 recording them means a future change that alters them shows up as a diff.
 
+## Phase 4d: the census — all 24,866 sections, and the one real difference left
+
+Every fidelity number before this was a sample: 250 sections text-validated
+(1.0%) and 200 markup-validated (0.8%). Phase 4c showed why that isn't
+enough — the 62 doubled ampersands lived in 25 documents, none of which the
+sample had ever drawn, and they scored 0.9999 rather than failing. Sampling
+plus a ratio threshold systematically misses small defects in large
+documents.
+
+So: `uv run python scripts/nxt_validate.py --all` — a census of every
+statute section against leg.state.fl.us. 24,866 sections, ~1.2/s, **5.98
+hours**, 0 fetch failures. The cache makes it a one-time network cost;
+re-scoring after a decoder change is offline and takes minutes.
+
+### Judge it by difference shape, not by ratio
+
+The 0.99 threshold is actively misleading on this corpus. Every section
+carrying footnotes differs in the same known, undecided way (the source
+encodes a literal `[1]`, the site renders a stripped superscript), but the
+*cost to the ratio* scales inversely with document length. F.S. 122.18
+scores 0.9883 on four markers in 687 characters; F.S. 320.08058 scores
+1.0000 on the same class of difference in 171,038. Ranking by ratio sorts
+by length, not by badness.
+
+`scripts/nxt_classify_diffs.py` classifies the *shape* of every difference
+instead, offline against the census cache. Results over all 24,866:
+
+| | sections | |
+|---|---|---|
+| byte-exact | **24,179** | **97.24%** |
+| differ | 687 | |
+| below the 0.99 threshold | 15 | of which **14** are threshold artifacts |
+
+| difference shape | occurrences | sections |
+|---|---|---|
+| `footnote-marker` — literal `[1]` vs. stripped superscript | 1,756 | 684 |
+| `tag-boundary-space` — see below | 2 | 2 |
+| genuinely unexplained | 2 | **1** |
+
+`tag-boundary-space` is an artifact of comparing, not of either output:
+`normalize()` turns every tag into a space, and our output legitimately
+carries `<a>` anchors around History session-law citations that the live
+page renders as plain text (a confirmed bonus, not a gap). `normalize()`
+already folds that space away before punctuation; it can't when the next
+character is a letter, which happens where a citation anchor is followed
+immediately by more text.
+
+### The one real difference is in Florida's data, not ours
+
+**F.S. 736.0708** (ratio 0.9588, the worst in the corpus) is the only
+section in 24,866 whose difference isn't a known class. In the statutory
+notice form at subsection (4)(b), the item
+
+> 1. Unless specifically disqualified by the terms of the trust
+> instrument, any person … is eligible to serve as a trustee.
+
+appears *inside the notice form* on the live site, and *before* the outer
+list's item 2 in our output, leaving the form's inner list starting at
+`2.`. Same content — the whole document differs by one character — but a
+different position.
+
+This is a defect in the distributed bulk data. The source markup nests it
+wrongly, putting the sentence and the following `2.` inside the
+`<span class="Number">` of the outer item:
+
+```
+<span class="Number">1.&#x2003;Unless specifically disqualified … trustee.2.&#x2003;</span>
+<span xml:space="preserve" class="Text Intro Justify">The written statement must be …
+```
+
+Ruled out as ours on the evidence: the passage sits at chain offset 4,780
+while the nearest fragment boundaries in that document are 4,068 and 8,130
+— comfortably mid-fragment, nowhere near a seam — so reassembly cannot
+have reordered it, and the decoder reproduces the byte order it is given.
+`leg.state.fl.us` evidently publishes from a corrected or
+differently-processed source.
+
+**Conclusion.** Of 24,866 sections, 24,179 are byte-exact; 684 differ only
+by the undecided `[n]` footnote representation (Phase 9); 2 by a
+comparison artifact; and 1 because Florida's own `.nxt` file disagrees with
+Florida's own website. There are **no known decoding defects left in
+`fs2025.nxt`**, and "validated by sample" is now "validated exhaustively."
+
 ## Phase 8a: the model generalizes — and the corpus found a defect `fs2025` couldn't
 
 Everything through Phase 4b was measured against `fs2025.nxt` alone. The open

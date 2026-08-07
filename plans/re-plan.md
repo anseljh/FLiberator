@@ -36,9 +36,16 @@ across all 13 files — they all reassemble, 12 of 13 decode to well-formed
 HTML, and every file is now identified from its content rather than its
 filename; and Phase 4c (`scripts/nxt_check_output.py`) closed the
 whitespace blind spot by checking the decoder against the source bytes
-rather than the live site. The paragraph below is superseded on two
-points: the `\x15` vocabulary is now decoded, and the other 12 files are
-no longer untouched.
+rather than the live site; and Phase 4d ran the **census** — all 24,866
+statute sections against the live site, 5.98 hours, 0 fetch failures —
+retiring the sampling caveat entirely. **24,179 sections (97.24%) are
+byte-exact**; 684 differ only by the undecided `[n]` footnote
+representation; 2 by a comparison artifact; and exactly 1 (F.S. 736.0708)
+because Florida's own `.nxt` file is mis-nested where their website is
+not. No known decoding defects remain in `fs2025.nxt`. The paragraph
+below is superseded on three points: the `\x15` vocabulary is now
+decoded, the other 12 files are no longer untouched, and the fidelity
+figures are no longer from a 200-section sample.
 
 **Known content gaps, as of Phase 2d**: on `fs2025.nxt`, none are known.
 All 26,306 reassembled documents carry exactly one intact title and at
@@ -313,7 +320,7 @@ still default to reading `FLLawDL2025/` for now, since that's what they
 were developed and checked against; pointing the real pipeline at
 `download/` instead is part of Phase 7.
 
-### Remaining work, after Phase 2e — items 1-4, 6 ✅ done; 5, 7 ⬜ open
+### Remaining work, after Phase 2e — items 1-4, 6 ✅ done; 5 (decision only), 7 ⬜ open
 
 **Item 4 is done** (Phase 8a): the page/fragment model is a property of
 the container, not of `fs2025.nxt` — all 13 files reassemble cleanly, and
@@ -372,11 +379,12 @@ reverse-engineering phases above. In the order they should be tackled:
    Fixed and re-validated (40/40 sections, no regression).
 5. **The `[n]` footnote-marker representation is undecided.** Not an
    unknown: the source encodes a literal `[1]`, leg.state.fl.us renders a
-   superscript. It is the only remaining difference in the 200-section
-   sample (~4% of it). Which representation the output should use is a
-   Phase 9 call. Open sub-question: whether a 200-section sample is large
-   enough to have surfaced every editorial notation of this kind, or just
-   the most common one.
+   superscript. Which representation the output should use is a Phase 9
+   call. The open sub-question — whether a sample was large enough to
+   have surfaced every editorial notation of this kind — is now **closed
+   by the Phase 4d census**: across all 24,866 sections it is the *only*
+   editorial notation that differs, appearing 1,756 times in 684
+   sections. There is no second class waiting to be found.
 6. ~~**Some output defects the harness structurally cannot see.**~~ ✅
    **done** (Phase 4c — see `docs/nxt-format.md`).
    `scripts/nxt_check_output.py` closes this by checking the decoder
