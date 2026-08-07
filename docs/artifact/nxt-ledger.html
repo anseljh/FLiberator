@@ -442,12 +442,12 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">FLiberator field notes · after Phase 8b</div>
+    <div class="eyebrow">FLiberator field notes · after Phase 11</div>
     <h1>The <em>NXT</em> Ledger</h1>
     <p class="lede">
       A running account of what we've proven, guessed, and still can't explain
       about Florida's proprietary Rocket&nbsp;Folio&nbsp;NXT statute container —
-      the format standing between <code>fs2025.nxt</code> and an open copy of
+      the format that stood between <code>fs2025.nxt</code> and an open copy of
       the Florida Statutes. Phase 2d rewrote most of this page: the file turned
       out to be a <strong>paged store</strong>, and nearly everything previously
       logged as corruption was storage metadata being read as content. Phase 2e
@@ -457,12 +457,19 @@
       <em>every</em> statute section against the live site, and Phase 8b did
       the same for the constitution and the session laws.
     </p>
+    <p class="lede">
+      <strong>The format work is finished, and the thing it was for now
+      exists.</strong> <code>uv&nbsp;run&nbsp;fliberate&nbsp;--download</code>
+      goes from an empty directory to 25,334 HTML files and a JSON sidecar in
+      about two minutes — most of that the download. What follows is the
+      evidence behind that, roughly in the order it was learned.
+    </p>
     <div class="stat-strip">
-      <div class="stat"><div class="n">13 / 13</div><div class="l">files reassemble &amp; decode</div></div>
+      <div class="stat"><div class="n">25,334</div><div class="l">documents liberated</div></div>
       <div class="stat"><div class="n">24,866</div><div class="l">sections validated — all of them</div></div>
       <div class="stat"><div class="n">97.24%</div><div class="l">byte-exact vs. the live site</div></div>
       <div class="stat"><div class="n">1</div><div class="l">unexplained difference, corpus-wide</div></div>
-      <div class="stat"><div class="n">4 / 4</div><div class="l">primary-law files validated</div></div>
+      <div class="stat"><div class="n">18s</div><div class="l">to decode the whole corpus</div></div>
     </div>
   </div>
 </header>
@@ -778,6 +785,49 @@
   <p class="legend-note" style="margin-top:18px;">Identified from each file's decoded <code>&lt;title&gt;</code> and first document body, not from its filename — which corrected several earlier guesses. Four of these self-title <code>Subject Index</code>, so what separates them is what their entries point <em>at</em>. <strong>Four files hold primary law</strong> and the remaining eight markup files are finding aids derived from it; whether those are in FLiberator's scope is now a decision over a known list rather than an unknown one.</p>
 </section>
 
+<section id="output">
+  <div class="section-head">
+    <div class="eyebrow">Phases 9–11 · the point of all this</div>
+    <h2>What comes out the other end</h2>
+    <p>Reverse-engineering a format is only interesting if something is produced with it. One command turns Florida's 249&nbsp;MB Windows installer into a browsable, linkable, diffable copy of the state's primary law.</p>
+  </div>
+
+  <div class="anatomy" style="margin-top:6px;">
+    <div class="field op">uv run fliberate --download<div class="cap">one command</div></div>
+    <div class="field data">249 MB zip → 13 <code>.nxt</code> files → 25,334 HTML documents + <code>metadata.json</code><div class="cap">≈ 2 minutes cold, 18 seconds once the data is on disk</div></div>
+  </div>
+
+  <div class="table-scroll" style="margin-top:28px;">
+    <div class="table-card">
+      <table>
+        <thead><tr><th>Collection</th><th>Documents</th><th>Source</th><th>Path shape</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Florida Statutes</strong></td><td class="off">24,866</td><td class="off">fs2025.nxt</td><td class="off">statutes/0316/316.193.html</td></tr>
+          <tr><td><strong>Florida Constitution</strong></td><td class="off">213</td><td class="off">flcnst2025.nxt</td><td class="off">constitution/article-01/section-03.html</td></tr>
+          <tr><td><strong>Laws of Florida</strong></td><td class="off">255</td><td class="off">lf2025.nxt</td><td class="off">laws/2025-1.html</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legend-note" style="margin-top:18px;">Scope is Florida primary law. The eight finding-aid files, the bundled US Constitution and the help PDF are deliberately out — "liberate the Florida statutes" stops at Florida primary law.</p>
+
+  <h3 style="margin-top:38px; font-size:1.15rem;">Three things the HTML alone can't carry</h3>
+
+  <p class="legend-note" style="margin-top:14px;"><strong>Order.</strong> Document bodies are stored in build order, which has nothing to do with statutory order — so <code>metadata.json</code> carries a canonical sequence instead. The sort key is the one piece of this that looks trivial and isn't: the part after the first dot is a <em>decimal fraction</em>, not an integer, because Florida slots new sections between existing ones. Read as integers, 1.015 lands after 1.02. Checked against the file's own 470 chapter tables of contents: 0 disagreements.</p>
+
+  <p class="legend-note" style="margin-top:14px;"><strong>Hierarchy.</strong> Title → Chapter → Part. The chapter is in the citation, but neither of the other two is recorded on the sections themselves. Part membership comes from the Part index documents; Title membership is harder, because only the <em>first</em> chapter of each Title carries the Title header — 49 documents for 49 Titles. A Title's extent is therefore the half-open chapter range up to the next Title's first chapter, and those ranges have gaps (Title I is Ch. 1–2; Title II starts at Ch. 6), which makes membership a predecessor search rather than a lookup. Verified against leg.state.fl.us's own Title index: <strong>49/49 Titles, and all 24,866 sections inside their Title's official chapter range</strong>.</p>
+
+  <p class="legend-note" style="margin-top:14px;"><strong>Footnotes.</strong> 771 notes across 684 sections, rewritten from presentational markup into semantic HTML5 — <code>role="doc-noteref"</code> references pointing at a <code>role="doc-endnotes"</code> section at the end of each document. 99 of those notes are cited from more than one place, up to 15 times, so each referrer gets its own backlink; a single backlink would silently pick one call site.</p>
+
+  <div class="stat-strip" style="margin-top:34px;">
+    <div class="stat"><div class="n">49</div><div class="l">Titles, 638 chapters</div></div>
+    <div class="stat"><div class="n">12,311</div><div class="l">sections inside a Part</div></div>
+    <div class="stat"><div class="n">771</div><div class="l">footnotes made semantic</div></div>
+    <div class="stat"><div class="n">13 / 1,382</div><div class="l">zip entries that are data</div></div>
+  </div>
+  <p class="legend-note" style="margin-top:18px;">That last figure is the shape of the whole problem in miniature. What Florida distributes is a Windows application that happens to contain the law: 1,369 of the archive's entries are the bundled viewer — DLLs, Java applets, icons, an InstallShield payload — and 13 are the corpus. Extraction now takes only those 13, which is 371&nbsp;MB instead of 550&nbsp;MB and leaves a folder holding nothing but data.</p>
+</section>
+
 <section id="phases">
   <div class="section-head">
     <div class="eyebrow">Plan status</div>
@@ -797,9 +847,8 @@
   </div>
 
   <div class="qgrid">
-    <div class="qcard"><h3>Does the page model survive a new year?</h3><p>Phase 8a widened this from one file to all 13 — the geometry holds across every one. But they were all built by the same tooling in the same year, so it still says nothing about a future edition, and the reassembler assumes rather than asserts, so a changed layout would produce garbage quietly.</p></div>
+    <div class="qcard"><h3>Does the page model survive a new year?</h3><p>Phase 8a widened this from one file to all 13 — the geometry holds across every one. But they were all built by the same tooling in the same year, so it still says nothing about a future edition. Phase 10 changed the <em>consequence</em> rather than the answer: the reassembler now asserts every constant it used to assume, so a changed layout fails loudly instead of quietly producing plausible garbage. A future mismatch is now visible, not handled — it would still need re-deriving.</p></div>
     <div class="qcard"><h3>Hyphen fidelity in the session laws</h3><p>The Laws of Florida have no HTML ground truth, so the comparison folds hyphens symmetrically to survive the PDF's line-break hyphenation. A hyphen we genuinely got wrong would therefore be invisible. Closing it needs a source other than laws.flrules.org's PDFs.</p></div>
-    <div class="qcard"><h3>Entity encoding inside elements</h3><p>The element stream and the tag-stripped text both check out. What hasn't been compared is the exact entity encoding of text within each element — low risk, since both sides unescape to the same characters, but not zero.</p></div>
     <div class="qcard"><h3>What are the checksum-shaped fields?</h3><p>Bytes 0x11E–0x11F and 0x1AE–0x1AF in the file header, plus the <code>uint32</code> at offset 2 of every page, all vary with no obvious correlation to anything else we've checked. None are needed for reassembly.</p></div>
     <div class="qcard"><h3>What order are documents stored in?</h3><p>Reassembly confirms physical storage order has nothing to do with statutory order — only the table-of-contents preserves the canonical sequence. What <em>does</em> determine the layout (build order? insertion order?) is still unknown.</p></div>
     <div class="qcard"><h3>What's the 8-byte ID at 0x100?</h3><p>Unique per file, doesn't match any other observable property. Hash? GUID? Timestamp? Unclear.</p></div>
@@ -821,6 +870,7 @@
     <p><strong>Fidelity is only known for a sample:</strong> no longer. The census checked all 24,866 sections — 97.24% byte-exact, and every remaining difference classified. Worth noting <em>why</em> sampling wasn't enough: the 62 ampersands lived in 25 documents none of the 250 sampled sections had drawn, and scored 0.9999 rather than failing.</p>
     <p><strong>The paging model might only work on <code>fs2025.nxt</code>:</strong> false. All 13 files reassemble with zero chain conflicts and 12 of 13 decode to well-formed HTML — 45,520 documents, 0 unclosed and 0 mismatched tags. The lone structural outlier is real content, not damage: the 2&nbsp;MB General Appropriations Act closes with <code>&lt;/approp&gt;</code> and uses a custom tag vocabulary, which is what the source contains.</p>
     <p><strong>Guessing file contents from filenames:</strong> closed, and several guesses were wrong. Every file is now identified from its decoded title and body — <code>conndx2025.nxt</code> is the Florida Constitution index, not a "connection index." Four files hold primary law; the other eight markup files are finding aids derived from it.</p>
+    <p><strong>Entity encoding inside elements is unverified:</strong> no longer. Both sides were walked with character references preserved as their own parser events and aligned on the rendered characters: <strong>19,359 aligned characters, 100.000% identical representation, 0 differences</strong> — and not vacuously, since both carry 2,120 entity-encoded characters agreeing exactly in kind, count and spelling (hex not decimal, lowercase <code>x</code>, uppercase digits). There is a structural reason it holds: the decoder emits token payloads verbatim, so our entity spelling simply <em>is</em> the source's. Caveat: 200 sections, bounded by the raw-HTML cache — the census cache stores reduced text, which has already discarded the entities.</p>
     <p><strong>Phase 3 v1's document count was wrong:</strong> false, and worth recording. Its figure of 26,306 — taken straight from the record markers — was right from the beginning. What v1 got wrong was assuming those documents sat contiguously in file order; versions 2 through 4 were three rounds of increasingly elaborate machinery built to work around that single wrong assumption, and v5 discards all of it.</p>
   </div>
 </section>
@@ -829,7 +879,7 @@
 
 <footer>
   <div class="wrap">
-    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 4d validated every statute section against the live site. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against — all 13 reassemble without error and 12 of 13 decode to well-formed HTML. <span class="mono">fs2025.nxt</span> is now exhaustively validated; the other three files holding primary law are decoded but not yet indexed or diffed against ground truth.
+    Compiled from <span class="mono">docs/nxt-format.md</span> and <span class="mono">plans/re-plan.md</span> in the FLiberator repository, after Phase 11 closed the last of the shipping work. Corpus: 13 files under <span class="mono">FLLawDL2025/Library/</span>, the frozen reference copy this work was developed against — all 13 reassemble without error and 12 of 13 decode to well-formed HTML. Every file holding primary law is validated against ground truth: <span class="mono">fs2025.nxt</span> exhaustively against the live site, the constitution against its published page, the session laws against the only source that exists for them, which is PDFs. What ships from all of it is <span class="mono">uv run fliberate</span>.
   </div>
 </footer>
 
@@ -924,9 +974,11 @@
     ["8b", "Validate the other primary law", "done"],
     [5, "Pipeline decision", "done"],
     [6, "Download automation", "done"],
-    [7, "Package promotion", "open"],
-    [8, "Rest of corpus", "open"],
-    [9, "Output shape", "open"],
+    [7, "Package promotion", "done"],
+    [8, "Rest of corpus", "done"],
+    [9, "Output shape", "done"],
+    [10, "Assert the geometry", "done"],
+    [11, "Discover the edition", "done"],
   ];
   const tl = document.getElementById("timeline");
   phases.forEach(([num, name, status]) => {
