@@ -1,11 +1,13 @@
 [project]
 name = "fliberator"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Liberate downloadable Florida statutes from a proprietary format."
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Ansel Halliburton" }]
 requires-python = ">=3.12"
+keywords = ["florida", "law", "legal-data", "statutes"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "License :: OSI Approved :: MIT License",
@@ -21,18 +23,40 @@ fliberate = "fliberator.cli:main"
 [project.urls]
 Homepage = "https://github.com/anseljh/FLiberator"
 Repository = "https://github.com/anseljh/FLiberator"
+Issues = "https://github.com/anseljh/FLiberator/issues"
+Changelog = "https://github.com/anseljh/FLiberator/blob/main/CHANGELOG.md"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.26"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/fliberator/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fliberator"]
 
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.claude",
+    "/.github",
+    "/.gitignore",
+    "/AGENTS.md",
+    "/CLAUDE.md",
+    "/data",
+    "/docs/artifact",
+    "/plans",
+    "/scripts",
+    "/tests",
+    "/uv.lock",
+]
+
 [dependency-groups]
 dev = [
+    "build>=1.2",
     "pytest>=8.0",
     "ruff>=0.6",
+    "twine>=6.0",
 ]
 
 [tool.ruff]
