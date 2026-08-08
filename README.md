@@ -83,6 +83,7 @@ html = decode.decode(records[0], 0, len(records[0]))[0]
 uv run pytest                # the test suite
 uv run ruff check .          # lint
 uv run ruff format .         # format
+uv run python scripts/release_check.py  # build and validate release artifacts
 ```
 
 `scripts/` holds the analysis and validation code the reverse-engineering was done with — not part of the package, but still useful as regression checks against the live leg.state.fl.us pages. See [`plans/re-plan.md`](plans/re-plan.md) for phase-by-phase status.
